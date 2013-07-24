@@ -66,7 +66,9 @@
     <Content Include="sample\styles.min.css">
       <DependentUpon>styles.less</DependentUpon>
     </Content>
+    <Content Include="src\angular-bound-column.js" />
     <Content Include="src\angular-grid.js" />
+    <Content Include="src\angular-static-column.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,7 +77,15 @@
     <Content Include="sample\sampleData.json" />
     <Content Include="sample\styles.less" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

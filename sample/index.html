@@ -9,12 +9,18 @@
 		<h1>Angular Grid Sample</h1>
 		<div ng-app="angularGridSample">
 			<div ng-controller="SampleController">
-				<grid data="localModel"></grid>
+				<grid data="localModel">
+					<bound-column property="firstName" title="'First name'"></bound-column>
+					<bound-column property="lastName" title="'Last name'"></bound-column>
+					<static-column content="':)'" title="'STATIC!'"></static-column>
+				</grid>
 			</div>
 		</div>
 		
 		<script src="../libs/angular-1.1.5-unstable.js"></script>
 		<script src="../src/angular-grid.js"></script>
+		<script src="../src/angular-bound-column.js"></script>
+		<script src="../src/angular-static-column.js"></script>
 		<script src="app.js"></script>
 	</body>
 </html>
