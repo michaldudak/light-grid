@@ -1,0 +1,10 @@
+﻿{
+	"1": {
+		firstName: "One",
+		lastName: "Jeden"
+	},
+	"2": {
+		firstName: "Two",
+		lastName: "Dwa"
+	}
+}
