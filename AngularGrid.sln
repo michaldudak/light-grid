@@ -8,20 +8,20 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "AngularGrid", "http://local
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_7403"
-		Debug.AspNetCompiler.PhysicalPath = "D:\Development\AngularGrid\"
+		Debug.AspNetCompiler.PhysicalPath = "..\AngularGrid\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7403\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_7403"
-		Release.AspNetCompiler.PhysicalPath = "D:\Development\AngularGrid\"
+		Release.AspNetCompiler.PhysicalPath = "..\AngularGrid\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7403\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "D:\Development\AngularGrid\"
+		SlnRelativePath = "..\AngularGrid\"
 	EndProjectSection
 EndProject
 Global

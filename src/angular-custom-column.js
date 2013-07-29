@@ -1,7 +1,7 @@
-﻿(function (window) {
+﻿(function (window, ng) {
 	"use strict";
 
-	window.angularGrid.directive("customColumn", function () {
+	window.angularGrid.module.directive("customColumn", function () {
 		return {
 			scope: {
 				cellRenderer: "&",
