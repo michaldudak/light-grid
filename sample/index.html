@@ -1,26 +1,32 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta charset="utf-8" />
-		<title>Angular Grid sample</title>
-		<link href="styles.css" rel="stylesheet" />
-	</head>
-	<body>
+<html ng-app="angularGridSample">
+<head>
+	<meta charset="utf-8" />
+	<title>Angular Grid sample</title>
+	<link href="bootstrap.css" rel="stylesheet" />
+	<!--<link href="styles.css" rel="stylesheet" />-->
+</head>
+<body>
+	<div class="container">
 		<h1>Angular Grid Sample</h1>
-		<div ng-app="angularGridSample">
-			<div ng-controller="SampleController">
-				<grid data="localModel">
-					<bound-column property="firstName" title="'First name'"></bound-column>
-					<bound-column property="lastName" title="'Last name'"></bound-column>
-					<static-column content="':)'" title="'STATIC!'"></static-column>
-				</grid>
-			</div>
+
+		<div ng-controller="SampleController">
+			<grid data="localModel" class="table">
+				<bound-column property="firstName" title="'First name'"></bound-column>
+				<bound-column property="lastName" title="'Last name'"></bound-column>
+				<static-column content="':)'" title="'STATIC!'"></static-column>
+				<custom-column cell-renderer="renderCustomCell(rowData, rowId, gridController)"></custom-column>
+			</grid>
 		</div>
-		
-		<script src="../libs/angular-1.1.5-unstable.js"></script>
-		<script src="../src/angular-grid.js"></script>
-		<script src="../src/angular-bound-column.js"></script>
-		<script src="../src/angular-static-column.js"></script>
-		<script src="app.js"></script>
-	</body>
+
+	</div>
+
+	<script src="../libs/jquery-1.10.2.js"></script>
+	<script src="../libs/angular-1.1.5-unstable.js"></script>
+	<script src="../src/angular-grid.js"></script>
+	<script src="../src/angular-bound-column.js"></script>
+	<script src="../src/angular-static-column.js"></script>
+	<script src="../src/angular-custom-column.js"></script>
+	<script src="app.js"></script>
+</body>
 </html>

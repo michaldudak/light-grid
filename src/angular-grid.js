@@ -1,96 +1,162 @@
-﻿(function (window, ng) {
+﻿/*
+
+Angular Grid
+  by Digital Creations
+
+Currently supported properties in column definitions:
+- cellRenderer(rowData, rowId)
+- headerRenderer()
+- planned: footerRenderer()
+
+*/
+
+(function (window, ng, $) {
 	"use strict";
 
 	var angularGrid = ng.module("angular-grid", []);
 	window.angularGrid = angularGrid;
 
-	var trTemplate = "<tr data-id='{{{id}}}'>{{{item}}}</tr>";
-	var tdTemplate = "<td>{{{item}}}</td>";
-	var thTemplate = "<th>{{{item}}}</th>";
-
 	var columnDefinitions = [];
-	
+	var openedRows = {};
+
 	function createCell(cellModel) {
-		return tdTemplate.replace("{{{item}}}", cellModel);
+		return ng.element("<td>").append(cellModel);
 	}
 	
 	function createHeaderCell(cellModel) {
-		return thTemplate.replace("{{{item}}}", cellModel);
+		return ng.element("<th>").append(cellModel);
+	}
+	
+	function createFooterCell(cellModel) {
+		return createCell(cellModel);
 	}
 
 	function createRow(id, rowModel) {
-		var cells = [];
+		var row = ng.element("<tr />");
 
 		if (columnDefinitions.length) {
 			for (var col in columnDefinitions) {
 				if (columnDefinitions.hasOwnProperty(col)) {
 					var renderer = columnDefinitions[col].cellRenderer;
-					cells.push(createCell(renderer(rowModel, id)));
+					row.append(createCell(renderer(rowModel, id)));
 				}
 			}
 		} else {
 			for (var prop in rowModel) {
 				if (rowModel.hasOwnProperty(prop)) {
-					cells.push(createCell(rowModel[prop]));
+					row.append(createCell(rowModel[prop]));
 				}
 			}
 		}
 
-		var cellsMarkup = cells.join("");
-		return trTemplate.replace("{{{item}}}", cellsMarkup).replace("{{{id}}}", id);
+		if (typeof(id) !== "undefined") {
+			row.data("id", id);
+		}
+
+		return row;
 	}
 	
 	function createHeaderRow() {
-		var cells = [];
+		var row = ng.element("<tr />");
 
 		if (columnDefinitions.length) {
 			for (var col in columnDefinitions) {
 				if (columnDefinitions.hasOwnProperty(col)) {
 					var renderer = columnDefinitions[col].headerRenderer;
-					cells.push(createHeaderCell(renderer()));
+					row.append(createHeaderCell(renderer()));
 				}
 			}
 		}
-		
-		var cellsMarkup = cells.join("");
-		return trTemplate.replace("{{{item}}}", cellsMarkup);
+
+		return row;
+	}
+	
+
+	function createFooterRow() {
+		var row = ng.element("<tr />");
+
+		if (columnDefinitions.length) {
+			for (var col in columnDefinitions) {
+				if (columnDefinitions.hasOwnProperty(col)) {
+					var renderer = columnDefinitions[col].footerRenderer || function() { return "" };
+					row.append(createFooterCell(renderer()));
+				}
+			}
+		}
+
+		return row;
+	}
+	
+	function buildRow(id, rowModel, rows) {
+		rows.append(createRow(id, rowModel));
+
+		var openedRow = openedRows[id];
+		if (typeof (openedRow) !== "undefined") {
+			var detailsRow = ng.element("<td />").attr("colspan", columnDefinitions.length).append(openedRow)
+			rows.append($("<tr />").append(detailsRow));
+		}
 	}
 
 	function createTable(tableModel) {
-		var rows = [];
-		var rowModel;
+		var table = ng.element("<table />");
+		table.append(createHeaderRow());
 
-		rows.push(createHeaderRow());
-
-		if (Object.prototype.toString.call(tableModel) === "[object Array]") {
+		if ($.isArray(tableModel)) {
 			// model is an array
 			for (var i = 0; i < tableModel.length; ++i) {
-				rowModel = tableModel[i];
-				rows.push(createRow(i, rowModel));
+				buildRow(i, tableModel[i], table);
 			}
 		} else {
 			// model is a plain object
 			for (var prop in tableModel) {
 				if (tableModel.hasOwnProperty(prop)) {
-					rowModel = tableModel[prop];
-					rows.push(createRow(prop, rowModel));
+					buildRow(prop, tableModel[prop], table);
 				}
 			}
 		}
 
-		return rows.join("");
+		table.append(createFooterRow());
+
+		return table;
 	}
 	
-	function link(scope, element, attrs) {
+	function link(scope, element, attrs, gridController) {
 		scope.$watchCollection("data", function(newValue) {
-			element.html(createTable(newValue));
+			gridController.redraw();
 		});
 	}
 
-	function controller() {
-		this.defineColumn = function(column) {
+	function controller($scope, $element, $compile) {
+		var ctrl = {};
+
+		ctrl.defineColumn = function (column) {
 			columnDefinitions.push(column);
 		};
+
+		ctrl.redraw = function () {
+			var tableElement = createTable($scope.data);
+			var compiledTable = $compile(tableElement)($scope);
+			$element.html("").append(compiledTable.children());
+		};
+
+		ctrl.openDetails = function(rowId, content) {
+			openedRows[rowId] = content;
+			ctrl.redraw();
+		};
+
+		ctrl.closeDetails = function(rowId) {
+			delete openedRows[rowId];
+			ctrl.redraw();
+		};
+
+		$scope.gridController = ctrl;
+		
+
+		$scope.sayHello = function() {
+			alert("hello");
+		};
+
+		return ctrl;
 	}
 
 	angularGrid.directive("grid", function () {
@@ -103,8 +169,9 @@
 			restrict: "EA",
 			transclude: true,
 			link: link,
-			controller: controller
+			controller: controller,
+			require: "grid"
 		};
 	});
 
-}(window, window.angular));
+}(window, window.angular, window.jQuery));
