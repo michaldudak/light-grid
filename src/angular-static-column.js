@@ -1,7 +1,7 @@
 ﻿(function (window, ng) {
 	"use strict";
 
-	window.angularGrid.directive("staticColumn", function () {
+	window.angularGrid.module.directive("staticColumn", function () {
 		return {
 			scope: {
 				content: "=",

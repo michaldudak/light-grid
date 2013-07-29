@@ -1,7 +1,7 @@
 ﻿(function (window, ng) {
 	"use strict";
 	
-	window.angularGrid.directive("boundColumn", function () {
+	window.angularGrid.module.directive("boundColumn", function () {
 		return {
 			scope: {
 				property: "@",
