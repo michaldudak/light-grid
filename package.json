@@ -1,0 +1,23 @@
+{
+  "name": "AngularGrid",
+  "version": "0.1.0",
+  "description": "Native Angular JS Grid implementation",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@bitbucket.org/doodack/angular-grid.git"
+  },
+  "keywords": [
+    "angular",
+    "grid"
+  ],
+  "author": "Michał Dudak",
+  "license": "MIT",
+  "gitHead": "106ca9c10177cacab56d4df3f829091a812e37d4",
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0"
+  }
+}

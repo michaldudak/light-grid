@@ -2,3 +2,4 @@
 /out
 *.user
 /*.suo
+/node_modules

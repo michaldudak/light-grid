@@ -17,14 +17,22 @@
 			$element.empty().append(compiledTable.children());
 		};
 
-		controller.openDetails = function (rowId, content) {
+		controller.openDetails = function openDetails(rowId, content) {
 			grid.openedRows[rowId] = content;
 			controller.redraw();
 		};
 
-		controller.closeDetails = function (rowId) {
+		controller.closeDetails = function closeDetails(rowId) {
 			delete grid.openedRows[rowId];
 			controller.redraw();
+		};
+
+		controller.toggleDetails = function toggleDetails(rowId, content) {
+			if (typeof(grid.openedRows[rowId]) === "undefined") {
+				controller.openDetails(rowId, content);
+			} else {
+				controller.closeDetails(rowId);
+			}
 		};
 		
 		$scope.gridController = controller;
