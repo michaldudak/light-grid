@@ -3,3 +3,4 @@
 *.user
 /*.suo
 /node_modules
+dist/

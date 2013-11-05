@@ -12,8 +12,8 @@
 			link: function(scope, element, attrs, gridController) {
 				element.remove();
 				gridController.defineColumn({
-					cellRenderer: function(rowData, rowId) {
-						return rowData[scope.property];
+					cellRenderer: function(rowScope) {
+						return rowScope.rowData[scope.property];
 					},
 					headerRenderer: function() {
 						return scope.title;

@@ -14,7 +14,8 @@
 	angularGrid.module.directive("grid", function () {
 		return {
 			scope: {
-				data: "="
+				data: "=",
+				extraSettings: "="
 			},
 			template: "<table class='angular-grid' ng-transclude></table>",
 			replace: true,

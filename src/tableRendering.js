@@ -13,26 +13,30 @@
 		return createCell(cellModel);
 	}
 
-	function createRow(id, rowModel) {
+	function createRow(rowScope) {
+		var rowId = rowScope.rowId;
+		var rowData = rowScope.rowData;
+
 		var row = $("<tr />");
 
 		if (grid.columnDefinitions.length) {
 			for (var col in grid.columnDefinitions) {
 				if (grid.columnDefinitions.hasOwnProperty(col)) {
 					var renderer = grid.columnDefinitions[col].cellRenderer;
-					row.append(createCell(renderer(rowModel, id)));
+					var cellContent = renderer(rowScope);
+					row.append(createCell(cellContent));
 				}
 			}
 		} else {
-			for (var prop in rowModel) {
-				if (rowModel.hasOwnProperty(prop)) {
-					row.append(createCell(rowModel[prop]));
+			for (var prop in rowData) {
+				if (rowData.hasOwnProperty(prop)) {
+					row.append(createCell(rowData[prop]));
 				}
 			}
 		}
 
-		if (typeof (id) !== "undefined") {
-			row.data("id", id);
+		if (typeof (rowId) !== "undefined") {
+			row.data("id", rowId);
 		}
 
 		return row;
@@ -69,8 +73,13 @@
 		return row;
 	}
 
-	function buildRow(id, rowModel, rows) {
-		rows.append(createRow(id, rowModel));
+	function buildRow(gridScope, id, rows) {
+		var rowScope = gridScope.$new();
+
+		rowScope.rowId = id;
+		rowScope.rowData = gridScope.data[id];
+		
+		rows.append(createRow(rowScope));
 
 		var openedRow = grid.openedRows[id];
 		if (typeof (openedRow) !== "undefined") {
@@ -79,20 +88,21 @@
 		}
 	}
 
-	function createTable(tableModel) {
+	function createTable(gridScope) {
+		var tableModel = gridScope.data;
 		var table = $("<table />");
 		table.append(createHeaderRow());
 
 		if ($.isArray(tableModel)) {
 			// model is an array
 			for (var i = 0; i < tableModel.length; ++i) {
-				buildRow(i, tableModel[i], table);
+				buildRow(gridScope, i, table);
 			}
 		} else {
 			// model is a plain object
 			for (var prop in tableModel) {
 				if (tableModel.hasOwnProperty(prop)) {
-					buildRow(prop, tableModel[prop], table);
+					buildRow(gridScope, prop, table);
 				}
 			}
 		}

@@ -12,7 +12,7 @@
 			link: function (scope, element, attrs, gridController) {
 				element.remove();
 				gridController.defineColumn({
-					cellRenderer: function (rowData, rowId) {
+					cellRenderer: function (rowScope) {
 						return scope.content;
 					},
 					headerRenderer: function () {

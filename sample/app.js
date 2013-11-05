@@ -5,26 +5,46 @@
 
 	app.controller("SampleController", function($scope, $compile) {
 		$scope.localModel = [
-			{ firstName: "1", lastName: "A" },
-			{ firstName: "2", lastName: "B" },
-			{ firstName: "3", lastName: "C" },
-			{ firstName: "4", lastName: "D" },
-			{ firstName: "5", lastName: "E" },
-			{ firstName: "6", lastName: "F" }
+			{ firstName: "FirstName 1", lastName: "LastName A" },
+			{ firstName: "FirstName 2", lastName: "LastName B" },
+			{ firstName: "FirstName 3", lastName: "LastName C" },
+			{ firstName: "FirstName 4", lastName: "LastName D" },
+			{ firstName: "FirstName 5", lastName: "LastName E" },
+			{ firstName: "FirstName 6", lastName: "LastName F" },
+			{ firstName: "FirstName 1", lastName: "LastName A" },
+			{ firstName: "FirstName 2", lastName: "LastName B" },
+			{ firstName: "FirstName 3", lastName: "LastName C" },
+			{ firstName: "FirstName 4", lastName: "LastName D" },
+			{ firstName: "FirstName 5", lastName: "LastName E" },
+			{ firstName: "FirstName 6", lastName: "LastName F" },
+			{ firstName: "FirstName 1", lastName: "LastName A" },
+			{ firstName: "FirstName 2", lastName: "LastName B" },
+			{ firstName: "FirstName 3", lastName: "LastName C" },
+			{ firstName: "FirstName 4", lastName: "LastName D" },
+			{ firstName: "FirstName 5", lastName: "LastName E" },
+			{ firstName: "FirstName 6", lastName: "LastName F" },
+			{ firstName: "FirstName 1", lastName: "LastName A" },
+			{ firstName: "FirstName 2", lastName: "LastName B" },
+			{ firstName: "FirstName 3", lastName: "LastName C" },
+			{ firstName: "FirstName 4", lastName: "LastName D" },
+			{ firstName: "FirstName 5", lastName: "LastName E" },
+			{ firstName: "FirstName 6", lastName: "LastName F" },
+			{ firstName: "FirstName 1", lastName: "LastName A" },
+			{ firstName: "FirstName 2", lastName: "LastName B" },
+			{ firstName: "FirstName 3", lastName: "LastName C" },
+			{ firstName: "FirstName 4", lastName: "LastName D" },
+			{ firstName: "FirstName 5", lastName: "LastName E" },
+			{ firstName: "FirstName 6", lastName: "LastName F" },
+			{ firstName: "FirstName 1", lastName: "LastName A" },
+			{ firstName: "FirstName 2", lastName: "LastName B" },
+			{ firstName: "FirstName 3", lastName: "LastName C" },
+			{ firstName: "FirstName 4", lastName: "LastName D" },
+			{ firstName: "FirstName 5", lastName: "LastName E" },
+			{ firstName: "FirstName 6", lastName: "LastName F" }
 		];
-
-		$scope.foo = function() {
-			console.log($scope);
-		};
-
-		$scope.renderCustomCell = function (rowData, rowId) {
-			
-			var elem = $("<div><button ng-click=\"gridController.openDetails(" + rowId + ", 'Hello!')\">Open details</button>" +
-				"<button ng-click=\"gridController.closeDetails(" + rowId + ")\">Close details</button>" +
-				"<button ng-click=\"foo()\">Say hello</button></div>");
-
-			return $compile(elem)($scope);
-		};
+		
+		$scope.temp = {};
+		$scope.temp.staticText = "record";
 	});
 
 }(window, window.angular));

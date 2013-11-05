@@ -4,7 +4,7 @@
 	window.angularGrid = window.angularGrid || {};
 	var grid = window.angularGrid;
 
-	grid.controller = function controllerFactory($scope, $element, $compile) {
+	grid.controller = function controllerFactory($scope, $element) {
 		var controller = {};
 
 		controller.defineColumn = function (column) {
@@ -12,9 +12,9 @@
 		};
 
 		controller.redraw = function () {
-			var tableElement = angularGrid.tableRenderer.renderTable($scope.data);
-			var compiledTable = $compile(tableElement)($scope);
-			$element.empty().append(compiledTable.children());
+			console.log("Redrawing table");
+			var tableElement = angularGrid.tableRenderer.renderTable($scope);
+			$element.empty().append(tableElement.children());
 		};
 
 		controller.openDetails = function openDetails(rowId, content) {

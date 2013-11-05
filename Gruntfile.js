@@ -13,11 +13,11 @@
 					"src/angular-grid.js",
 					"src/angular-bound-column.js",
 					"src/angular-static-column.js",
-					"src/angular-custom-column.js"
+					"src/angular-custom-column.js",
+					"src/template-column.js"
 				],
 				dest: 'dist/angular-grid-<%= pkg.version %>.js',
-			},
-			nonull: true
+			}
 		},
 	});
 
