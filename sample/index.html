@@ -14,10 +14,11 @@
 			<input ng-model="localModel[0].lastName" />
 			<input ng-model="temp.staticText" />
 
-			<grid data="localModel" class="table" extra-settings="temp">
+			<grid class="table" extra-settings="temp">
+				<local-data-provider model="localModel"></local-data-provider>
 				<template-column title="'ID'">{{rowId}}</template-column>
 				<template-column title="'First name'">
-					{{extraSettings.staticText}} <span style="color: limegreen; font-size: 120%">{{rowId}}:</span> {{rowData.firstName}}
+					{{extraSettings.staticText}} <span style="color: limegreen; font-size: 140%; font-family: 'Lucida Grande'">{{rowId}}:</span> {{rowData.firstName}}
 				</template-column>
 				<bound-column property="lastName" title="'Last name'"></bound-column>
 				<static-column content="':)'" title="'STATIC!'"></static-column>
@@ -28,13 +29,17 @@
 	<script src="../libs/jquery-1.10.2.js"></script>
 	<script src="../libs/angular-1.2.0-rc3.js"></script>
 
-	<script src="../src/tableRendering.js"></script>
+	<script src="../src/tableRenderer.js"></script>
 	<script src="../src/controller.js"></script>
 	<script src="../src/directiveDefinition.js"></script>
 	<script src="../src/angular-grid.js"></script>
-	<script src="../src/angular-bound-column.js"></script>
-	<script src="../src/angular-static-column.js"></script>
-	<script src="../src/template-column.js"></script>
+
+	<script src="../src/column-templates/boundColumn.js"></script>
+	<script src="../src/column-templates/staticColumn.js"></script>
+	<script src="../src/column-templates/templateColumn.js"></script>
+	
+	<script src="../src/data-providers/localDataProvider.js"></script>
+	<script src="../src/data-providers/ajaxDataProvider.js"></script>
 
 	<script src="app.js"></script>
 </body>

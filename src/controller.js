@@ -6,6 +6,15 @@
 
 	grid.controller = function controllerFactory($scope, $element) {
 		var controller = {};
+		var dataProviderController = null;
+
+		controller.getData = function getData() {
+			return $scope.data;
+		};
+
+		controller.setData = function setData(newData) {
+			$scope.data = newData;
+		};
 
 		controller.defineColumn = function (column) {
 			grid.columnDefinitions.push(column);
@@ -13,7 +22,7 @@
 
 		controller.redraw = function () {
 			console.log("Redrawing table");
-			var tableElement = angularGrid.tableRenderer.renderTable($scope);
+			var tableElement = grid.tableRenderer.renderTable($scope);
 			$element.empty().append(tableElement.children());
 		};
 
@@ -34,9 +43,13 @@
 				controller.closeDetails(rowId);
 			}
 		};
+
+		controller.registerDataProvider = function(dataProvider) {
+			dataProviderController = dataProvider;
+		};
 		
 		$scope.gridController = controller;
 		return controller;
 	};
-
+	
 }(window));

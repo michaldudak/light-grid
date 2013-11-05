@@ -1,4 +1,4 @@
-﻿(function (window, ng) {
+﻿(function (window) {
 	"use strict";
 
 	window.angularGrid.module.directive("staticColumn", function () {
@@ -12,7 +12,7 @@
 			link: function (scope, element, attrs, gridController) {
 				element.remove();
 				gridController.defineColumn({
-					cellRenderer: function (rowScope) {
+					cellRenderer: function () {
 						return scope.content;
 					},
 					headerRenderer: function () {

@@ -1,20 +1,23 @@
-﻿(function (window, ng, $) {
+﻿(function (window, ng) {
 	"use strict";
 
 	window.angularGrid.module = ng.module("angular-grid", []);
 	var grid = window.angularGrid;
 
-
 	function link(scope, element, attrs, gridController) {
+		if (typeof scope.data === "undefined") {
+			scope.data = [];
+		}
+		
 		scope.$watchCollection("data", function () {
 			gridController.redraw();
 		});
 	}
 
-	angularGrid.module.directive("grid", function () {
+	grid.module.directive("grid", function () {
 		return {
 			scope: {
-				data: "=",
+				//data: "=",
 				extraSettings: "="
 			},
 			template: "<table class='angular-grid' ng-transclude></table>",
@@ -27,4 +30,4 @@
 		};
 	});
 
-}(window, window.angular, window.jQuery));
+}(window, window.angular));

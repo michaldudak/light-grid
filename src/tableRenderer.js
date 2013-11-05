@@ -20,6 +20,7 @@
 		var row = $("<tr />");
 
 		if (grid.columnDefinitions.length) {
+			// full-featured mode
 			for (var col in grid.columnDefinitions) {
 				if (grid.columnDefinitions.hasOwnProperty(col)) {
 					var renderer = grid.columnDefinitions[col].cellRenderer;
@@ -28,6 +29,7 @@
 				}
 			}
 		} else {
+			// simple mode, without column definitions
 			for (var prop in rowData) {
 				if (rowData.hasOwnProperty(prop)) {
 					row.append(createCell(rowData[prop]));
@@ -57,6 +59,9 @@
 		return row;
 	}
 
+	function nopRenderer() {
+		return "";
+	}
 
 	function createFooterRow() {
 		var row = $("<tr />");
@@ -64,7 +69,7 @@
 		if (grid.columnDefinitions.length) {
 			for (var col in grid.columnDefinitions) {
 				if (grid.columnDefinitions.hasOwnProperty(col)) {
-					var renderer = grid.columnDefinitions[col].footerRenderer || function () { return "" };
+					var renderer = grid.columnDefinitions[col].footerRenderer || nopRenderer;
 					row.append(createFooterCell(renderer()));
 				}
 			}
