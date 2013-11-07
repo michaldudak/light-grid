@@ -1,4 +1,6 @@
-﻿module.exports = function (grunt) {
+﻿/* global module*/
+
+module.exports = function (grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON("package.json"),
 		concat: {
@@ -19,7 +21,13 @@
 				dest: 'dist/angular-grid-<%= pkg.version %>.js',
 			}
 		},
+		karma: {
+			unit: {
+				configFile: "config/karma.conf.js",
+			}
+		}
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
+	grunt.loadNpmTasks("grunt-karma");
 };

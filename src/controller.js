@@ -7,6 +7,7 @@
 	grid.controller = function controllerFactory($scope, $element) {
 		var controller = {};
 		var dataProviderController = null;
+		$scope.columnDefinitions = [];
 
 		controller.getData = function getData() {
 			return $scope.data;
@@ -17,7 +18,7 @@
 		};
 
 		controller.defineColumn = function (column) {
-			grid.columnDefinitions.push(column);
+			$scope.columnDefinitions.push(column);
 		};
 
 		controller.redraw = function () {
@@ -46,6 +47,14 @@
 
 		controller.registerDataProvider = function(dataProvider) {
 			dataProviderController = dataProvider;
+		};
+
+		controller.switchView = function(viewName, rowId) {
+			if (typeof(rowId) === "undefined") {
+				$scope.view = viewName;
+			} else {
+				$scope.rowScopes[rowId].view = viewName;
+			}
 		};
 		
 		$scope.gridController = controller;

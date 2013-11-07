@@ -14,14 +14,40 @@
 			<input ng-model="localModel[0].lastName" />
 			<input ng-model="temp.staticText" />
 
-			<grid class="table" extra-settings="temp">
+			<grid id="sampleGrid" class="table" extra-settings="temp">
 				<local-data-provider model="localModel"></local-data-provider>
-				<template-column title="'ID'">{{rowId}}</template-column>
+				<template-column title="'ID'"><template-view>{{rowId}}</template-view></template-column>
+
 				<template-column title="'First name'">
-					{{extraSettings.staticText}} <span style="color: limegreen; font-size: 140%; font-family: 'Lucida Grande'">{{rowId}}:</span> {{rowData.firstName}}
+					<template-view>
+						{{extraSettings.staticText}} <span style="color: limegreen; font-size: 140%; font-family: 'Lucida Grande'">{{rowId}}:</span> {{rowData.firstName}}
+					</template-view>
 				</template-column>
 				<bound-column property="lastName" title="'Last name'"></bound-column>
+				<template-column title="'Editable here'">
+					<template-view>[{{ rowData.firstName }} {{ rowData.lastName }}]</template-view>
+					<template-view data-view="edit">
+						<input ng-model="rowData.firstName" />
+						<input ng-model="rowData.lastName" />
+					</template-view>
+				</template-column>
+				<template-column title="'Actions'">
+					<template-view>
+						<button switch-view="edit">Edit view</button>
+						<button switch-view="read">Read view</button>
+					</template-view>
+				</template-column>
+				<template-column title="'Directives inside template'">
+					<template-view>
+						<span ng-show="rowId % 2 === 0">Row ID is even</span>
+					</template-view>
+				</template-column>
 				<static-column content="':)'" title="'STATIC!'"></static-column>
+			</grid>
+			
+			<grid id="sampleGrid2" class="table" data="localModel">
+				<bound-column property="firstName" title="'First name'"></bound-column>
+				<bound-column property="lastName" title="'Last name'"></bound-column>
 			</grid>
 		</div>
 	</div>
@@ -37,9 +63,12 @@
 	<script src="../src/column-templates/boundColumn.js"></script>
 	<script src="../src/column-templates/staticColumn.js"></script>
 	<script src="../src/column-templates/templateColumn.js"></script>
+	<script src="../src/column-templates/templateView.js"></script>
 	
 	<script src="../src/data-providers/localDataProvider.js"></script>
 	<script src="../src/data-providers/ajaxDataProvider.js"></script>
+
+	<script src="../src/cell-elements/switchView.js"></script>
 
 	<script src="app.js"></script>
 </body>

@@ -5,9 +5,9 @@
 	var grid = window.angularGrid;
 
 	function link(scope, element, attrs, gridController) {
-		if (typeof scope.data === "undefined") {
+		/*if (typeof scope.data === "undefined") {
 			scope.data = [];
-		}
+		}*/
 		
 		scope.$watchCollection("data", function () {
 			gridController.redraw();
@@ -17,7 +17,7 @@
 	grid.module.directive("grid", function () {
 		return {
 			scope: {
-				//data: "=",
+				data: "=?",
 				extraSettings: "="
 			},
 			template: "<table class='angular-grid' ng-transclude></table>",

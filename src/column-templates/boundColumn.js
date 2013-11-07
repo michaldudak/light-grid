@@ -1,26 +1,15 @@
-﻿(function (window, ng) {
+﻿(function (window) {
 	"use strict";
 	
 	window.angularGrid.module.directive("boundColumn", function () {
+		var template = "<template-column><template-view>{{rowData.[property]}}</template-view></template-column>";
+
 		return {
-			scope: {
-				property: "@",
-				title: "="
-			},
 			restrict: "EA",
-			require: "^grid",
-			link: function(scope, element, attrs, gridController) {
-				element.remove();
-				gridController.defineColumn({
-					cellRenderer: function(rowScope) {
-						return rowScope.rowData[scope.property];
-					},
-					headerRenderer: function() {
-						return scope.title;
-					},
-					footerRenderer: null
-				});
-			}
+			template: function(elem, attrs) {
+				return template.replace("[property]", attrs.property);
+			},
+			replace: true
 		};
 	});
 

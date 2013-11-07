@@ -19,11 +19,11 @@
 
 		var row = $("<tr />");
 
-		if (grid.columnDefinitions.length) {
+		if (rowScope.columnDefinitions.length) {
 			// full-featured mode
-			for (var col in grid.columnDefinitions) {
-				if (grid.columnDefinitions.hasOwnProperty(col)) {
-					var renderer = grid.columnDefinitions[col].cellRenderer;
+			for (var col in rowScope.columnDefinitions) {
+				if (rowScope.columnDefinitions.hasOwnProperty(col)) {
+					var renderer = rowScope.columnDefinitions[col].cellRenderer;
 					var cellContent = renderer(rowScope);
 					row.append(createCell(cellContent));
 				}
@@ -44,13 +44,13 @@
 		return row;
 	}
 
-	function createHeaderRow() {
+	function createHeaderRow(gridScope) {
 		var row = $("<tr />");
 
-		if (grid.columnDefinitions.length) {
-			for (var col in grid.columnDefinitions) {
-				if (grid.columnDefinitions.hasOwnProperty(col)) {
-					var renderer = grid.columnDefinitions[col].headerRenderer;
+		if (gridScope.columnDefinitions.length) {
+			for (var col in gridScope.columnDefinitions) {
+				if (gridScope.columnDefinitions.hasOwnProperty(col)) {
+					var renderer = gridScope.columnDefinitions[col].headerRenderer;
 					row.append(createHeaderCell(renderer()));
 				}
 			}
@@ -63,13 +63,13 @@
 		return "";
 	}
 
-	function createFooterRow() {
+	function createFooterRow(gridScope) {
 		var row = $("<tr />");
 
-		if (grid.columnDefinitions.length) {
-			for (var col in grid.columnDefinitions) {
-				if (grid.columnDefinitions.hasOwnProperty(col)) {
-					var renderer = grid.columnDefinitions[col].footerRenderer || nopRenderer;
+		if (gridScope.columnDefinitions.length) {
+			for (var col in gridScope.columnDefinitions) {
+				if (gridScope.columnDefinitions.hasOwnProperty(col)) {
+					var renderer = gridScope.columnDefinitions[col].footerRenderer || nopRenderer;
 					row.append(createFooterCell(renderer()));
 				}
 			}
@@ -83,6 +83,8 @@
 
 		rowScope.rowId = id;
 		rowScope.rowData = gridScope.data[id];
+
+		gridScope.rowScopes[id] = rowScope;
 		
 		rows.append(createRow(rowScope));
 
@@ -96,7 +98,17 @@
 	function createTable(gridScope) {
 		var tableModel = gridScope.data;
 		var table = $("<table />");
-		table.append(createHeaderRow());
+		table.append(createHeaderRow(gridScope));
+		
+		if (gridScope.rowScopes) {
+			for (var rowId in rowScopes) {
+				if (rowScopes.hasOwnProperty(rowId)) {
+					rowScopes[rowId].$destroy();
+				}
+			}
+		}
+
+		gridScope.rowScopes = {};
 
 		if ($.isArray(tableModel)) {
 			// model is an array
@@ -112,7 +124,7 @@
 			}
 		}
 
-		table.append(createFooterRow());
+		table.append(createFooterRow(gridScope));
 
 		return table;
 	}
