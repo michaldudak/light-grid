@@ -1,6 +1,6 @@
 ﻿angularGrid.module.directive("localDataProvider", function () {
 
-	function localDataProviderController($scope) {
+	function localDataProviderController() {
 		var controller = {};
 
 		controller.requestSort = function (sortProperty, descending) {
@@ -16,15 +16,15 @@
 	}
 
 	return {
-		scope: {
-			model: "="
-		},
+		
 		restrict: "EA",
 		require: "^grid",
 		link: function(scope, elem, attrs, gridController) {
+			var model = scope.$eval(attrs.localDataProvider || attrs.model);
+
 			elem.remove();
-			gridController.registerDataProvider(localDataProviderController(scope));
-			gridController.setData(scope.model);
+			gridController.registerDataProvider(localDataProviderController());
+			gridController.setData(model);
 		},
 		controller: localDataProviderController
 	};

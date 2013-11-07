@@ -5,20 +5,162 @@
 
 	app.controller("SampleController", function($scope) {
 		$scope.localModel = [
-			{ firstName: "FirstName 1", lastName: "LastName A" },
-			{ firstName: "FirstName 2", lastName: "LastName B" },
-			{ firstName: "FirstName 3", lastName: "LastName C" },
-			{ firstName: "FirstName 4", lastName: "LastName D" },
-			{ firstName: "FirstName 5", lastName: "LastName E" },
-			{ firstName: "FirstName 6", lastName: "LastName F" },
-			{ firstName: "FirstName 7", lastName: "LastName G" },
-			{ firstName: "FirstName 8", lastName: "LastName H" },
-			{ firstName: "FirstName 9", lastName: "LastName I" },
-			{ firstName: "FirstName 10", lastName: "LastName J" }
+			{
+				"firstName": "Aidan",
+				"lastName": "Wheeler"
+			},
+			{
+				"firstName": "Chase",
+				"lastName": "Buckner"
+			},
+			{
+				"firstName": "Quinlan",
+				"lastName": "Atkinson"
+			},
+			{
+				"firstName": "Connor",
+				"lastName": "Watts"
+			},
+			{
+				"firstName": "Russell",
+				"lastName": "Blake"
+			},
+			{
+				"firstName": "Tobias",
+				"lastName": "Dickson"
+			},
+			{
+				"firstName": "Hyatt",
+				"lastName": "Hudson"
+			},
+			{
+				"firstName": "Julian",
+				"lastName": "Gamble"
+			},
+			{
+				"firstName": "Christian",
+				"lastName": "Lawrence"
+			},
+			{
+				"firstName": "Russell",
+				"lastName": "Gallegos"
+			},
+			{
+				"firstName": "Clinton",
+				"lastName": "Roman"
+			},
+			{
+				"firstName": "Cullen",
+				"lastName": "Vaughn"
+			},
+			{
+				"firstName": "Hamish",
+				"lastName": "Snow"
+			},
+			{
+				"firstName": "Luke",
+				"lastName": "Sherman"
+			},
+			{
+				"firstName": "Ray",
+				"lastName": "Booker"
+			},
+			{
+				"firstName": "Hilel",
+				"lastName": "Stanley"
+			},
+			{
+				"firstName": "Drake",
+				"lastName": "Bradford"
+			},
+			{
+				"firstName": "Callum",
+				"lastName": "Jefferson"
+			},
+			{
+				"firstName": "Kasimir",
+				"lastName": "Logan"
+			},
+			{
+				"firstName": "Justin",
+				"lastName": "Espinoza"
+			},
+			{
+				"firstName": "Garth",
+				"lastName": "Bonner"
+			},
+			{
+				"firstName": "Jin",
+				"lastName": "Manning"
+			},
+			{
+				"firstName": "Rigel",
+				"lastName": "Franklin"
+			},
+			{
+				"firstName": "Keane",
+				"lastName": "Stokes"
+			},
+			{
+				"firstName": "Drew",
+				"lastName": "Griffith"
+			},
+			{
+				"firstName": "Carson",
+				"lastName": "Daniel"
+			},
+			{
+				"firstName": "Chaney",
+				"lastName": "Bruce"
+			},
+			{
+				"firstName": "Geoffrey",
+				"lastName": "Merrill"
+			},
+			{
+				"firstName": "Wing",
+				"lastName": "Barrera"
+			},
+			{
+				"firstName": "Honorato",
+				"lastName": "Riggs"
+			},
+			{
+				"firstName": "Brendan",
+				"lastName": "Vance"
+			},
+			{
+				"firstName": "Logan",
+				"lastName": "Hodge"
+			},
+			{
+				"firstName": "Abraham",
+				"lastName": "Russell"
+			},
+			{
+				"firstName": "Thor",
+				"lastName": "Matthews"
+			},
+			{
+				"firstName": "Ethan",
+				"lastName": "Howe"
+			},
+			{
+				"firstName": "Samuel",
+				"lastName": "Poole"
+			},
+			{
+				"firstName": "John",
+				"lastName": "Gutierrez"
+			},
+			{
+				"firstName": "Dillon",
+				"lastName": "Gonzales"
+			}
 		];
 		
 		$scope.temp = {};
-		$scope.temp.staticText = "record";
+		$scope.temp.staticText = "some random text";
 	});
 
 }(window, window.angular));

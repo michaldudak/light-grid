@@ -10,45 +10,62 @@
 		<h1>Angular Grid Sample</h1>
 
 		<div ng-controller="SampleController">
-			<input ng-model="localModel[0].firstName" />
-			<input ng-model="localModel[0].lastName" />
-			<input ng-model="temp.staticText" />
+			<h2>Full-featured grid</h2>
 
 			<grid id="sampleGrid" class="table" extra-settings="temp">
 				<local-data-provider model="localModel"></local-data-provider>
 				<template-column title="'ID'"><template-view>{{rowId}}</template-view></template-column>
 
-				<template-column title="'First name'">
+				<bound-column property="firstName" title="'First name'"></bound-column>
+				<bound-column property="lastName" title="'Last name'"></bound-column>
+
+				<template-column title="'Formatted data'">
 					<template-view>
-						{{extraSettings.staticText}} <span style="color: limegreen; font-size: 140%; font-family: 'Lucida Grande'">{{rowId}}:</span> {{rowData.firstName}}
+						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{extraSettings.staticText}}
 					</template-view>
 				</template-column>
-				<bound-column property="lastName" title="'Last name'"></bound-column>
-				<template-column title="'Editable here'">
-					<template-view>[{{ rowData.firstName }} {{ rowData.lastName }}]</template-view>
-					<template-view data-view="edit">
+
+				<template-column title="'Combined editable data'">
+					<template-view>
+						{{ rowData.firstName }}
+						{{ rowData.lastName }}
+					</template-view>
+					<template-view view="edit">
 						<input ng-model="rowData.firstName" />
 						<input ng-model="rowData.lastName" />
 					</template-view>
 				</template-column>
+
 				<template-column title="'Actions'">
 					<template-view>
-						<button switch-view="edit">Edit view</button>
-						<button switch-view="read">Read view</button>
+						<button switch-view="edit">Edit</button>
+					</template-view>
+					<template-view view="edit">
+						<button switch-view="read">Save</button>
 					</template-view>
 				</template-column>
-				<template-column title="'Directives inside template'">
+				
+				<template-column title="'Images, why not'">
 					<template-view>
-						<span ng-show="rowId % 2 === 0">Row ID is even</span>
+						<img src="http://lorempixel.com/100/50/" alt="random image"/>
 					</template-view>
 				</template-column>
-				<static-column content="':)'" title="'STATIC!'"></static-column>
+
+				<static-column content="'Lorem ipsum'" title="'Static text'"></static-column>
 			</grid>
 			
+			<h3>Common text</h3>
+			<input ng-model="temp.staticText" />
+			
+			<h2>Simpler grid</h2>
 			<grid id="sampleGrid2" class="table" data="localModel">
 				<bound-column property="firstName" title="'First name'"></bound-column>
 				<bound-column property="lastName" title="'Last name'"></bound-column>
 			</grid>
+			
+			<h2>First record modification</h2>
+			<input ng-model="localModel[0].firstName" />
+			<input ng-model="localModel[0].lastName" />
 		</div>
 	</div>
 
@@ -64,7 +81,7 @@
 	<script src="../src/column-templates/staticColumn.js"></script>
 	<script src="../src/column-templates/templateColumn.js"></script>
 	<script src="../src/column-templates/templateView.js"></script>
-	
+
 	<script src="../src/data-providers/localDataProvider.js"></script>
 	<script src="../src/data-providers/ajaxDataProvider.js"></script>
 
