@@ -12,7 +12,7 @@
 		<div ng-controller="SampleController">
 			<h2>Full-featured grid</h2>
 
-			<grid id="sampleGrid" class="table" extra-settings="temp">
+			<light-grid id="sampleGrid" class="table" extra-settings="temp">
 				<local-data-provider model="localModel"></local-data-provider>
 				<template-column title="'ID'"><template-view>{{rowId}}</template-view></template-column>
 
@@ -44,25 +44,25 @@
 						<button switch-view="read">Save</button>
 					</template-view>
 				</template-column>
-				
+
 				<template-column title="'Images, why not'">
 					<template-view>
-						<img src="http://lorempixel.com/100/50/" alt="random image"/>
+						<img src="http://lorempixel.com/100/50/" alt="random image" />
 					</template-view>
 				</template-column>
 
 				<static-column content="'Lorem ipsum'" title="'Static text'"></static-column>
-			</grid>
-			
+			</light-grid>
+
 			<h3>Common text</h3>
 			<input ng-model="temp.staticText" />
-			
+
 			<h2>Simpler grid</h2>
-			<grid id="sampleGrid2" class="table" data="localModel">
+			<light-grid id="sampleGrid2" class="table" data="localModel">
 				<bound-column property="firstName" title="'First name'"></bound-column>
 				<bound-column property="lastName" title="'Last name'"></bound-column>
-			</grid>
-			
+			</light-grid>
+
 			<h2>First record modification</h2>
 			<input ng-model="localModel[0].firstName" />
 			<input ng-model="localModel[0].lastName" />
@@ -72,10 +72,10 @@
 	<script src="../libs/jquery-1.10.2.js"></script>
 	<script src="../libs/angular-1.2.0-rc3.js"></script>
 
+	<!--<script src="../src/moduleDefinition.js"></script>
 	<script src="../src/tableRenderer.js"></script>
 	<script src="../src/controller.js"></script>
 	<script src="../src/directiveDefinition.js"></script>
-	<script src="../src/angular-grid.js"></script>
 
 	<script src="../src/column-templates/boundColumn.js"></script>
 	<script src="../src/column-templates/staticColumn.js"></script>
@@ -85,8 +85,8 @@
 	<script src="../src/data-providers/localDataProvider.js"></script>
 	<script src="../src/data-providers/ajaxDataProvider.js"></script>
 
-	<script src="../src/cell-elements/switchView.js"></script>
-
+	<script src="../src/cell-elements/switchView.js"></script>-->
+	<script src="../dist/angular-grid-0.1.0.min.js"></script>
 	<script src="app.js"></script>
 </body>
 </html>

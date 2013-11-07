@@ -1,6 +1,6 @@
 ﻿(function(window, ng) {
 
-	var app = ng.module("angularGridSample", ["angular-grid"]);
+	var app = ng.module("angularGridSample", ["light-grid"]);
 	window.app = app;
 
 	app.controller("SampleController", function($scope) {

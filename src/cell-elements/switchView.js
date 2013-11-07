@@ -1,4 +1,4 @@
-﻿window.angularGrid.module.directive("switchView", function () {
+﻿grid.module.directive("switchView", function () {
 	return {
 		link: function (scope, elem, attrs) {
 			var viewName = attrs.switchView;

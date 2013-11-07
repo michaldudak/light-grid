@@ -1,6 +1,6 @@
-﻿window.angularGrid.module.directive("toggleDetails", function() {
+﻿grid.module.directive("toggleDetails", function() {
 	return {
-		require: "^grid",
+		require: "^lightGrid",
 		link: function(scope, elem, attrs, gridController) {
 			var detailsTemplate = attrs.detailsTemplate;
 

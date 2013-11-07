@@ -6,20 +6,32 @@ module.exports = function (grunt) {
 		concat: {
 			options: {
 				separator: "\n\n;",
+				banner: "(function (window, angular, $, undefined) {\n\n",
+				footer: "\n\n}(window, window.angular, window.jQuery));"
 			},
 			dist: {
 				src: [
-					"src/tableRendering.js",
+					"src/moduleDefinition.js",
+					"src/tableRenderer.js",
 					"src/controller.js",
 					"src/directiveDefinition.js",
-					"src/angular-grid.js",
-					"src/angular-bound-column.js",
-					"src/angular-static-column.js",
-					"src/angular-custom-column.js",
-					"src/template-column.js"
+					
+					"src/cell-elements/*.js",
+					"src/column-templates/*.js",
+					"src/data-providers/*.js"
 				],
-				dest: 'dist/angular-grid-<%= pkg.version %>.js',
+				dest: "dist/angular-grid-<%= pkg.version %>.js",
 			}
+		},
+		uglify: {
+			dist: {
+				options: {
+					//mangle: false
+				},
+				files: {
+					"dist/angular-grid-<%= pkg.version %>.min.js": ["dist/angular-grid-<%= pkg.version %>.js"]
+				}
+			},
 		},
 		karma: {
 			unit: {
@@ -29,5 +41,6 @@ module.exports = function (grunt) {
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
+	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-karma");
 };
