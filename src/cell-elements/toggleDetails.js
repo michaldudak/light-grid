@@ -1,12 +1,14 @@
 ﻿grid.module.directive("toggleDetails", function() {
 	return {
-		require: "^lightGrid",
-		link: function(scope, elem, attrs, gridController) {
-			var detailsTemplate = attrs.detailsTemplate;
+		link: function(scope, elem, attrs) {
+			var detailsTemplate = attrs.toggleDetails || attrs.detailsTemplate;
 
 			elem.on("click", function () {
-				var rowId = elem.closest("tr").data("id");
-				console.log("Toggling row " + rowId);
+				scope.rowController.toggleDetails(detailsTemplate);
+				
+				if (!scope.$$phase) {
+					scope.$apply();
+				}
 			});
 		}
 	};

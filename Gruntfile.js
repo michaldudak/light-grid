@@ -12,10 +12,7 @@ module.exports = function (grunt) {
 			dist: {
 				src: [
 					"src/moduleDefinition.js",
-					"src/tableRenderer.js",
-					"src/controller.js",
-					"src/directiveDefinition.js",
-					
+					"src/directives/*.js",
 					"src/cell-elements/*.js",
 					"src/column-templates/*.js",
 					"src/data-providers/*.js"
@@ -43,4 +40,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-karma");
+	
+	grunt.registerTask("default", ["concat", "uglify"]);
 };

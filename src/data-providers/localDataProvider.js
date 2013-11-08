@@ -28,17 +28,21 @@
 	}
 	
 	return {
-		scope: true,
+		scope: {
+			model: "="
+		},
 		restrict: "EA",
 		require: "^lightGrid",
 		controllerAs: "controller",
 		controller: LocalDataProviderController,
 		link: function (scope, elem, attrs, gridController) {
-			var model = scope.$eval(attrs.localDataProvider || attrs.model);
-
-			elem.remove();
 			gridController.registerDataProvider(scope.controller);
-			gridController.setData(model);
+			
+			scope.$watch("model", function (model) {
+				gridController.setData(model);
+			});
+			
+			elem.remove();
 		},
 	};
 });
