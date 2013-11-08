@@ -26,7 +26,7 @@ module.exports = function (grunt) {
 		uglify: {
 			dist: {
 				options: {
-					//mangle: false
+					sourceMap: "dist/angular-grid-<%= pkg.version %>.min.js.map"
 				},
 				files: {
 					"dist/angular-grid-<%= pkg.version %>.min.js": ["dist/angular-grid-<%= pkg.version %>.js"]
