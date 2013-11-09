@@ -12,6 +12,8 @@
 		<div ng-controller="SampleController">
 			<h2>Full-featured grid</h2>
 
+			<button ng-click="modifyModel()">Modify model</button>
+
 			<light-grid id="sampleGrid" class="table" extra-settings="temp">
 				<local-data-provider model="localModel"></local-data-provider>
 				<template-column title="'Index'"><template-view>{{$index}}</template-view></template-column>
@@ -66,7 +68,7 @@
 	
 	<script src="../libs/jquery-1.10.2.js"></script>
 	<script src="../libs/angular-1.2.0-rc3.js"></script>
-<!--
+
 	<script src="../src/moduleDefinition.js"></script>
 
 	<script src="../src/directives/grid.js"></script>
@@ -82,9 +84,9 @@
 	<script src="../src/data-providers/ajaxDataProvider.js"></script>
 
 	<script src="../src/cell-elements/switchView.js"></script>
-	<script src="../src/cell-elements/toggleDetails.js"></script>-->
+	<script src="../src/cell-elements/toggleDetails.js"></script>
 
-	<script src="../dist/angular-grid-0.1.0.min.js"></script>
+	<!--script src="../dist/angular-grid-0.1.0.min.js"></script-->
 	<script src="app.js"></script>
 </body>
 </html>

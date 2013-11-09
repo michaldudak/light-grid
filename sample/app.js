@@ -161,6 +161,10 @@
 		
 		$scope.temp = {};
 		$scope.temp.staticText = "some random text";
+
+		$scope.modifyModel = function() {
+			$scope.localModel.splice(0, 1);
+		};
 	});
 
 }(window, window.angular));

@@ -34,11 +34,16 @@ module.exports = function (grunt) {
 			unit: {
 				configFile: "config/karma.conf.js",
 			}
+		},
+		watch: {
+			files: ["src/**/*.js"],
+			tasks: ["concat", "uglify"]
 		}
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
+	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-karma");
 	
 	grunt.registerTask("default", ["concat", "uglify"]);

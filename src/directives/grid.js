@@ -33,21 +33,29 @@
 		};
 	}];
 
-	var template =
+	var defaultTemplate =
 		"<table class='angular-grid'>" +
-			"<thead><tr header-row ng-transclude></tr></thead>" +
+			"<thead><tr header-row></tr></thead>" +
 			"<tbody><tr row ng-repeat='rowData in data'></tr></tbody>" +
 		"</table>";
 	
 	return {
 		scope: {
 			data: "=?",
-			extraSettings: "="
+			extraSettings: "=?"
 		},
-		template: template,
+		template: defaultTemplate,
 		replace: true,
 		restrict: "EA",
 		transclude: true,
+		compile: function(tElement, tAttrs, transclude) {
+			return function postLink(scope, elem, attr) {
+				var transclusionScope = scope.$parent.$new();
+				transclude(transclusionScope, function(clone) {
+					elem.append(clone);
+				});
+			};
+		},
 		controller: gridController,
 		controllerAs: "gridController",
 	};
