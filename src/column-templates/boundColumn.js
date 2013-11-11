@@ -1,5 +1,5 @@
 ﻿grid.module.directive("boundColumn", function () {
-	var template = "<template-column><template-view>{{rowData.[property]}}</template-view></template-column>";
+	var template = "<template-column>{{rowData.[property]}}</template-column>";
 
 	return {
 		restrict: "EA",

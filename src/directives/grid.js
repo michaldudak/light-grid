@@ -1,10 +1,31 @@
-﻿grid.module.directive("lightGrid", function () {
+﻿grid.module.directive("lightGrid", function gridDirective() {
 	"use strict";
 
-	var gridController = ["$scope", "$element", function GridController($scope, $element) {
+	var gridController = ["$scope", "$element", "$rootScope", function GridController($scope, $element, $rootScope) {
+		var EVENT_PREFIX = "lightGrid.";
+
 		var dataProviderController = null;
+		var self = this;
+
 		$scope.columnDefinitions = [];
-		$scope.expandedRows = {};
+
+		function registerEventHandler(name) {
+			$scope.$on(EVENT_PREFIX + name, function(event, gridId) {
+				if (gridId !== $scope.id) {
+					return;
+				}
+
+				[].splice.call(arguments, 0, 2);
+
+				self[name].apply(self, arguments);
+			});
+		}
+
+		function fireEvent(name) {
+			name = EVENT_PREFIX + name;
+			[].splice.call(arguments, 1, 0, $scope.id);
+			$rootScope.$broadcast.apply($rootScope, arguments);
+		}
 
 		this.getData = function getData() {
 			return $scope.data;
@@ -18,19 +39,16 @@
 			$scope.columnDefinitions.push(column);
 		};
 
-		this.redraw = function() {
-			console.log("Redrawing table");
-			var tableElement = tableRenderer.renderTable($scope);
-			$element.empty().append(tableElement.children());
-		};
-
 		this.registerDataProvider = function(dataProvider) {
 			dataProviderController = dataProvider;
 		};
 
 		this.switchView = function(viewName) {
 			$scope.view = viewName;
+			fireEvent("switchedView", viewName);
 		};
+
+		registerEventHandler("switchView");
 	}];
 
 	var defaultTemplate =
@@ -42,7 +60,8 @@
 	return {
 		scope: {
 			data: "=?",
-			extraSettings: "=?"
+			extraSettings: "=?",
+			id: "@"
 		},
 		template: defaultTemplate,
 		replace: true,
@@ -50,6 +69,10 @@
 		transclude: true,
 		compile: function(tElement, tAttrs, transclude) {
 			return function postLink(scope, elem, attr) {
+				if (typeof (scope.id) === "undefined" || scope.id === "") {
+					throw new Error("The grid must have an id attribute.");
+				}
+
 				var transclusionScope = scope.$parent.$new();
 				transclude(transclusionScope, function(clone) {
 					elem.append(clone);

@@ -38,13 +38,22 @@ module.exports = function (grunt) {
 		watch: {
 			files: ["src/**/*.js"],
 			tasks: ["concat", "uglify"]
-		}
+		},
+		jsdoc : {
+			dist : {
+				src: ["src/*.js"], 
+				options: {
+					destination: "doc"
+				}
+			}
+	}
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-karma");
+	grunt.loadNpmTasks("grunt-jsdoc");
 	
 	grunt.registerTask("default", ["concat", "uglify"]);
 };

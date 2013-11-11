@@ -13,18 +13,17 @@
 			<h2>Full-featured grid</h2>
 
 			<button ng-click="modifyModel()">Modify model</button>
+			<button ng-click="switchView()">Switch view</button>
 
 			<light-grid id="sampleGrid" class="table" extra-settings="temp">
+
 				<local-data-provider model="localModel"></local-data-provider>
-				<template-column title="'Index'"><template-view>{{$index}}</template-view></template-column>
 
 				<bound-column property="firstName" title="'First name'"></bound-column>
 				<bound-column property="lastName" title="'Last name'"></bound-column>
 
 				<template-column title="'Formatted data'">
-					<template-view>
-						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{extraSettings.staticText}}
-					</template-view>
+					<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{extraSettings.staticText}}
 				</template-column>
 
 				<template-column title="'Combined editable data'">
@@ -33,8 +32,10 @@
 						{{ rowData.lastName }}
 					</template-view>
 					<template-view view="edit">
-						<input ng-model="rowData.firstName" />
-						<input ng-model="rowData.lastName" />
+						<input ng-model="viewData.firstName" />
+						<input ng-model="viewData.lastName" />
+						<button switch-view="read" persist-data>Save</button>
+						<button switch-view="read">Cancel</button>
 					</template-view>
 				</template-column>
 
@@ -43,12 +44,8 @@
 						<button switch-view="edit">Edit</button>
 						<button toggle-details="detailsTemplate.html">Details</button>
 					</template-view>
-					<template-view view="edit">
-						<button switch-view="read">Save</button>
-					</template-view>
+					<template-view view="edit"></template-view>
 				</template-column>
-
-				<static-column content="'Lorem ipsum'" title="'Static text'"></static-column>
 			</light-grid>
 
 			<h3>Common text</h3>
@@ -74,9 +71,10 @@
 	<script src="../src/directives/grid.js"></script>
 	<script src="../src/directives/row.js"></script>
 	<script src="../src/directives/headerRow.js"></script>
+	<script src="../src/directives/cell.js"></script>
+	<script src="../src/directives/headerCell.js"></script>
 
 	<script src="../src/column-templates/boundColumn.js"></script>
-	<script src="../src/column-templates/staticColumn.js"></script>
 	<script src="../src/column-templates/templateColumn.js"></script>
 	<script src="../src/column-templates/templateView.js"></script>
 
@@ -85,6 +83,7 @@
 
 	<script src="../src/cell-elements/switchView.js"></script>
 	<script src="../src/cell-elements/toggleDetails.js"></script>
+	<script src="../src/cell-elements/persistData.js"></script>
 
 	<!--script src="../dist/angular-grid-0.1.0.min.js"></script-->
 	<script src="app.js"></script>

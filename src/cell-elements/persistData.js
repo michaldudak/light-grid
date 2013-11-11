@@ -1,13 +1,11 @@
-﻿grid.module.directive("switchView", function () {
+grid.module.directive("persistData", function() {
 	return {
-		priority: 20,
+		priority: 10,
 		require: "^?row",
 		link: function (scope, elem, attrs, rowController) {
-			var viewName = attrs.switchView;
-
 			elem.on("click", function () {
-				rowController.switchView(viewName);
-				
+				rowController.acceptDataChanges();
+
 				if (!scope.$$phase) {
 					scope.$apply();
 				}

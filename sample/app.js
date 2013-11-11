@@ -165,6 +165,16 @@
 		$scope.modifyModel = function() {
 			$scope.localModel.splice(0, 1);
 		};
+
+		$scope.switchView = function() {
+			if ($scope.currentView === "edit") {
+				$scope.currentView = "read";
+			} else {
+				$scope.currentView = "edit";
+			}
+
+			$scope.$broadcast("lightGrid.switchView", "sampleGrid", $scope.currentView);
+		}
 	});
 
 }(window, window.angular));

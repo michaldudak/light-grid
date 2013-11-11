@@ -1,10 +1,11 @@
 ﻿grid.module.directive("toggleDetails", function() {
 	return {
-		link: function(scope, elem, attrs) {
+		require: "^?row",
+		link: function(scope, elem, attrs, rowController) {
 			var detailsTemplate = attrs.toggleDetails || attrs.detailsTemplate;
 
 			elem.on("click", function () {
-				scope.rowController.toggleDetails(detailsTemplate);
+				rowController.toggleDetails(detailsTemplate);
 				
 				if (!scope.$$phase) {
 					scope.$apply();

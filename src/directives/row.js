@@ -1,15 +1,13 @@
 ﻿grid.module.directive("row", ["$compile", function rowDirective($compile) {
 	"use strict";
 
-	function createCell(cellModel) {
-		return $("<td>").append(cellModel);
-	}
-
-	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{columnCount}}' ng-include='expandedTemplate'></td></tr>";
+	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{columnDefinitions.length}}' ng-include='expandedTemplate'></td></tr>";
 
 	return {
 		restrict: "A",
-		controller: ["$scope", function($scope) {
+		template: "<td cell ng-repeat='columnDefinition in columnDefinitions'></td>",
+		replace: false,
+		controller: ["$scope", function rowController($scope) {
 			var self = this;
 			
 			$scope.expandedTemplate = null;
@@ -34,37 +32,27 @@
 
 			this.switchView = function(viewName) {
 				$scope.view = viewName;
+				$scope.viewData = angular.copy($scope.rowData);
 				console.log("Switching view on a row " + $scope.$index + " to " + viewName);
+			};
+
+			this.acceptDataChanges = function() {
+				$.extend($scope.rowData, $scope.viewData);
 			};
 		}],
 		controllerAs: "rowController",
 		link: function(scope, element) {
-			var columnDefinitions = scope.columnDefinitions;
 
-			var row = element;
-			if (columnDefinitions.length) {
-				// full-featured mode
-				for (var col in columnDefinitions) {
-					if (columnDefinitions.hasOwnProperty(col)) {
-						var renderer = columnDefinitions[col].cellRenderer;
-						var cellContent = renderer(scope);
-						row.append(createCell(cellContent));
-					}
-				}
-
-				scope.columnCount = columnDefinitions.length;
-			} else {
-				// simple mode, without column definitions
-				scope.columnCount = 0;
-				for (var prop in scope.rowData) {
-					if (scope.rowData.hasOwnProperty(prop)) {
-						row.append(createCell(scope.rowData[prop]));
-						scope.columnCount += 1;
-					}
-				}
+			if (element[0].nodeName !== "TR") {
+				throw new Error("Row directive must be placed on a tr element.");
 			}
 
+			scope.$watch("rowData", function(rowData) {
+				scope.viewData = angular.copy(rowData);
+			});
+
 			var expandingRow = $(expandingRowMarkup);
+			expandingRow.data(element.data());
 			$compile(expandingRow)(scope);
 
 			element.after(expandingRow);
