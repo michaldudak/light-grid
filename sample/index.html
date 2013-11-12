@@ -17,7 +17,10 @@
 
 				<light-grid id="sampleGrid" class="table">
 
-					<local-data-provider model="localModel"></local-data-provider>
+					<custom-data-provider get-method="getRecords(options)"
+					                      add-method="addRecord(record)"
+					                      update-method="updateRecords(records)"
+					                      delete-method="deleteRecord(record)"></custom-data-provider>
 
 					<bound-column property="firstName" title="'First name'"></bound-column>
 					<bound-column property="lastName" title="'Last name'"></bound-column>
@@ -34,7 +37,7 @@
 						<template-view view="edit">
 							<input ng-model="viewData.firstName" />
 							<input ng-model="viewData.lastName" />
-							<button switch-view="read" persist-data>Save</button>
+							<button persist-data>Save</button>
 							<button switch-view="read">Cancel</button>
 						</template-view>
 					</template-column>
@@ -80,6 +83,7 @@
 
 		<script src="../src/data-providers/localDataProvider.js"></script>
 		<script src="../src/data-providers/ajaxDataProvider.js"></script>
+		<script src="../src/data-providers/customDataProvider.js"></script>
 
 		<script src="../src/cell-elements/switchView.js"></script>
 		<script src="../src/cell-elements/toggleDetails.js"></script>

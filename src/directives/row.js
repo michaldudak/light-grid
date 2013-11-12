@@ -31,7 +31,6 @@
 			};
 
 			this.switchView = function(viewName) {
-				
 				if ($scope.view === viewName) {
 					return;
 				}
@@ -41,8 +40,12 @@
 				console.log("Switching view on the row " + $scope.$index + " to " + viewName);
 			};
 
-			this.acceptDataChanges = function() {
+			this.acceptViewModel = function() {
 				$.extend($scope.rowData, $scope.viewData);
+			};
+
+			this.discardViewModel = function() {
+				$scope.viewData = angular.copy($scope.rowData);
 			};
 			
 			this.getDomElement = function () {
@@ -64,6 +67,8 @@
 				scope.viewData = angular.copy(rowData);
 			});
 
+			// angular templates can't have several top-level elements (and TR can't be a template root),
+			// so we need to insert another row here during linking
 			var expandingRow = $(expandingRowMarkup);
 			expandingRow.data(element.data());
 			$compile(expandingRow)(scope);

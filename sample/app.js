@@ -174,6 +174,23 @@
 
 			$scope.$broadcast("lightGrid.switchView", "sampleGrid", $scope.currentView);
 		};
+
+		$scope.getRecords = function (options) {
+			console.log("Requesting data", options);
+			return $scope.localModel;
+		};
+		
+		$scope.addRecord = function (record) {
+			console.log("Adding record", record);
+		};
+		
+		$scope.updateRecords = function (records) {
+			console.log("Updating records", records);
+		};
+		
+		$scope.deleteRecord = function (record) {
+			console.log("Deleting record", record);
+		};
 	});
 
 }(window, window.angular));

@@ -1,10 +1,22 @@
-﻿grid.module.directive("lightGrid", function gridDirective() {
+﻿grid.module.directive("lightGrid", ["$q", function gridDirective($q) {
 	"use strict";
 
 	var gridController = ["$scope", "$element", "$rootScope", function GridController($scope, $element, $rootScope) {
 		var EVENT_PREFIX = "lightGrid.";
 
-		var dataProviderController = null;
+		// empty fallback data provider
+		var dataProviderController = {
+			getData: function() {
+				return $scope.data;
+			},
+			sort: function() {},
+			changePage: function () {},
+			filter: function() {},
+			persistData: function () {},
+			addRecord: function () {},
+			removeRecord: function () {}
+		};
+		
 		var self = this;
 
 		$scope.columnDefinitions = [];
@@ -43,6 +55,10 @@
 			dataProviderController = dataProvider;
 		};
 
+		this.getDataProvider = function() {
+			return dataProviderController;
+		};
+
 		this.switchView = function(viewName) {
 			$scope.$broadcast(EVENT_PREFIX + "row.switchView", viewName);
 			fireEvent("switchedView", viewName);
@@ -75,18 +91,24 @@
 		restrict: "EA",
 		transclude: true,
 		compile: function(tElement, tAttrs, transclude) {
-			return function postLink(scope, elem, attr) {
+			return function postLink(scope, elem) {
 				if (typeof (scope.id) === "undefined" || scope.id === "") {
 					throw new Error("The grid must have an id attribute.");
 				}
 
+				// directives such as dataProvider require access to the parent of the grid scope,
+				// so they can't be linked with the grid scope (as it's isolated).
 				var transclusionScope = scope.$parent.$new();
 				transclude(transclusionScope, function(clone) {
 					elem.append(clone);
+				});
+
+				$q.when(scope.gridController.getDataProvider().getData()).then(function(data) {
+					scope.data = data;
 				});
 			};
 		},
 		controller: gridController,
 		controllerAs: "gridController",
 	};
-});
+}]);

@@ -2,6 +2,15 @@
 	"use strict";
 	
 	function AjaxDataProviderController() {
+		var loadedDataProperties = {
+			sort: null,
+			
+		};
+
+		this.getData = function (options) {
+
+		};
+
 		this.sort = function (sortProperty, descending) {
 			throw new Error("Not implemented");
 		};
@@ -14,7 +23,7 @@
 			throw new Error("Not implemented");
 		};
 
-		this.persistData = function (rows) {
+		this.updateRecords = function (rows) {
 			throw new Error("Not implemented");
 		};
 
@@ -22,7 +31,7 @@
 			throw new Error("Not implemented");
 		};
 
-		this.removeRecord = function (removeRecord) {
+		this.deleteRecord = function (removeRecord) {
 			throw new Error("Not implemented");
 		};
 	}
@@ -37,7 +46,7 @@
 		controller: AjaxDataProviderController,
 		link: function (scope, elem, attrs, gridController) {
 			elem.remove();
-			gridController.registerDataProvider(AjaxDataProviderController);
+			gridController.registerDataProvider(scope.controller);
 			$http.get(scope.url).success(function(data) {
 				gridController.setData(data);
 			});
