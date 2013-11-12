@@ -23,13 +23,17 @@ grid.module.directive("cell", ["$compile", function cellDirective($compile) {
 
 	return {
 		restrict: "EA",
-		link: function(scope, element) {
+		require: "^lightGrid",
+		link: function(scope, element, attrs, gridController) {
 			var views = scope.columnDefinition.views;
+
+			var transclusionScope = scope;
+			transclusionScope.external = gridController.getScope().$parent;
 
 			if (countProperties(views) === 1 && typeof(views["*"]) !== "undefined") {
 				// optimization: if there is just default view defined, we don't need ngSwitch
 
-				views["*"](scope, function (clone) {
+				views["*"](transclusionScope, function (clone) {
 					element.append(clone);
 				});
 
@@ -38,12 +42,12 @@ grid.module.directive("cell", ["$compile", function cellDirective($compile) {
 
 			var switchRoot = angular.element("<div ng-switch='view' />");
 
-			for (var availableView in views) {
-				if (views.hasOwnProperty(availableView) && availableView !== "*") {
-					var viewLinker = views[availableView];
-					var switchElement = angular.element("<div ng-switch-when='" + availableView + "' />");
+			for (var view in views) {
+				if (views.hasOwnProperty(view) && view !== "*") {
+					var viewLinker = views[view];
+					var switchElement = angular.element("<div ng-switch-when='" + view + "' />");
 
-					viewLinker(scope, function(clone) {
+					viewLinker(transclusionScope, function (clone) {
 						switchElement.append(clone);
 					});
 
@@ -53,7 +57,7 @@ grid.module.directive("cell", ["$compile", function cellDirective($compile) {
 
 			if (views["*"]) {
 				var defaultElement = angular.element("<div ng-switch-default />");
-				views["*"](scope, function(clone) {
+				views["*"](transclusionScope, function (clone) {
 					defaultElement.append(clone);
 				});
 
@@ -61,7 +65,7 @@ grid.module.directive("cell", ["$compile", function cellDirective($compile) {
 			}
 
 			element.append(switchRoot);
-			$compile(switchRoot)(scope);
+			$compile(switchRoot)(transclusionScope);
 		}
 	};
 }]);

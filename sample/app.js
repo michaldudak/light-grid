@@ -159,8 +159,7 @@
 			}
 		];
 		
-		$scope.temp = {};
-		$scope.temp.staticText = "some random text";
+		$scope.staticText = "some random text";
 
 		$scope.modifyModel = function() {
 			$scope.localModel.splice(0, 1);
@@ -174,7 +173,7 @@
 			}
 
 			$scope.$broadcast("lightGrid.switchView", "sampleGrid", $scope.currentView);
-		}
+		};
 	});
 
 }(window, window.angular));

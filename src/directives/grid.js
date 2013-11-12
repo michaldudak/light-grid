@@ -44,8 +44,16 @@
 		};
 
 		this.switchView = function(viewName) {
-			$scope.view = viewName;
+			$scope.$broadcast(EVENT_PREFIX + "row.switchView", viewName);
 			fireEvent("switchedView", viewName);
+		};
+
+		this.getDomElement = function() {
+			return $element;
+		};
+
+		this.getScope = function() {
+			return $scope;
 		};
 
 		registerEventHandler("switchView");
@@ -54,13 +62,12 @@
 	var defaultTemplate =
 		"<table class='angular-grid'>" +
 			"<thead><tr header-row></tr></thead>" +
-			"<tbody><tr row ng-repeat='rowData in data'></tr></tbody>" +
+			"<tbody><tr row default-view='read' ng-repeat='rowData in data'></tr></tbody>" +
 		"</table>";
 	
 	return {
 		scope: {
 			data: "=?",
-			extraSettings: "=?",
 			id: "@"
 		},
 		template: defaultTemplate,

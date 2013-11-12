@@ -31,14 +31,27 @@
 			};
 
 			this.switchView = function(viewName) {
+				
+				if ($scope.view === viewName) {
+					return;
+				}
+				
 				$scope.view = viewName;
 				$scope.viewData = angular.copy($scope.rowData);
-				console.log("Switching view on a row " + $scope.$index + " to " + viewName);
+				console.log("Switching view on the row " + $scope.$index + " to " + viewName);
 			};
 
 			this.acceptDataChanges = function() {
 				$.extend($scope.rowData, $scope.viewData);
 			};
+			
+			this.getDomElement = function () {
+				return $element;
+			};
+
+			$scope.$on("lightGrid.row.switchView", function(event, viewName) {
+				self.switchView(viewName);
+			});
 		}],
 		controllerAs: "rowController",
 		link: function(scope, element) {
