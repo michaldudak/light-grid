@@ -13,6 +13,7 @@ module.exports = function (grunt) {
 				src: [
 					"src/moduleDefinition.js",
 					"src/directives/*.js",
+					"src/services/*.js",
 					"src/cell-elements/*.js",
 					"src/column-templates/*.js",
 					"src/data-providers/*.js"

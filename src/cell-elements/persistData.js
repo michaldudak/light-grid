@@ -1,4 +1,4 @@
-grid.module.directive("persistData", ["$q", function($q) {
+grid.module.directive("persistData", ["$q", "$rootScope", function($q, $rootScope) {
 	return {
 		priority: 10,
 		link: function (scope, elem) {
@@ -9,7 +9,7 @@ grid.module.directive("persistData", ["$q", function($q) {
 						scope.rowController.acceptViewModel();
 						scope.rowController.switchView("read");
 
-						if (!scope.$$phase) {
+						if (!scope.$$phase && !$rootScope.$$phase) {
 							scope.$apply();
 						}
 					});

@@ -14,6 +14,7 @@
 
 				<button ng-click="modifyModel()">Modify model</button>
 				<button ng-click="switchView()">Edit all</button>
+				<button ng-click="saveAll()">Save all</button>
 
 				<light-grid id="sampleGrid" class="table">
 
@@ -49,16 +50,15 @@
 						</template-view>
 						<template-view view="edit"></template-view>
 					</template-column>
+					
+					<template-column title="'Row data'">
+						{{rowData}} <br />
+						{{rowData.viewModel}}
+					</template-column>
 				</light-grid>
 
 				<h3>Common text</h3>
 				<input ng-model="staticText" />
-
-				<h2>Simpler grid</h2>
-				<light-grid id="sampleGrid2" class="table" data="localModel">
-					<bound-column property="firstName" title="'First name'"></bound-column>
-					<bound-column property="lastName" title="'Last name'"></bound-column>
-				</light-grid>
 
 				<h2>First record modification</h2>
 				<input ng-model="localModel[0].firstName" />
@@ -76,6 +76,8 @@
 		<script src="../src/directives/headerRow.js"></script>
 		<script src="../src/directives/cell.js"></script>
 		<script src="../src/directives/headerCell.js"></script>
+
+		<script src="../src/services/gridService.js"></script>
 
 		<script src="../src/column-templates/boundColumn.js"></script>
 		<script src="../src/column-templates/templateColumn.js"></script>

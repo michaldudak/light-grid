@@ -2,13 +2,8 @@
 	"use strict";
 	
 	function AjaxDataProviderController() {
-		var loadedDataProperties = {
-			sort: null,
-			
-		};
-
 		this.getData = function (options) {
-
+			throw new Error("Not implemented");
 		};
 
 		this.sort = function (sortProperty, descending) {

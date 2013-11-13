@@ -1,9 +1,8 @@
-﻿grid.module.directive("lightGrid", ["$q", function gridDirective($q) {
+﻿grid.module.directive("lightGrid", ["gridService", function gridDirective(gridService) {
 	"use strict";
 
-	var gridController = ["$scope", "$element", "$rootScope", function GridController($scope, $element, $rootScope) {
-		var EVENT_PREFIX = "lightGrid.";
-
+	var gridController = ["$scope", "$element", function GridController($scope, $element) {
+		
 		// empty fallback data provider
 		var dataProviderController = {
 			getData: function() {
@@ -17,30 +16,28 @@
 			removeRecord: function () {}
 		};
 		
-		var self = this;
-
 		$scope.columnDefinitions = [];
-
-		function registerEventHandler(name) {
-			$scope.$on(EVENT_PREFIX + name, function(event, gridId) {
-				if (gridId !== $scope.id) {
-					return;
-				}
-
-				[].splice.call(arguments, 0, 2);
-
-				self[name].apply(self, arguments);
-			});
-		}
-
-		function fireEvent(name) {
-			name = EVENT_PREFIX + name;
-			[].splice.call(arguments, 1, 0, $scope.id);
-			$rootScope.$broadcast.apply($rootScope, arguments);
-		}
-
+		
 		this.getData = function getData() {
 			return $scope.data;
+		};
+
+		this.getViewData = function getViewData() {
+			if (angular.isArray($scope.data)) {
+				return $scope.data.map(function(elem) {
+					return elem._viewData;
+				});
+			} else {
+				var gridViewData = {};
+
+				for (var prop in $scope.data) {
+					if ($scope.data.hasOwnProperty(prop)) {
+						gridViewData[prop] = $scope.data[prop]._viewData;
+					}
+				}
+
+				return gridViewData;
+			}
 		};
 
 		this.setData = function setData(newData) {
@@ -60,8 +57,11 @@
 		};
 
 		this.switchView = function(viewName) {
-			$scope.$broadcast(EVENT_PREFIX + "row.switchView", viewName);
-			fireEvent("switchedView", viewName);
+			$scope.$broadcast("lightGrid.row.switchView", viewName);
+		};
+
+		this.acceptViewModel = function() {
+			$scope.$broadcast("lightGrid.row.acceptViewModel");
 		};
 
 		this.getDomElement = function() {
@@ -71,8 +71,6 @@
 		this.getScope = function() {
 			return $scope;
 		};
-
-		registerEventHandler("switchView");
 	}];
 
 	var defaultTemplate =
@@ -103,8 +101,14 @@
 					elem.append(clone);
 				});
 
-				$q.when(scope.gridController.getDataProvider().getData()).then(function(data) {
-					scope.data = data;
+				scope.gridController.getDataProvider().getData().then(function(response) {
+					scope.data = response.data;
+				});
+
+				gridService.registerGrid(scope.id, scope.gridController);
+
+				scope.$on("$destroy", function() {
+					gridService.unregisterGrid(scope.id);
 				});
 			};
 		},

@@ -2,6 +2,20 @@
 	"use strict";
 
 	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{columnDefinitions.length}}' ng-include='expandedTemplate'></td></tr>";
+	
+	function defineViewDataProperty(obj) {
+		try {
+			Object.defineProperty(obj, "_viewData", {
+				configurable: true,
+				writable: true
+			});
+		} catch(err) {
+			// IE < 9 does not support properties
+			// falling back to plain field
+
+			obj._viewData = null;
+		}
+	}
 
 	return {
 		restrict: "A",
@@ -36,16 +50,21 @@
 				}
 				
 				$scope.view = viewName;
-				$scope.viewData = angular.copy($scope.rowData);
+				self.resetViewModel();
 				console.log("Switching view on the row " + $scope.$index + " to " + viewName);
 			};
 
 			this.acceptViewModel = function() {
 				$.extend($scope.rowData, $scope.viewData);
+				defineViewDataProperty();
+				$scope.rowData._viewData = $scope.viewData;
 			};
 
-			this.discardViewModel = function() {
+			this.resetViewModel = function() {
+				delete $scope.rowData._viewData;
 				$scope.viewData = angular.copy($scope.rowData);
+				defineViewDataProperty();
+				$scope.rowData._viewData = $scope.viewData;
 			};
 			
 			this.getDomElement = function () {
@@ -55,6 +74,10 @@
 			$scope.$on("lightGrid.row.switchView", function(event, viewName) {
 				self.switchView(viewName);
 			});
+			
+			$scope.$on("lightGrid.row.acceptViewModel", function () {
+				self.acceptViewModel();
+			});
 		}],
 		controllerAs: "rowController",
 		link: function(scope, element) {
@@ -63,8 +86,8 @@
 				throw new Error("Row directive must be placed on a tr element.");
 			}
 
-			scope.$watch("rowData", function(rowData) {
-				scope.viewData = angular.copy(rowData);
+			scope.$watch("rowData", function() {
+				scope.rowController.resetViewModel();
 			});
 
 			// angular templates can't have several top-level elements (and TR can't be a template root),

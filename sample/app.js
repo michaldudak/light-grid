@@ -3,7 +3,7 @@
 	var app = ng.module("angularGridSample", ["light-grid"]);
 	window.app = app;
 
-	app.controller("SampleController", function($scope) {
+	app.controller("SampleController", function($scope, $http, gridService) {
 		$scope.localModel = [
 			{
 				"firstName": "Aidan",
@@ -177,7 +177,7 @@
 
 		$scope.getRecords = function (options) {
 			console.log("Requesting data", options);
-			return $scope.localModel;
+			return $http.get("sampleData.json");
 		};
 		
 		$scope.addRecord = function (record) {
@@ -190,6 +190,17 @@
 		
 		$scope.deleteRecord = function (record) {
 			console.log("Deleting record", record);
+		};
+
+		$scope.saveAll = function() {
+			var ctrl = gridService.getGridController("sampleGrid");
+			var dataProvider = ctrl.getDataProvider();
+
+			dataProvider.updateRecords(ctrl.getViewData());
+
+			console.log(ctrl.getViewData());
+			ctrl.acceptViewModel();
+			ctrl.switchView("read");
 		};
 	});
 
