@@ -1,12 +1,12 @@
 ﻿grid.module.directive("lightGrid", ["gridService", function gridDirective(gridService) {
 	"use strict";
 
-	var gridController = ["$scope", "$element", function GridController($scope, $element) {
+	var gridController = ["$scope", "$element", "$q", function GridController($scope, $element, $q) {
 		
 		// empty fallback data provider
 		var dataProviderController = {
 			getData: function() {
-				return $scope.data;
+				return $q.when(function() { return { data: $scope.data }; });
 			},
 			sort: function() {},
 			changePage: function () {},
