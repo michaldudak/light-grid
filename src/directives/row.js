@@ -56,14 +56,14 @@
 
 			this.acceptViewModel = function() {
 				$.extend($scope.rowData, $scope.viewData);
-				defineViewDataProperty();
+				defineViewDataProperty($scope.rowData);
 				$scope.rowData._viewData = $scope.viewData;
 			};
 
 			this.resetViewModel = function() {
 				delete $scope.rowData._viewData;
 				$scope.viewData = angular.copy($scope.rowData);
-				defineViewDataProperty();
+				defineViewDataProperty($scope.rowData);
 				$scope.rowData._viewData = $scope.viewData;
 			};
 			

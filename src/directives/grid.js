@@ -6,7 +6,7 @@
 		// empty fallback data provider
 		var dataProviderController = {
 			getData: function() {
-				return $q.when(function() { return { data: $scope.data }; });
+				return $q.when({ data: $scope.data });
 			},
 			sort: function() {},
 			changePage: function () {},
