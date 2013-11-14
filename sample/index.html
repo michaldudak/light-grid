@@ -12,60 +12,62 @@
 			<div ng-controller="SampleController">
 				<h2>Full-featured grid</h2>
 
-				<button ng-click="modifyModel()">Modify model</button>
-				<button ng-click="switchView()">Edit all</button>
-				<button ng-click="saveAll()">Save all</button>
+				<button class="btn btn-default" ng-click="modifyModel()">Modify model</button>
+				<button class="btn btn-default" ng-click="switchView()">Edit all</button>
+				<button class="btn btn-default" ng-click="saveAll()">Save all</button>
 
 				<light-grid id="sampleGrid" class="table">
 
-					<custom-data-provider get-method="getRecords(options)"
-					                      add-method="addRecord(record)"
-					                      update-method="updateRecords(records)"
-					                      delete-method="deleteRecord(record)"></custom-data-provider>
+					<lg-custom-data-provider get-method="getRecords(options)"
+					                         add-method="addRecord(record)"
+					                         update-method="updateRecords(records)"
+					                         delete-method="deleteRecord(record)"></lg-custom-data-provider>
 
-					<bound-column property="firstName" title="'First name'"></bound-column>
-					<bound-column property="lastName" title="'Last name'"></bound-column>
+					<lg-bound-column property="firstName" title="'First name'"></lg-bound-column>
+					<lg-bound-column property="lastName" title="'Last name'"></lg-bound-column>
 
-					<template-column title="'Formatted data'">
+					<lg-column title="'Formatted data'">
 						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{external.staticText}}
-					</template-column>
+					</lg-column>
 
-					<template-column title="'Combined editable data'">
-						<template-view>
+					<lg-column title="'Combined editable data'">
+						<lg-view>
 							{{ rowData.firstName }}
 							{{ rowData.lastName }}
-						</template-view>
-						<template-view view="edit">
-							<input ng-model="viewData.firstName" />
-							<input ng-model="viewData.lastName" />
-							<button persist-data>Save</button>
-							<button switch-view="read">Cancel</button>
-						</template-view>
-					</template-column>
+						</lg-view>
+						<lg-view view="edit">
+							<div class="row">
+								<div class="col-xs-4">
+									<input ng-model="viewData.firstName" class="form-control input-sm" />
+								</div>
+								<div class="col-xs-4">
+									<input ng-model="viewData.lastName" class="form-control input-sm" />
+								</div>
+							</div>
+						</lg-view>
+					</lg-column>
 
-					<template-column title="'Actions'">
-						<template-view>
-							<button switch-view="edit">Edit</button>
-							<button toggle-details="detailsTemplate.html">Details</button>
-						</template-view>
-						<template-view view="edit"></template-view>
-					</template-column>
-					
-					<template-column title="'Row data'">
-						{{rowData}} <br />
-						{{rowData.viewModel}}
-					</template-column>
+					<lg-column title="'Actions'">
+						<lg-view>
+							<button class="btn btn-default btn-sm" switch-view="edit">Edit</button>
+							<button class="btn btn-default btn-sm" toggle-details="detailsTemplate.html">Details</button>
+						</lg-view>
+						<lg-view view="edit">
+							<button class="btn btn-primary btn-sm" persist-data>Save</button>
+							<button class="btn btn-default btn-sm" switch-view="read">Cancel</button>
+						</lg-view>
+					</lg-column>
+
+					<lg-column title="'Row data'">
+						<pre>{{rowData}}</pre>
+					</lg-column>
 				</light-grid>
 
 				<h3>Common text</h3>
-				<input ng-model="staticText" />
-
-				<h2>First record modification</h2>
-				<input ng-model="localModel[0].firstName" />
-				<input ng-model="localModel[0].lastName" />
+				<input ng-model="staticText" class="form-control" />
 			</div>
 		</div>
-	
+
 		<script src="../libs/jquery-1.10.2.js"></script>
 		<script src="../libs/angular-1.2.0.js"></script>
 
@@ -84,14 +86,13 @@
 		<script src="../src/column-templates/templateView.js"></script>
 
 		<script src="../src/data-providers/localDataProvider.js"></script>
-		<script src="../src/data-providers/ajaxDataProvider.js"></script>
 		<script src="../src/data-providers/customDataProvider.js"></script>
 
 		<script src="../src/cell-elements/switchView.js"></script>
 		<script src="../src/cell-elements/toggleDetails.js"></script>
 		<script src="../src/cell-elements/persistData.js"></script>
 
-		<!--script src="../dist/angular-grid-0.1.0.min.js"></script-->
+		<!--<script src="../dist/angular-grid-0.1.0.min.js"></script>-->
 		<script src="app.js"></script>
 	</body>
 </html>

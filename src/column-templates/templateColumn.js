@@ -1,4 +1,4 @@
-﻿grid.module.directive("templateColumn", [function () {
+﻿grid.module.directive("lgColumn", [function () {
 	return {
 		scope: {
 			property: "@",

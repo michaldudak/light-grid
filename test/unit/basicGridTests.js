@@ -1,6 +1,6 @@
 ﻿/// <reference path="/libs/jquery-1.10.2.js" />
 /// <reference path="/libs/angular-1.2.0.js" />
-/// <reference path="/dist/angular-grid-0.1.0.js" />
+/// <reference path="/dist/angular-grid-0.1.0.min.js" />
 /// <reference path="/test/lib/angular-mocks.js" />
 
 describe("Grid directive tests:", function () {

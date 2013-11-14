@@ -1,4 +1,4 @@
-﻿grid.module.directive("customDataProvider", [function () {
+﻿grid.module.directive("lgCustomDataProvider", [function () {
 	"use strict";
 
 	var customDataProviderController = ["$scope", "$q", function CustomDataProviderController($scope, $q) {

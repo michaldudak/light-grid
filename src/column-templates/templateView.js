@@ -1,10 +1,10 @@
-﻿grid.module.directive("templateView", function () {
+﻿grid.module.directive("lgView", function () {
 	return {
 		scope: {
 			view: "@"
 		},
 		restrict: "EA",
-		require: "^templateColumn",
+		require: "^lgColumn",
 		transclude: true,
 		compile: function (templateElement, templateAttrs, linker) {
 			return function (scope, instanceElement, instanceAttrs, templateColumnController) {

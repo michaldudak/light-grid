@@ -1,4 +1,4 @@
-﻿grid.module.directive("row", ["$compile", function rowDirective($compile) {
+﻿grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 	"use strict";
 
 	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{columnDefinitions.length}}' ng-include='expandedTemplate'></td></tr>";
@@ -19,7 +19,7 @@
 
 	return {
 		restrict: "A",
-		template: "<td cell ng-repeat='columnDefinition in columnDefinitions'></td>",
+		template: "<td lg-cell ng-repeat='columnDefinition in columnDefinitions'></td>",
 		replace: false,
 		controller: ["$scope", function rowController($scope) {
 			var self = this;

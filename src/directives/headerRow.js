@@ -1,8 +1,8 @@
-﻿grid.module.directive("headerRow", [function headerRowDirective() {
+﻿grid.module.directive("lgHeaderRow", [function headerRowDirective() {
 	"use strict";
 
 	return {
 		restrict: "A",
-		template: "<th header-cell ng-repeat='columnDefinition in columnDefinitions'></th>",
+		template: "<th lg-header-cell ng-repeat='columnDefinition in columnDefinitions'></th>",
 	};
 }]);

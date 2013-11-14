@@ -1,9 +1,10 @@
-﻿(function(window, ng) {
+﻿(function (window, ng) {
+	"use strict";
 
 	var app = ng.module("angularGridSample", ["light-grid"]);
 	window.app = app;
 
-	app.controller("SampleController", function($scope, $http, gridService) {
+	app.controller("SampleController", function($scope, $http, lgGridService) {
 		$scope.localModel = [
 			{
 				"firstName": "Aidan",
@@ -172,7 +173,7 @@
 				$scope.currentView = "edit";
 			}
 
-			$scope.$broadcast("lightGrid.switchView", "sampleGrid", $scope.currentView);
+			lgGridService.getGridController("sampleGrid").switchView($scope.currentView);
 		};
 
 		$scope.getRecords = function (options) {
@@ -193,7 +194,7 @@
 		};
 
 		$scope.saveAll = function() {
-			var ctrl = gridService.getGridController("sampleGrid");
+			var ctrl = lgGridService.getGridController("sampleGrid");
 			var dataProvider = ctrl.getDataProvider();
 
 			dataProvider.updateRecords(ctrl.getViewData());
@@ -201,6 +202,7 @@
 			console.log(ctrl.getViewData());
 			ctrl.acceptViewModel();
 			ctrl.switchView("read");
+			$scope.currentView = "read";
 		};
 	});
 

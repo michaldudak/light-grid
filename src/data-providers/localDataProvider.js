@@ -1,4 +1,4 @@
-﻿grid.module.directive("localDataProvider", [function () {
+﻿grid.module.directive("lgLocalDataProvider", [function () {
 	"use strict";
 
 	var localDataProviderController = ["$scope", "$q", function LocalDataProviderController($scope, $q) {

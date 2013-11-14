@@ -1,4 +1,4 @@
-﻿grid.module.service("gridService", [function gridService() {
+﻿grid.module.service("lgGridService", [function gridService() {
 	"use strict";
 
 	var grids = {};

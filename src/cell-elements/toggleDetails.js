@@ -1,6 +1,6 @@
 ﻿grid.module.directive("toggleDetails", function() {
 	return {
-		require: "^?row",
+		require: "^?lgRow",
 		link: function(scope, elem, attrs, rowController) {
 			var detailsTemplate = attrs.toggleDetails || attrs.detailsTemplate;
 

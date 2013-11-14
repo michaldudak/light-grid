@@ -5,7 +5,7 @@
  * @function cellDirective
  * @module lightGrid
  */
-grid.module.directive("cell", ["$compile", function cellDirective($compile) {
+grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 	function countProperties(obj) {
 		if (typeof Object.keys === "function") {
 			return Object.keys(obj).length;

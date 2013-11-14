@@ -1,4 +1,4 @@
-﻿grid.module.directive("lightGrid", ["gridService", function gridDirective(gridService) {
+﻿grid.module.directive("lightGrid", ["lgGridService", function gridDirective(gridService) {
 	"use strict";
 
 	var gridController = ["$scope", "$element", "$q", function GridController($scope, $element, $q) {
@@ -75,8 +75,8 @@
 
 	var defaultTemplate =
 		"<table class='angular-grid'>" +
-			"<thead><tr header-row></tr></thead>" +
-			"<tbody><tr row default-view='read' ng-repeat='rowData in data'></tr></tbody>" +
+			"<thead><tr lg-header-row></tr></thead>" +
+			"<tbody><tr lg-row default-view='read' ng-repeat='rowData in data'></tr></tbody>" +
 		"</table>";
 	
 	return {
