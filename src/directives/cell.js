@@ -6,6 +6,8 @@
  * @module lightGrid
  */
 grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
+	"use strict";
+	
 	function countProperties(obj) {
 		if (typeof Object.keys === "function") {
 			return Object.keys(obj).length;
@@ -18,7 +20,7 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 			}
 		}
 
-		return keys;
+		return count;
 	}
 
 	return {
@@ -27,8 +29,19 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 		link: function(scope, element, attrs, gridController) {
 			var views = scope.columnDefinition.views;
 
-			var transclusionScope = scope;
-			transclusionScope.external = gridController.getScope().$parent;
+			var transclusionScope = gridController.getScope().$parent.$new();
+
+			transclusionScope.rowData = scope.rowData;
+			transclusionScope.gridController = scope.gridController;
+			transclusionScope.rowController = scope.rowController;
+
+			scope.$watch("view", function() {
+				transclusionScope.view = scope.view;
+			});
+
+			scope.$watch("viewData", function () {
+				transclusionScope.viewData = scope.viewData;
+			});
 			
 			element.attr("class", scope.columnDefinition.attributes.class);
 
