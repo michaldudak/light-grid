@@ -1,4 +1,8 @@
-﻿grid.module.directive("toggleDetails", function() {
+﻿/* global grid */
+
+grid.module.directive("toggleDetails", function () {
+	"use strict";
+	
 	return {
 		require: "^?lgRow",
 		link: function(scope, elem, attrs, rowController) {

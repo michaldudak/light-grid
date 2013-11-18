@@ -1,4 +1,8 @@
-﻿grid.module.directive("lgColumn", function () {
+﻿/* global grid */
+
+grid.module.directive("lgColumn", function () {
+	"use strict";
+	
 	return {
 		scope: {
 			title: "="

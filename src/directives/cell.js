@@ -1,3 +1,5 @@
+/* global angular, grid */
+
 /**
  * Represents a cell in a table.
  * Does not expose any API.
@@ -56,16 +58,18 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 			}
 
 			var switchRoot = angular.element("<div ng-switch='view' />");
+			
+			function cloneLinkerHandlerBuilder(switchElem) {
+				return function(clone) {
+					switchElem.append(clone);
+				};
+			}
 
 			for (var view in views) {
 				if (views.hasOwnProperty(view) && view !== "*") {
 					var viewLinker = views[view];
 					var switchElement = angular.element("<div ng-switch-when='" + view + "' />");
-
-					viewLinker(transclusionScope, function (clone) {
-						switchElement.append(clone);
-					});
-
+					viewLinker(transclusionScope, cloneLinkerHandlerBuilder(switchElement));
 					switchRoot.append(switchElement);
 				}
 			}

@@ -1,34 +1,36 @@
-﻿grid.module.directive("lgLocalDataProvider", [function () {
+﻿/* global grid */
+
+grid.module.directive("lgLocalDataProvider", [function () {
 	"use strict";
 
 	var localDataProviderController = ["$scope", "$q", function LocalDataProviderController($scope, $q) {
-		this.getData = function(options) {
+		this.getData = function() {
 			return $q.when(function() {
 				return { data: $scope.model };
 			});
 		};
 
-		this.sort = function(sortProperty, descending) {
+		this.sort = function(/*sortProperty, descending*/) {
 			throw new Error("Not implemented");
 		};
 
-		this.changePage = function(pageNumber, pageSize) {
+		this.changePage = function(/*pageNumber, pageSize*/) {
 			throw new Error("Not implemented");
 		};
 
-		this.filter = function(filter) {
+		this.filter = function(/*filter*/) {
 			throw new Error("Not implemented");
 		};
 
-		this.updateRecords = function(records) {
+		this.updateRecords = function(/*records*/) {
 			throw new Error("Not implemented");
 		};
 
-		this.addRecord = function(record) {
+		this.addRecord = function(/*record*/) {
 			throw new Error("Not implemented");
 		};
 
-		this.deleteRecord = function(removeRecord) {
+		this.deleteRecord = function(/*removeRecord*/) {
 			throw new Error("Not implemented");
 		};
 	}];

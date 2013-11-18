@@ -1,4 +1,6 @@
-﻿grid.module.directive("lightGrid", ["lgGridService", function gridDirective(gridService) {
+﻿/* global angular, grid */
+
+grid.module.directive("lightGrid", ["lgGridService", function gridDirective(gridService) {
 	"use strict";
 
 	var gridController = ["$scope", "$element", "$q", function GridController($scope, $element, $q) {

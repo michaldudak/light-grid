@@ -3,6 +3,8 @@
 /// <reference path="/dist/angular-grid-0.1.0.min.js" />
 /// <reference path="/test/lib/angular-mocks.js" />
 
+/* global beforeEach, describe, it, expect, inject, module */
+
 describe("Grid directive tests:", function () {
 	"use strict";
 
@@ -10,7 +12,6 @@ describe("Grid directive tests:", function () {
 	var $rootScope;
 
 	var emptyGrid = "<light-grid id='testGrid'></light-grid>";
-	var emptyGridWithData = "<light-grid id='testGrid' data='model'></light-grid>";
 	var singleColumnGrid = "<light-grid id='testGrid' data='model'><template-column title='\"Column 1\"'>{{rowData.id}}</template-column></light-grid>";
 	
 	beforeEach(module("light-grid"));

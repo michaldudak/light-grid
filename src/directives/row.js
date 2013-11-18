@@ -1,4 +1,6 @@
-﻿grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
+﻿/* global angular, grid */
+
+grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 	"use strict";
 
 	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{columnDefinitions.length}}' ng-include='expandedTemplate'></td></tr>";

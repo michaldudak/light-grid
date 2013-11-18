@@ -1,4 +1,8 @@
-﻿grid.module.directive("lgView", function () {
+﻿/* global grid */
+
+grid.module.directive("lgView", function () {
+	"use strict";
+	
 	return {
 		scope: {
 			view: "@"

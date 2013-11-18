@@ -1,4 +1,6 @@
-﻿grid.module.directive("lgHeaderRow", [function headerRowDirective() {
+﻿/* global grid */
+
+grid.module.directive("lgHeaderRow", [function headerRowDirective() {
 	"use strict";
 
 	return {

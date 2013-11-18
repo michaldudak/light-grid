@@ -1,4 +1,8 @@
-grid.module.directive("persistData", ["$q", "$rootScope", function($q, $rootScope) {
+/* global grid */
+
+grid.module.directive("persistData", ["$q", "$rootScope", function ($q, $rootScope) {
+	"use strict";
+	
 	return {
 		priority: 10,
 		link: function (scope, elem) {

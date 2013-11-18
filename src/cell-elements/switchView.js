@@ -1,4 +1,8 @@
-﻿grid.module.directive("switchView", function () {
+﻿/* global grid */
+
+grid.module.directive("switchView", function () {
+	"use strict";
+	
 	return {
 		priority: 20,
 		require: "^?lgRow",
