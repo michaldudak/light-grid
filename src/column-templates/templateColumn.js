@@ -1,7 +1,6 @@
-﻿grid.module.directive("lgColumn", [function () {
+﻿grid.module.directive("lgColumn", function () {
 	return {
 		scope: {
-			property: "@",
 			title: "="
 		},
 		restrict: "EA",
@@ -14,8 +13,18 @@
 			$scope.viewCount = 0;
 
 			templateColumnController.registerView = function(name, viewLinker) {
-				$scope.views[name || "*"] = viewLinker;
-				$scope.viewCount += 1;
+				name = name || "*";
+				var separatedNames = name.split(",");
+
+				for (var i = 0; i < separatedNames.length; ++i) {
+					var separatedName = separatedNames[i].trim();
+					if (separatedName === "") {
+						continue;
+					}
+
+					$scope.views[separatedName] = viewLinker;
+					$scope.viewCount += 1;
+				}
 			};
 
 			return templateColumnController;
@@ -42,4 +51,4 @@
 			};
 		}
 	};
-}]);
+});

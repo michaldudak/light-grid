@@ -18,16 +18,16 @@ module.exports = function (grunt) {
 					"src/column-templates/*.js",
 					"src/data-providers/*.js"
 				],
-				dest: "dist/angular-grid-<%= pkg.version %>.js",
+				dest: "dist/light-grid-<%= pkg.version %>.js",
 			}
 		},
 		uglify: {
 			dist: {
 				options: {
-					sourceMap: "dist/angular-grid-<%= pkg.version %>.min.js.map"
+					sourceMap: "dist/light-grid-<%= pkg.version %>.min.js.map"
 				},
 				files: {
-					"dist/angular-grid-<%= pkg.version %>.min.js": ["dist/angular-grid-<%= pkg.version %>.js"]
+					"dist/light-grid-<%= pkg.version %>.min.js": ["dist/light-grid-<%= pkg.version %>.js"]
 				}
 			},
 		},

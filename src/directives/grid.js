@@ -76,13 +76,14 @@
 	var defaultTemplate =
 		"<table class='angular-grid'>" +
 			"<thead><tr lg-header-row></tr></thead>" +
-			"<tbody><tr lg-row default-view='read' ng-repeat='rowData in data'></tr></tbody>" +
+			"<tbody><tr lg-row default-view='read' initial-view='{{ initialView || \"read\" }}' ng-repeat='rowData in data'></tr></tbody>" +
 		"</table>";
 	
 	return {
 		scope: {
 			data: "=?",
-			id: "@"
+			id: "@",
+			initialView: "@"
 		},
 		template: defaultTemplate,
 		replace: true,
@@ -113,6 +114,6 @@
 			};
 		},
 		controller: gridController,
-		controllerAs: "gridController",
+		controllerAs: "gridController"
 	};
 }]);

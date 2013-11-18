@@ -29,6 +29,8 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 
 			var transclusionScope = scope;
 			transclusionScope.external = gridController.getScope().$parent;
+			
+			element.attr("class", scope.columnDefinition.attributes.class);
 
 			if (countProperties(views) === 1 && typeof(views["*"]) !== "undefined") {
 				// optimization: if there is just default view defined, we don't need ngSwitch

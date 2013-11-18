@@ -21,7 +21,7 @@
 		restrict: "A",
 		template: "<td lg-cell ng-repeat='columnDefinition in columnDefinitions'></td>",
 		replace: false,
-		controller: ["$scope", function rowController($scope) {
+		controller: ["$scope", "$element", function rowController($scope, $element) {
 			var self = this;
 			
 			$scope.expandedTemplate = null;

@@ -1,5 +1,5 @@
 ﻿if (typeof ($) === "undefined") {
-	throw new Error("Angular Grid requires jQuery.");
+	throw new Error("Light Grid requires jQuery.");
 }
 	
 if (angular.element !== $) {
