@@ -76,7 +76,7 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 	}];
 
 	var defaultTemplate =
-		"<table class='angular-grid'>" +
+		"<table class='light-grid'>" +
 			"<thead><tr lg-header-row></tr></thead>" +
 			"<tbody><tr lg-row default-view='read' initial-view='{{ initialView || \"read\" }}' ng-repeat='rowData in data'></tr></tbody>" +
 		"</table>";

@@ -27,8 +27,10 @@
 					<lg-bound-column property="lastName" title="'Last name'"></lg-bound-column>
 
 					<lg-column title="'Formatted data'">
-						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{external.staticText}}
+						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{staticText}}
 					</lg-column>
+					
+					<lg-editable-column title="'lgEditableColumn'" property="lastName"></lg-editable-column>
 
 					<lg-column title="'Combined editable data'">
 						<lg-view>
@@ -78,12 +80,13 @@
 		<script src="../src/directives/headerRow.js"></script>
 		<script src="../src/directives/cell.js"></script>
 		<script src="../src/directives/headerCell.js"></script>
+		<script src="../src/directives/column.js"></script>
+		<script src="../src/directives/view.js"></script>
 
 		<script src="../src/services/gridService.js"></script>
 
 		<script src="../src/column-templates/boundColumn.js"></script>
-		<script src="../src/column-templates/templateColumn.js"></script>
-		<script src="../src/column-templates/templateView.js"></script>
+		<script src="../src/column-templates/editableColumn.js"></script>
 
 		<script src="../src/data-providers/localDataProvider.js"></script>
 		<script src="../src/data-providers/customDataProvider.js"></script>
