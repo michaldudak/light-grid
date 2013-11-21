@@ -3,20 +3,7 @@
 grid.module.directive("lightGrid", ["lgGridService", function gridDirective(gridService) {
 	"use strict";
 
-	var gridController = ["$scope", "$element", "$q", function GridController($scope, $element, $q) {
-		
-		// empty fallback data provider
-		var dataProviderController = {
-			getData: function() {
-				return $q.when({ data: $scope.data });
-			},
-			sort: function() {},
-			changePage: function () {},
-			filter: function() {},
-			persistData: function () {},
-			addRecord: function () {},
-			removeRecord: function () {}
-		};
+	var gridController = ["$scope", "$element", function GridController($scope, $element) {
 		
 		$scope.columnDefinitions = [];
 		
@@ -48,14 +35,6 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 
 		this.defineColumn = function(column) {
 			$scope.columnDefinitions.push(column);
-		};
-
-		this.registerDataProvider = function(dataProvider) {
-			dataProviderController = dataProvider;
-		};
-
-		this.getDataProvider = function() {
-			return dataProviderController;
 		};
 
 		this.switchView = function(viewName) {

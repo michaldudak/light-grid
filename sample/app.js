@@ -163,6 +163,33 @@
 			var dataProvider = lgGridService.getDataProvider("sampleGrid");
 			dataProvider.sort($scope.sortProperty, false);
 		};
+
+		$scope.nextPage = function() {
+			if (!$scope.pageNumber) {
+				$scope.pageNumber = 1;
+			} else {
+				$scope.pageNumber++;
+			}
+			
+			var dataProvider = lgGridService.getDataProvider("sampleGrid");
+			dataProvider.changePage($scope.pageNumber, 10);
+		};
+		
+		$scope.prevPage = function () {
+			if ($scope.pageNumber <= 2) {
+				$scope.pageNumber = 1;
+			} else {
+				$scope.pageNumber--;
+			}
+
+			var dataProvider = lgGridService.getDataProvider("sampleGrid");
+			dataProvider.changePage($scope.pageNumber, 10);
+		};
+
+		$scope.$watch("filterExpression", function() {
+			var dataProvider = lgGridService.getDataProvider("sampleGrid");
+			dataProvider.filter($scope.filterExpression);
+		});
 	});
 
 }(window, window.angular));

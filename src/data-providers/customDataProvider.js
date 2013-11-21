@@ -36,7 +36,7 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", function (
 		};
 
 		this.filter = function(filter) {
-			var properties = $.extend($scope.displayedDataProperties, { filter: filter });
+			var properties = $.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
 			return self.getData(properties);
 		};
 
