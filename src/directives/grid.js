@@ -73,6 +73,10 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 		this.getScope = function() {
 			return $scope;
 		};
+
+		this.getId = function() {
+			return $scope.id;
+		};
 	}];
 
 	var defaultTemplate =
@@ -103,11 +107,7 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 				transclude(transclusionScope, function(clone) {
 					elem.append(clone);
 				});
-
-				scope.gridController.getDataProvider().getData().then(function(response) {
-					scope.data = response.data;
-				});
-
+				
 				gridService.registerGrid(scope.id, scope.gridController);
 
 				scope.$on("$destroy", function() {

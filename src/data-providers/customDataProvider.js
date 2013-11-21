@@ -1,35 +1,42 @@
 ﻿/* global grid */
 
-grid.module.directive("lgCustomDataProvider", [function () {
+grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", function (lgGridService, $q) {
 	"use strict";
+	
+	var defaultOptions = {
+		sortProperty: null,
+		sortDirectionDescending: false,
+		pageNumber: null,
+		pageSize: null,
+		filter: null
+	};
+	
+	function setModel(modelPromise, gridController) {
+		$q.when(modelPromise).then(function (model) {
+			if (model && model.data) {
+				gridController.setData(model.data);
+			} else {
+				gridController.setData({ data: [] });
+			}
+		});
+	}
 
-	var customDataProviderController = ["$scope", "$q", function CustomDataProviderController($scope, $q) {
-		var displayedDataProperties = {
-			sortProperty: null,
-			sortDirectionDescending: false,
-			pageNumber: null,
-			pageSize: null,
-			filter: null
-		};
-
+	var customDataProviderController = ["$scope", function CustomDataProviderController($scope) {
+		
 		var self = this;
 
-		this.getData = function(options) {
-			return $q.when($scope.getMethod({ options: options }));
-		};
-
 		this.sort = function(sortProperty, descending) {
-			var properties = $.extend(displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
+			var properties = $.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
 			return self.getData(properties);
 		};
 
 		this.changePage = function(pageNumber, pageSize) {
-			var properties = $.extend(displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
+			var properties = $.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
 			return self.getData(properties);
 		};
 
 		this.filter = function(filter) {
-			var properties = $.extend(displayedDataProperties, { filter: filter });
+			var properties = $.extend($scope.displayedDataProperties, { filter: filter });
 			return self.getData(properties);
 		};
 
@@ -51,15 +58,25 @@ grid.module.directive("lgCustomDataProvider", [function () {
 			getMethod: "&",
 			addMethod: "&",
 			updateMethod: "&",
-			deleteMethod: "&"
+			deleteMethod: "&",
+			initialOptions: "=?"
 		},
 		restrict: "EA",
-		require: "^lightGrid",
+		require: "^?lightGrid",
 		controllerAs: "controller",
 		controller: customDataProviderController,
 		link: function (scope, elem, attrs, gridController) {
+			if (gridController) {
+				scope.gridId = gridController.getId();
+			} else {
+				scope.gridId = attrs.gridId;
+			}
+
+			scope.displayedDataProperties = $.extend({}, defaultOptions, scope.initialOptions);
+			setModel(scope.getMethod({ options: scope.displayedDataProperties }), gridController);
+			
+			lgGridService.registerDataProvider(scope.gridId, scope.controller);
 			elem.remove();
-			gridController.registerDataProvider(scope.controller);
 		},
 	};
 }]);

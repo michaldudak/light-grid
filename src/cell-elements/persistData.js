@@ -1,6 +1,6 @@
 /* global grid */
 
-grid.module.directive("persistData", ["$q", "$rootScope", function ($q, $rootScope) {
+grid.module.directive("persistData", ["$q", "$rootScope", "lgGridService", function ($q, $rootScope, lgGridService) {
 	"use strict";
 	
 	return {
@@ -8,7 +8,10 @@ grid.module.directive("persistData", ["$q", "$rootScope", function ($q, $rootSco
 		link: function (scope, elem) {
 			elem.on("click", function () {
 
-				$q.when(scope.gridController.getDataProvider().updateRecords(scope.viewData))
+				var gridId = scope.gridController.getId();
+				var dataProvider = lgGridService.getDataProvider(gridId);
+
+				$q.when(dataProvider.updateRecords(scope.viewData))
 					.then(function () {
 						scope.rowController.acceptViewModel();
 						scope.rowController.switchView("read");

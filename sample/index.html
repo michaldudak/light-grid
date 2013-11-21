@@ -1,29 +1,26 @@
 ﻿<!DOCTYPE html>
-<html ng-app="angularGridSample">
+<html ng-app="lightGridSamples">
 	<head>
 		<meta charset="utf-8" />
-		<title>Angular Grid sample</title>
+		<title>Light Grid samples</title>
 		<link href="bootstrap.css" rel="stylesheet" />
 	</head>
 	<body>
 		<div class="container">
-			<h1>Angular Grid Sample</h1>
+			<h1>Light Grid samples</h1>
 
 			<div ng-controller="SampleController">
-				<h2>Full-featured grid</h2>
+				<h2>Grid with local model</h2>
 
 				<button class="btn btn-default" ng-click="modifyModel()">Modify model</button>
 				<button class="btn btn-default" ng-click="switchView()">Edit all</button>
 				<button class="btn btn-default" ng-click="saveAll()">Save all</button>
+				<button class="btn btn-default" ng-click="sort()">Sort</button>
 
 				<light-grid id="sampleGrid" class="table">
+					<lg-local-data-provider data-model="localModel"></lg-local-data-provider>
 
-					<lg-custom-data-provider get-method="getRecords(options)"
-					                         add-method="addRecord(record)"
-					                         update-method="updateRecords(records)"
-					                         delete-method="deleteRecord(record)"></lg-custom-data-provider>
-
-					<lg-bound-column property="firstName" title="'First name'"></lg-bound-column>
+					<lg-bound-column ng-if="localModel" property="firstName" title="'First name'"></lg-bound-column>
 					<lg-bound-column property="lastName" title="'Last name'"></lg-bound-column>
 
 					<lg-column title="'Formatted data'">
@@ -40,7 +37,7 @@
 						<lg-view view="edit">
 							<div class="row">
 								<div class="col-xs-4">
-									<input ng-model="viewData.firstName" class="form-control input-sm" />
+									<input ng-model="rowData.firstName" class="form-control input-sm" />
 								</div>
 								<div class="col-xs-4">
 									<input ng-model="viewData.lastName" class="form-control input-sm" />
@@ -59,13 +56,54 @@
 							<button class="btn btn-default btn-sm" switch-view="read">Cancel</button>
 						</lg-view>
 					</lg-column>
+				</light-grid>
+				
+				<h2>Grid with custom data provider</h2>
+				<light-grid id="customProviderGrid" class="table">
+					<lg-custom-data-provider get-method="getRecords(options)"
+											 update-method="updateRecords(records)">
 
-					<lg-column title="'Row data'">
-						<pre>{{rowData}}</pre>
+					</lg-custom-data-provider>
+
+					<lg-bound-column property="firstName" title="'First name'"></lg-bound-column>
+					<lg-bound-column property="lastName" title="'Last name'"></lg-bound-column>
+
+					<lg-column title="'Formatted data'">
+						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{staticText}}
+					</lg-column>
+
+					<lg-editable-column title="'lgEditableColumn'" property="lastName"></lg-editable-column>
+
+					<lg-column title="'Combined editable data'">
+						<lg-view>
+							{{ rowData.firstName }}
+							{{ rowData.lastName }}
+						</lg-view>
+						<lg-view view="edit">
+							<div class="row">
+								<div class="col-xs-4">
+									<input ng-model="rowData.firstName" class="form-control input-sm" />
+								</div>
+								<div class="col-xs-4">
+									<input ng-model="viewData.lastName" class="form-control input-sm" />
+								</div>
+							</div>
+						</lg-view>
+					</lg-column>
+
+					<lg-column title="'Actions'">
+						<lg-view>
+							<button class="btn btn-default btn-sm" switch-view="edit">Edit</button>
+							<button class="btn btn-default btn-sm" toggle-details="detailsTemplate.html">Details</button>
+						</lg-view>
+						<lg-view view="edit">
+							<button class="btn btn-primary btn-sm" persist-data>Save</button>
+							<button class="btn btn-default btn-sm" switch-view="read">Cancel</button>
+						</lg-view>
 					</lg-column>
 				</light-grid>
 
-				<h3>Common text</h3>
+				<h2>Common text</h2>
 				<input ng-model="staticText" class="form-control" />
 			</div>
 		</div>

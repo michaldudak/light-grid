@@ -1,17 +1,23 @@
 ﻿/* global grid */
 
-grid.module.directive("lgLocalDataProvider", [function () {
+grid.module.directive("lgLocalDataProvider", ["lgGridService", function (lgGridService) {
 	"use strict";
 
-	var localDataProviderController = ["$scope", "$q", function LocalDataProviderController($scope, $q) {
-		this.getData = function() {
-			return $q.when(function() {
-				return { data: $scope.model };
+	var localDataProviderController = ["$scope", "$q", "$filter", function ($scope, $q, $filter) {
+		var modelData = [];
+
+		this.setModel = function (modelPromise) {
+			$q.when(modelPromise).then(function (model) {
+				var gridController = lgGridService.getGridController($scope.gridId);
+				modelData = model.data;
+				gridController.setData(modelData);
 			});
 		};
 
-		this.sort = function(/*sortProperty, descending*/) {
-			throw new Error("Not implemented");
+		this.sort = function(sortProperty, descending) {
+			modelData = $filter("orderBy")(modelData, sortProperty, descending);
+			var gridController = lgGridService.getGridController($scope.gridId);
+			gridController.setData(modelData);
 		};
 
 		this.changePage = function(/*pageNumber, pageSize*/) {
@@ -40,15 +46,23 @@ grid.module.directive("lgLocalDataProvider", [function () {
 			model: "="
 		},
 		restrict: "EA",
-		require: "^lightGrid",
+		require: "^?lightGrid",
 		controllerAs: "controller",
 		controller: localDataProviderController,
 		link: function (scope, elem, attrs, gridController) {
-			gridController.registerDataProvider(scope.controller);
+
+			if (gridController) {
+				scope.gridId = gridController.getId();
+			} else {
+				scope.gridId = attrs.gridId;
+			}
 			
 			scope.$watch("model", function (model) {
-				gridController.setData(model);
+				var gridCtrl = gridController || lgGridService.getGridController(scope.gridId);
+				scope.controller.setModel(model);
 			});
+
+			lgGridService.registerDataProvider(scope.gridId, scope.controller);
 			
 			elem.remove();
 		},

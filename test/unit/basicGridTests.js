@@ -38,7 +38,7 @@ describe("Grid directive tests:", function () {
 		expect(element.hasClass("table")).toBeTruthy();
 	});
 
-	it("Should have column titles defined in the markup", function () {
+	it("should have column titles defined in the markup", function () {
 		$rootScope.model = [];
 
 		var element = $compile(singleColumnGrid)($rootScope);
