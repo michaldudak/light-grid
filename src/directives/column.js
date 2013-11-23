@@ -2,7 +2,7 @@
 
 grid.module.directive("lgColumn", function () {
 	"use strict";
-	
+
 	return {
 		scope: {
 			title: "=",
@@ -11,13 +11,15 @@ grid.module.directive("lgColumn", function () {
 		restrict: "EA",
 		require: "^lightGrid",
 		transclude: true,
-		controller: ["$scope", function($scope) {
+		controller: ["$scope", function ($scope) {
 			var templateColumnController = {};
 
 			$scope.views = {};
 			$scope.viewCount = 0;
+			$scope.headerTemplate = null;
+			$scope.footerTemplate = null;
 
-			templateColumnController.registerView = function(name, viewLinker) {
+			templateColumnController.registerView = function (name, viewLinker) {
 				name = name || "*";
 				var separatedNames = name.split(",");
 
@@ -32,14 +34,22 @@ grid.module.directive("lgColumn", function () {
 				}
 			};
 
+			templateColumnController.registerHeaderTemplate = function (viewLinker) {
+				$scope.headerTemplate = viewLinker;
+			};
+
+			templateColumnController.registerFooterTemplate = function (viewLinker) {
+				$scope.footerTemplate = viewLinker;
+			};
+
 			return templateColumnController;
 		}],
 		controllerAs: "templateColumnController",
 		compile: function (tElem, tAttr, linker) {
-			return function(scope, instanceElement, instanceAttrs, gridController) {
+			return function (scope, instanceElement, instanceAttrs, gridController) {
 
 				if (scope.visible !== false) {
-					linker(scope, function(clone) {
+					linker(scope, function (clone) {
 						instanceElement.append(clone);
 					});
 
@@ -50,6 +60,8 @@ grid.module.directive("lgColumn", function () {
 					gridController.defineColumn({
 						title: scope.title,
 						views: scope.views,
+						headerTemplate: scope.headerTemplate,
+						footerTemplate: scope.footerTemplate,
 						attributes: instanceAttrs
 					});
 				}

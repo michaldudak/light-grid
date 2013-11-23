@@ -19,8 +19,7 @@
 			return originalEmit.call(this, arguments);
 		};
 
-		$scope.localModel = {
-			data: [
+		$scope.localModel = [
 				{
 					"firstName": "Aidan",
 					"lastName": "Wheeler"
@@ -105,8 +104,7 @@
 					"firstName": "Garth",
 					"lastName": "Bonner"
 				}
-			]
-		};
+			];
 		
 		$scope.staticText = "some random text";
 

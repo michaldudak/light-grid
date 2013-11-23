@@ -36,8 +36,8 @@
 				<light-grid id="sampleGrid" class="table">
 					<lg-local-data-provider data-model="localModel"></lg-local-data-provider>
 
-					<lg-bound-column ng-if="localModel" property="firstName" title="'First name'"></lg-bound-column>
-					<lg-bound-column property="lastName" title="'Last name'"></lg-bound-column>
+					<lg-sortable-column property="firstName" title="'First name'"></lg-sortable-column>
+					<lg-sortable-column property="lastName" title="'Last name'"></lg-sortable-column>
 
 					<lg-column title="'Formatted data'">
 						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{staticText}}
@@ -136,11 +136,13 @@
 		<script src="../src/directives/headerCell.js"></script>
 		<script src="../src/directives/column.js"></script>
 		<script src="../src/directives/view.js"></script>
+		<script src="../src/directives/headerView.js"></script>
 
 		<script src="../src/services/gridService.js"></script>
 
 		<script src="../src/column-templates/boundColumn.js"></script>
 		<script src="../src/column-templates/editableColumn.js"></script>
+		<script src="../src/column-templates/sortableColumn.js"></script>
 
 		<script src="../src/data-providers/localDataProvider.js"></script>
 		<script src="../src/data-providers/customDataProvider.js"></script>
@@ -148,6 +150,7 @@
 		<script src="../src/cell-elements/switchView.js"></script>
 		<script src="../src/cell-elements/toggleDetails.js"></script>
 		<script src="../src/cell-elements/persistData.js"></script>
+		<script src="../src/cell-elements/sorter.js"></script>
 
 		<!--<script src="../dist/light-grid-0.1.0.min.js"></script>-->
 		<script src="app.js"></script>

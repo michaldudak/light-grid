@@ -6,8 +6,8 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 	var defaultOptions = {
 		sortProperty: null,
 		sortDirectionDescending: false,
-		pageNumber: null,
-		pageSize: null,
+		pageNumber: 1,
+		pageSize: 10,
 		filter: null
 	};
 
@@ -50,6 +50,10 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 			recordCount: modelInfo.recordCount,
 			viewOptions: scope.displayedDataProperties
 		});
+		
+		if (!scope.$$phase && !$rootScope.$$phase) {
+			scope.$apply();
+		}
 	}
 
 	var localDataProviderController = ["$scope", "$q", function ($scope, $q) {
@@ -60,6 +64,10 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 		this.sort = function (sortProperty, descending) {
 			$.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
 			updateGridModel($scope);
+			$rootScope.$broadcast("lightGrid.dataSorted", $scope.gridId, {
+				sortProperty: sortProperty,
+				sortDirectionDescending: descending
+			});
 		};
 
 		this.changePage = function (pageNumber, pageSize) {

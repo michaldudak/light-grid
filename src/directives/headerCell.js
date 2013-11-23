@@ -10,6 +10,23 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 	return {
 		template: "{{columnDefinition.title}}",
 		replace: false,
-		restrict: "A"
+		restrict: "A",
+		require: "^lightGrid",
+		link: function (scope, elem, attrs, gridController) {
+			if (!scope.columnDefinition.headerTemplate) {
+				return;
+			}
+
+			var transclusionScope = gridController.getScope().$parent.$new();
+
+			transclusionScope.data = scope.data;
+			transclusionScope.gridController = scope.gridController;
+			transclusionScope.title = scope.columnDefinition.title;
+
+			elem.html("");
+			scope.columnDefinition.headerTemplate(transclusionScope, function (clone) {
+				elem.append(clone);
+			});
+		}
 	};
 });
