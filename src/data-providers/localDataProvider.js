@@ -1,6 +1,6 @@
-﻿/* global grid */
+﻿/* global grid, $ */
 
-grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", function (lgGridService, $filter) {
+grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$rootScope", function (lgGridService, $filter, $rootScope) {
 	"use strict";
 
 	var defaultOptions = {
@@ -10,14 +10,16 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", functi
 		pageSize: null,
 		filter: null
 	};
-	
+
 	function applyFilters(model, options) {
-		var viewModel = model.data;
+		var viewModel = model;
 
 		if (options.filter) {
 			var filter = $filter("filter");
 			viewModel = filter(viewModel, options.filter);
 		}
+
+		var recordCount = viewModel.length;
 
 		if (options.sortProperty) {
 			var orderBy = $filter("orderBy");
@@ -31,32 +33,46 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", functi
 			viewModel = viewModel.slice(startIndex, endIndex);
 		}
 
-		return viewModel;
+		return {
+			model: viewModel,
+			recordCount: recordCount
+		};
 	}
 
 	function updateGridModel(scope) {
 		var gridController = lgGridService.getGridController(scope.gridId);
-		scope.viewModel = applyFilters(scope.model, scope.displayedDataProperties);
+		var modelInfo = applyFilters(scope.model, scope.displayedDataProperties);
+		scope.viewModel = modelInfo.model;
+
 		gridController.setData(scope.viewModel);
+		$rootScope.$broadcast("lightGrid.dataUpdated", scope.gridId, {
+			model: scope.model,
+			recordCount: modelInfo.recordCount,
+			viewOptions: scope.displayedDataProperties
+		});
 	}
 
 	var localDataProviderController = ["$scope", "$q", function ($scope, $q) {
-		this.sort = function(sortProperty, descending) {
+		this.getViewProperties = function () {
+			return $scope.displayedDataProperties;
+		};
+
+		this.sort = function (sortProperty, descending) {
 			$.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
 			updateGridModel($scope);
 		};
 
-		this.changePage = function(pageNumber, pageSize) {
+		this.changePage = function (pageNumber, pageSize) {
 			$.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
 			updateGridModel($scope);
 		};
 
-		this.filter = function(filter) {
+		this.filter = function (filter) {
 			$.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
 			updateGridModel($scope);
 		};
 
-		this.updateRecords = function() {
+		this.updateRecords = function () {
 			// local model is updated immediately, so nothing to do here
 		};
 
@@ -69,7 +85,7 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", functi
 			return deferred.promise;
 		};
 
-		this.deleteRecord = function(record) {
+		this.deleteRecord = function (record) {
 			var deferred = $q.defer();
 			var deleteIndex = null;
 
@@ -79,7 +95,7 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", functi
 					break;
 				}
 			}
-			
+
 			if (deleteIndex !== null) {
 				$scope.model.splice(deleteIndex, 1);
 				deferred.resolve();
@@ -90,7 +106,7 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", functi
 			return deferred.promise;
 		};
 	}];
-	
+
 	return {
 		scope: {
 			model: "=",
@@ -101,21 +117,20 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", functi
 		controllerAs: "controller",
 		controller: localDataProviderController,
 		link: function (scope, elem, attrs, gridController) {
-
 			if (gridController) {
 				scope.gridId = gridController.getId();
 			} else {
 				scope.gridId = attrs.gridId;
 			}
-			
+
 			scope.displayedDataProperties = $.extend({}, defaultOptions, scope.initialOptions);
-			
+
 			scope.$watch("model", function () {
 				updateGridModel(scope);
 			});
 
 			lgGridService.registerDataProvider(scope.gridId, scope.controller);
 			elem.remove();
-		},
+		}
 	};
 }]);

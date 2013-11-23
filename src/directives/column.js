@@ -5,7 +5,8 @@ grid.module.directive("lgColumn", function () {
 	
 	return {
 		scope: {
-			title: "="
+			title: "=",
+			visible: "="
 		},
 		restrict: "EA",
 		require: "^lightGrid",
@@ -36,21 +37,23 @@ grid.module.directive("lgColumn", function () {
 		controllerAs: "templateColumnController",
 		compile: function (tElem, tAttr, linker) {
 			return function(scope, instanceElement, instanceAttrs, gridController) {
-				
-				linker(scope, function(clone) {
-					instanceElement.append(clone);
-				});
-				
-				if (scope.viewCount === 0) {
-					scope.templateColumnController.registerView("*", linker);
+
+				if (scope.visible !== false) {
+					linker(scope, function(clone) {
+						instanceElement.append(clone);
+					});
+
+					if (scope.viewCount === 0) {
+						scope.templateColumnController.registerView("*", linker);
+					}
+
+					gridController.defineColumn({
+						title: scope.title,
+						views: scope.views,
+						attributes: instanceAttrs
+					});
 				}
 
-				gridController.defineColumn({
-					title: scope.title,
-					views: scope.views,
-					attributes: instanceAttrs
-				});
-				
 				instanceElement.remove();
 			};
 		}

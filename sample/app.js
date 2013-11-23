@@ -7,15 +7,15 @@
 	app.controller("SampleController", function($scope, $rootScope, $http, lgGridService) {
 
 		// log all Angular events to the console for debugging
-		var originalBroadcast = $rootScope.$broadcast;
-		$rootScope.$broadcast = function (event, data) {
-			window.console.log("Broadcasting event: " + event + ". Source and data:", this, data);
+		var originalBroadcast = $rootScope.constructor.prototype.$broadcast;
+		$rootScope.constructor.prototype.$broadcast = function (event) {
+			window.console.log("Broadcasting event: " + event + ". Source and data:", this, [].slice.call(arguments, 1));
 			return originalBroadcast.apply(this, arguments);
 		};
 
-		var originalEmit = $rootScope.$emit;
-		$rootScope.$emit = function (event, data) {
-			window.console.log("Emitting event: " + event + ". Source and data:", this, data);
+		var originalEmit = $rootScope.constructor.prototype.$emit;
+		$rootScope.constructor.prototype.$emit = function (event) {
+			window.console.log("Emitting event: " + event + ". Source and data:", this, [].slice.call(arguments, 1));
 			return originalEmit.call(this, arguments);
 		};
 
