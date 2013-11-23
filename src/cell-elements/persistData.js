@@ -1,5 +1,8 @@
 /* global grid */
 
+/**
+ * Directive persisting data from the viewModel of the row.
+ */
 grid.module.directive("persistData", ["$q", "$rootScope", "lgGridService", function ($q, $rootScope, lgGridService) {
 	"use strict";
 	

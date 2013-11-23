@@ -1,5 +1,12 @@
 ﻿/* global angular, grid */
 
+/**
+ * The root grid directive.
+ * Parameters:
+ *  - id - {String} ID of the grid. This attribute must be present and unique.
+ *  - data - {Array} (interpolated) data model displayed on the grid (optional).
+ *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
+ */
 grid.module.directive("lightGrid", ["lgGridService", function gridDirective(gridService) {
 	"use strict";
 
@@ -7,10 +14,18 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 		
 		$scope.columnDefinitions = [];
 		
+		/**
+		 * Gets the model displayed on the grid.
+		 * @return {Array} Model displayed on the grid.
+		 */
 		this.getData = function getData() {
 			return $scope.data;
 		};
 
+		/**
+		 * Gets the current view model displayed on the grid.
+		 * @return {Array} Current state of the grid's view model 
+		 */
 		this.getViewData = function getViewData() {
 			if (angular.isArray($scope.data)) {
 				return $scope.data.map(function(elem) {
@@ -29,30 +44,63 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 			}
 		};
 
+		/**
+		 * Sets the model of the grid.
+		 * @param {[type]} newData [description]
+		 */
 		this.setData = function setData(newData) {
 			$scope.data = newData;
 		};
 
+		/**
+		 * Registers a column template.
+		 * @param  {Object} column Column definition object
+		 */
 		this.defineColumn = function(column) {
 			$scope.columnDefinitions.push(column);
 		};
 
+		/**
+		 * Changes a view in all visible rows of the grid.
+		 * This method is asynchronous.
+		 * 
+		 * @param  {String} viewName Name of the new view.
+		 * @async
+		 */
 		this.switchView = function(viewName) {
 			$scope.$broadcast("lightGrid.row.switchView", viewName);
 		};
 
+		/**
+		 * Copies values from the view model to the data model.
+		 * This method is asynchronous.
+		 * 
+		 * @async
+		 */
 		this.acceptViewModel = function() {
 			$scope.$broadcast("lightGrid.row.acceptViewModel");
 		};
 
+		/**
+		 * Gets a jQuery wrapper over the root DOM element of the grid.
+		 * @return {jQuery} jQuery object representing the root node of the grid.
+		 */
 		this.getDomElement = function() {
 			return $element;
 		};
 
+		/**
+		 * Gets the scope of the grid directive. 
+		 * @return {Scope} Scope of the grid directive.
+		 */
 		this.getScope = function() {
 			return $scope;
 		};
 
+		/**
+		 * Gets the ID property of the grid.
+		 * @return {String} Grid's ID
+		 */
 		this.getId = function() {
 			return $scope.id;
 		};

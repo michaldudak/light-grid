@@ -1,5 +1,9 @@
 ﻿/* global grid */
 
+/**
+ * Enables sorting data by a column specified by the sort-property attribute
+ * This directive is meant to be used in header template.
+ */
 grid.module.directive("lgSorter", function (lgGridService) {
 	"use strict";
 

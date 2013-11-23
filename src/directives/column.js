@@ -1,5 +1,11 @@
 ﻿/* global grid */
 
+/**
+ * Defines a column template.
+ * Parameters:
+ *  - title - {String} (interpolated) title of the column (used to render a header if header template is not specified)
+ *  - visible - {Boolean} specifies if a column should be rendered
+ */
 grid.module.directive("lgColumn", function () {
 	"use strict";
 
@@ -12,14 +18,17 @@ grid.module.directive("lgColumn", function () {
 		require: "^lightGrid",
 		transclude: true,
 		controller: ["$scope", function ($scope) {
-			var templateColumnController = {};
-
 			$scope.views = {};
 			$scope.viewCount = 0;
 			$scope.headerTemplate = null;
 			$scope.footerTemplate = null;
 
-			templateColumnController.registerView = function (name, viewLinker) {
+			/**
+			 * Registers a view in a column.
+			 * @param  {String} name - Name of the view (optional, defaults to '*')
+			 * @param  {Function} viewLinker - Precompiled view template (as a linking function)
+			 */
+			this.registerView = function (name, viewLinker) {
 				name = name || "*";
 				var separatedNames = name.split(",");
 
@@ -34,26 +43,34 @@ grid.module.directive("lgColumn", function () {
 				}
 			};
 
-			templateColumnController.registerHeaderTemplate = function (viewLinker) {
+			/**
+			 * Registers a header template in a column.
+			 * @param  {Function} viewLinker - Precompiled view template (as a linking function)
+			 */
+			this.registerHeaderTemplate = function (viewLinker) {
 				$scope.headerTemplate = viewLinker;
 			};
 
-			templateColumnController.registerFooterTemplate = function (viewLinker) {
+			/**
+			 * Registers a footer template in a column.
+			 * @param  {Function} viewLinker - Precompiled view template (as a linking function)
+			 */
+			this.registerFooterTemplate = function (viewLinker) {
 				$scope.footerTemplate = viewLinker;
 			};
-
-			return templateColumnController;
 		}],
 		controllerAs: "templateColumnController",
 		compile: function (tElem, tAttr, linker) {
 			return function (scope, instanceElement, instanceAttrs, gridController) {
 
-				if (scope.visible !== false) {
+				if (scope.visible !== false) {					
 					linker(scope, function (clone) {
 						instanceElement.append(clone);
 					});
 
 					if (scope.viewCount === 0) {
+						// simple mode - if no views are defined, the content of the directive is treated
+						// as the default view
 						scope.templateColumnController.registerView("*", linker);
 					}
 
@@ -66,6 +83,7 @@ grid.module.directive("lgColumn", function () {
 					});
 				}
 
+				// this element should not be rendered
 				instanceElement.remove();
 			};
 		}
