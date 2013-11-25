@@ -64,10 +64,6 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 		this.sort = function (sortProperty, descending) {
 			$.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
 			updateGridModel($scope);
-			$rootScope.$broadcast("lightGrid.dataSorted", $scope.gridId, {
-				sortProperty: sortProperty,
-				sortDirectionDescending: descending
-			});
 		};
 
 		this.changePage = function (pageNumber, pageSize) {

@@ -7,7 +7,6 @@ grid.module.directive("persistData", ["$q", "$rootScope", "lgGridService", funct
 	"use strict";
 	
 	return {
-		priority: 10,
 		link: function (scope, elem) {
 			elem.on("click", function () {
 

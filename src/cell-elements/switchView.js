@@ -4,7 +4,6 @@ grid.module.directive("switchView", function () {
 	"use strict";
 	
 	return {
-		priority: 20,
 		require: "^?lgRow",
 		link: function (scope, elem, attrs, rowController) {
 			var viewName = attrs.switchView;

@@ -1,8 +1,8 @@
-﻿/* global grid */
+﻿/* global grid, $ */
 
-grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", function (lgGridService, $q) {
+grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScope", function (lgGridService, $q, $rootScope) {
 	"use strict";
-	
+
 	var defaultOptions = {
 		sortProperty: null,
 		sortDirectionDescending: false,
@@ -10,42 +10,46 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", function (
 		pageSize: null,
 		filter: null
 	};
-	
-	function updateGridModel(modelPromise, gridController) {
+
+	function updateGridModel(modelPromise, scope) {
 		$q.when(modelPromise).then(function (model) {
 			if (model && model.data) {
-				gridController.setData(model.data);
+				scope.gridController.setData(model.data);
 			} else {
-				gridController.setData({ data: [] });
+				scope.gridController.setData({ data: [] });
+			}
+
+			if (!scope.$$phase && !$rootScope.$$phase) {
+				scope.$apply();
 			}
 		});
 	}
 
 	var customDataProviderController = ["$scope", function CustomDataProviderController($scope) {
-		this.sort = function(sortProperty, descending) {
+		this.sort = function (sortProperty, descending) {
 			var properties = $.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
-			updateGridModel($scope.getMethod({ options: properties }, $scope.gridController));
+			updateGridModel($scope.getMethod({ options: properties }, $scope));
 		};
 
-		this.changePage = function(pageNumber, pageSize) {
+		this.changePage = function (pageNumber, pageSize) {
 			var properties = $.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
-			updateGridModel($scope.getMethod({ options: properties }, $scope.gridController));
+			updateGridModel($scope.getMethod({ options: properties }, $scope));
 		};
 
-		this.filter = function(filter) {
+		this.filter = function (filter) {
 			var properties = $.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
-			updateGridModel($scope.getMethod({ options: properties }, $scope.gridController));
+			updateGridModel($scope.getMethod({ options: properties }, $scope));
 		};
 
-		this.updateRecords = function(records) {
+		this.updateRecords = function (records) {
 			return $q.when($scope.updateMethod({ records: records }));
 		};
 
-		this.addRecord = function(record) {
+		this.addRecord = function (record) {
 			return $q.when($scope.addMethod({ record: record }));
 		};
 
-		this.deleteRecord = function(record) {
+		this.deleteRecord = function (record) {
 			return $q.when($scope.deleteMethod({ record: record }));
 		};
 	}];
@@ -65,13 +69,15 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", function (
 		link: function (scope, elem, attrs, gridController) {
 			if (gridController) {
 				scope.gridId = gridController.getId();
+				scope.gridController = gridController;
 			} else {
 				scope.gridId = attrs.gridId;
 			}
 
 			scope.displayedDataProperties = $.extend({}, defaultOptions, scope.initialOptions);
-			updateGridModel(scope.getMethod({ options: scope.displayedDataProperties }), gridController);
-			
+			var modelPromise = scope.getMethod({ options: scope.displayedDataProperties });
+			updateGridModel(modelPromise, scope);
+
 			lgGridService.registerDataProvider(scope.gridId, scope.controller);
 			elem.remove();
 		}

@@ -22,6 +22,10 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 			transclusionScope.data = scope.data;
 			transclusionScope.gridController = scope.gridController;
 			transclusionScope.title = scope.columnDefinition.title;
+			
+			if (scope.columnDefinition.attributes.width) {
+				elem.width(scope.columnDefinition.attributes.width);
+			}
 
 			elem.html("");
 			scope.columnDefinition.headerTemplate(transclusionScope, function (clone) {

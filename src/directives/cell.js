@@ -46,6 +46,10 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 			});
 			
 			element.attr("class", scope.columnDefinition.attributes.class);
+			
+			if (scope.columnDefinition.attributes.width) {
+				element.width(scope.columnDefinition.attributes.width);
+			}
 
 			if (countProperties(views) === 1 && typeof(views["*"]) !== "undefined") {
 				// optimization: if there is just default view defined, we don't need ngSwitch

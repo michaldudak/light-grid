@@ -23,10 +23,12 @@ grid.module.directive("lgSorter", function (lgGridService) {
 				dataProvider.sort(sortProperty, !scope.sortDirectionDescending);
 			});
 
-			scope.$on("lightGrid.dataSorted", function (event, sortedGridId, sortOptions) {
+			scope.$on("lightGrid.dataUpdated", function (event, sortedGridId, gridProperties) {
 				if (gridId !== sortedGridId) {
 					return;
 				}
+
+				var sortOptions = gridProperties.viewOptions;
 
 				if (sortOptions.sortProperty !== sortProperty) {
 					scope.isSorted = false;
