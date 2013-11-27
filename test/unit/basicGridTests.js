@@ -1,24 +1,27 @@
 ﻿/// <reference path="/libs/jquery-1.10.2.js" />
-/// <reference path="/libs/angular-1.2.0.js" />
+/// <reference path="/libs/angular-1.2.2.js" />
 /// <reference path="/dist/light-grid-0.1.0.min.js" />
 /// <reference path="/test/lib/angular-mocks.js" />
+/// <reference path="/test/resources/markup.js" />
 
-/* global beforeEach, describe, it, expect, inject, module */
+/* global beforeEach, describe, it, expect, inject, module, markup */
 
 describe("Grid directive tests:", function () {
 	"use strict";
 
 	var $compile;
 	var $rootScope;
+	var gridService;
 
-	var emptyGrid = "<light-grid id='testGrid' class='table'></light-grid>";
-	var singleColumnGrid = "<light-grid id='testGrid' data='model'><lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column></light-grid>";
-	
+	var emptyGrid = markup.emptyGrid;
+	var singleColumnGrid = markup.singleColumnGrid;
+
 	beforeEach(module("light-grid"));
-	
-	beforeEach(inject(function (_$compile_, _$rootScope_) {
+
+	beforeEach(inject(function(_$compile_, _$rootScope_, _lgGridService_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
+		gridService = _lgGridService_;
 	}));
 	
 	it("should replace the directive with a table tag", function () {
@@ -45,6 +48,28 @@ describe("Grid directive tests:", function () {
 		$rootScope.$digest();
 
 		expect(element.find("th:eq(0)").text()).toEqual("Column 1");
+	});
+
+	it("should register itself in the grid service", function() {
+		spyOn(gridService, "registerGrid");
+		
+		$compile(singleColumnGrid)($rootScope);
+		$rootScope.$digest();
+
+		expect(gridService.registerGrid).toHaveBeenCalled();
+		expect(gridService.registerGrid.mostRecentCall.args[0]).toEqual("testGrid");
+	});
+	
+	it("should unregister itself from the grid service after its scope is destroyed", function () {
+		spyOn(gridService, "unregisterGrid");
+
+		var scope = $rootScope.$new();
+
+		$compile(singleColumnGrid)(scope);
+		scope.$digest();
+		scope.$destroy();
+
+		expect(gridService.unregisterGrid).toHaveBeenCalledWith("testGrid");
 	});
 
 	describe("when array with 3 records is provided as a model", function() {

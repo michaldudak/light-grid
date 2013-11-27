@@ -1,6 +1,6 @@
 ﻿/* global grid */
 
-grid.module.service("lgGridService", [function gridService() {
+grid.module.service("lgGridService", function gridService() {
 	"use strict";
 
 	var grids = {};
@@ -25,4 +25,4 @@ grid.module.service("lgGridService", [function gridService() {
 	this.getDataProvider = function getDataProvider(id) {
 		return dataProviders[id];
 	};
-}]);
+});

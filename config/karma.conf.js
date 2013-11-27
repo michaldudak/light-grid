@@ -15,6 +15,7 @@ module.exports = function (config) {
 			"libs/angular*.js",
 			"dist/light-grid-0.1.0.js",
 			"test/lib/angular-mocks.js",
+			"test/resources/markup.js",
 			"test/unit/*.js"
 		]
 	});
