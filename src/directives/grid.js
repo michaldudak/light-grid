@@ -106,6 +106,7 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 		};
 	}];
 
+	// TODO: footer support
 	var defaultTemplate =
 		"<table class='light-grid'>" +
 			"<thead><tr lg-header-row></tr></thead>" +
@@ -122,25 +123,23 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 		replace: true,
 		restrict: "EA",
 		transclude: true,
-		compile: function(tElement, tAttrs, transclude) {
-			return function postLink(scope, elem) {
-				if (typeof (scope.id) === "undefined" || scope.id === "") {
-					throw new Error("The grid must have an id attribute.");
-				}
+		link: function postLink(scope, elem, attrs, controller, transclude) {
+			if (typeof (scope.id) === "undefined" || scope.id === "") {
+				throw new Error("The grid must have an id attribute.");
+			}
 
-				// directives such as dataProvider require access to the parent of the grid scope,
-				// so they can't be linked with the grid scope (as it's isolated).
-				var transclusionScope = scope.$parent.$new();
-				transclude(transclusionScope, function(clone) {
-					elem.append(clone);
-				});
+			// directives such as dataProvider require access to the parent of the grid scope,
+			// so they can't be linked with the grid scope (as it's isolated).
+			var transclusionScope = scope.$parent.$new();
+			transclude(transclusionScope, function(clone) {
+				elem.append(clone);
+			});
 				
-				gridService.registerGrid(scope.id, scope.gridController);
+			gridService.registerGrid(scope.id, scope.gridController);
 
-				scope.$on("$destroy", function() {
-					gridService.unregisterGrid(scope.id);
-				});
-			};
+			scope.$on("$destroy", function() {
+				gridService.unregisterGrid(scope.id);
+			});
 		},
 		controller: gridController,
 		controllerAs: "gridController"

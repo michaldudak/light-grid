@@ -1,20 +1,20 @@
 ﻿/* global grid */
 
+/**
+ * Defines a view in the column template
+ */
 grid.module.directive("lgView", function () {
 	"use strict";
 	
 	return {
-		scope: {
-			view: "@"
-		},
 		restrict: "EA",
 		require: "^lgColumn",
 		transclude: true,
-		compile: function (templateElement, templateAttrs, linker) {
-			return function (scope, instanceElement, instanceAttrs, templateColumnController) {
-				instanceElement.remove();
-				templateColumnController.registerView(scope.view, linker);
-			};
+		link: function (scope, element, attrs, templateColumnController, linker) {
+			var view = attrs.lgView || attrs.view;
+			
+			templateColumnController.registerView(view, linker);
+			element.remove();
 		}
 	};
 });

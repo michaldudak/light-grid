@@ -1,5 +1,11 @@
 ﻿/* global grid, $ */
 
+/**
+ * Data provider to be used with a local array as a model.
+ * Attributes:
+ *  - model (interpolated) - an array with a data model to display
+ *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
+ */
 grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$rootScope", function (lgGridService, $filter, $rootScope) {
 	"use strict";
 
@@ -7,10 +13,16 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 		sortProperty: null,
 		sortDirectionDescending: false,
 		pageNumber: 1,
-		pageSize: 10,
+		pageSize: null,
 		filter: null
 	};
 
+	/**
+	 * Filters the input array according to specified criteria.
+	 * @param {Array} model - model to filter
+	 * @param {object} options - filtering criteria
+	 * @returns {{model: Array, recordCount: Number}}
+	 */
 	function applyFilters(model, options) {
 		var viewModel = model;
 
@@ -18,7 +30,8 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 			var filter = $filter("filter");
 			viewModel = filter(viewModel, options.filter);
 		}
-
+		
+		// recordCount stores the number of results after filtering but before paging
 		var recordCount = viewModel.length;
 
 		if (options.sortProperty) {
@@ -45,6 +58,8 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 		scope.viewModel = modelInfo.model;
 
 		gridController.setData(scope.viewModel);
+
+		// notifying other components that the displayed data may have changed
 		$rootScope.$broadcast("lightGrid.dataUpdated", scope.gridId, {
 			model: scope.model,
 			recordCount: modelInfo.recordCount,

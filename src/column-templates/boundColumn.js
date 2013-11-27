@@ -1,5 +1,8 @@
 ﻿/* global grid */
 
+/**
+ * Simple read-only column bound to a model's property
+ */
 grid.module.directive("lgBoundColumn", function () {
 	"use strict";
 	

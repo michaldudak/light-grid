@@ -2,7 +2,7 @@
 
 /**
  * Defines a column template.
- * Parameters:
+ * Attributes:
  *  - title - {String} (interpolated) title of the column (used to render a header if header template is not specified)
  *  - visible - {Boolean} specifies if a column should be rendered
  */
@@ -30,6 +30,9 @@ grid.module.directive("lgColumn", function () {
 			 */
 			this.registerView = function (name, viewLinker) {
 				name = name || "*";
+
+				// name argument may contain a comma-separated list of view names
+				// we need to register the linking function in all of them
 				var separatedNames = name.split(",");
 
 				for (var i = 0; i < separatedNames.length; ++i) {
@@ -60,32 +63,29 @@ grid.module.directive("lgColumn", function () {
 			};
 		}],
 		controllerAs: "templateColumnController",
-		compile: function (tElem, tAttr, linker) {
-			return function (scope, instanceElement, instanceAttrs, gridController) {
+		link: function(scope, instanceElement, instanceAttrs, gridController, linker) {
+			if (scope.visible !== false) {
+				linker(scope, function (clone) {
+					instanceElement.append(clone);
+				});
 
-				if (scope.visible !== false) {					
-					linker(scope, function (clone) {
-						instanceElement.append(clone);
-					});
-
-					if (scope.viewCount === 0) {
-						// simple mode - if no views are defined, the content of the directive is treated
-						// as the default view
-						scope.templateColumnController.registerView("*", linker);
-					}
-
-					gridController.defineColumn({
-						title: scope.title,
-						views: scope.views,
-						headerTemplate: scope.headerTemplate,
-						footerTemplate: scope.footerTemplate,
-						attributes: instanceAttrs
-					});
+				if (scope.viewCount === 0) {
+					// simple mode - if no views are defined, the content of the directive is treated
+					// as the default view
+					scope.templateColumnController.registerView("*", linker);
 				}
 
-				// this element should not be rendered
-				instanceElement.remove();
-			};
+				gridController.defineColumn({
+					title: scope.title,
+					views: scope.views,
+					headerTemplate: scope.headerTemplate,
+					footerTemplate: scope.footerTemplate,
+					attributes: instanceAttrs
+				});
+			}
+
+			// this element should not be rendered
+			instanceElement.remove();
 		}
 	};
 });

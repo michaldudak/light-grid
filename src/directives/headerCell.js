@@ -17,8 +17,8 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 				return;
 			}
 
+			// same as in the lgCell directive
 			var transclusionScope = gridController.getScope().$parent.$new();
-
 			transclusionScope.data = scope.data;
 			transclusionScope.gridController = scope.gridController;
 			transclusionScope.title = scope.columnDefinition.title;
@@ -28,7 +28,10 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 			}
 
 			elem.html("");
+			
+			// link the header template with the correct scope...
 			scope.columnDefinition.headerTemplate(transclusionScope, function (clone) {
+				// ...and insert the linked template inside the directive root element
 				elem.append(clone);
 			});
 		}

@@ -1,5 +1,14 @@
 ﻿/* global grid, $ */
 
+/**
+ * Customizable data provider.
+ * Attributes:
+ *  - get-method (function(options)) - method called when the provider need new data. The options parameter contain the view options (filter, paging ans sorting)
+ *  - add-method (function(record)) - method called when the provider wants to save a new resource
+ *  - update-method (function(records)) - method called when the provider wants to update existing resources
+ *  - delete-method(function(record)) - method called when the provider wants to delete an existing resource
+ *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
+ */
 grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScope", function (lgGridService, $q, $rootScope) {
 	"use strict";
 
@@ -12,6 +21,8 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 	};
 
 	function updateGridModel(modelPromise, scope) {
+		// modelPromise may be either a promise or an actual object, so we have to wrap it in
+		// $q.when() to make sure it's a promise.
 		$q.when(modelPromise).then(function (model) {
 			if (model && model.data) {
 				scope.gridController.setData(model.data);
@@ -67,6 +78,7 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 		controllerAs: "controller",
 		controller: customDataProviderController,
 		link: function (scope, elem, attrs, gridController) {
+			// TODO: this looks quite error-prone
 			if (gridController) {
 				scope.gridId = gridController.getId();
 				scope.gridController = gridController;
@@ -74,11 +86,12 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 				scope.gridId = attrs.gridId;
 			}
 
+			lgGridService.registerDataProvider(scope.gridId, scope.controller);
+
 			scope.displayedDataProperties = $.extend({}, defaultOptions, scope.initialOptions);
 			var modelPromise = scope.getMethod({ options: scope.displayedDataProperties });
 			updateGridModel(modelPromise, scope);
-
-			lgGridService.registerDataProvider(scope.gridId, scope.controller);
+			
 			elem.remove();
 		}
 	};

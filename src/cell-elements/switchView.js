@@ -1,5 +1,9 @@
 ﻿/* global grid */
 
+/**
+ * Allows to change a view mode of the row.
+ * Can only be used as an attribute. Its value specifies name of the target view mode.
+ */
 grid.module.directive("switchView", function () {
 	"use strict";
 	

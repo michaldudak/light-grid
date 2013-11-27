@@ -1,5 +1,8 @@
 ﻿/* global grid */
 
+/**
+ * Simple sortable column bound to a model's property
+ */
 grid.module.directive("lgSortableColumn", function () {
 	"use strict";
 
