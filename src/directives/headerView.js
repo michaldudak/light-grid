@@ -12,11 +12,9 @@ grid.module.directive("lgHeaderView", function () {
 		restrict: "EA",
 		require: "^?lgColumn",
 		transclude: true,
-		compile: function (templateElement, templateAttrs, linker) {
-			return function (scope, instanceElement, instanceAttrs, templateColumnController) {
-				instanceElement.remove();
-				templateColumnController.registerHeaderTemplate(linker);
-			};
+		link: function (scope, instanceElement, instanceAttrs, templateColumnController, linker) {
+			instanceElement.remove();
+			templateColumnController.registerHeaderTemplate(linker);
 		}
 	};
 });

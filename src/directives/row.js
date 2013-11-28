@@ -67,7 +67,6 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 				
 				$scope.view = viewName;
 				self.resetViewModel();
-				console.log("Switching view on the row " + $scope.$index + " to " + viewName);
 			};
 
 			/**
@@ -107,7 +106,7 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			});
 		}],
 		controllerAs: "rowController",
-		link: function(scope, element) {
+		link: function(scope, element, attrs) {
 			if (element[0].nodeName !== "TR") {
 				throw new Error("Row directive must be placed on a tr element.");
 			}
@@ -115,6 +114,8 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			scope.$watch("rowData", function() {
 				scope.rowController.resetViewModel();
 			});
+			
+			scope.view = attrs.initialView;
 
 			// angular templates can't have several top-level elements (also TR can't be a template root),
 			// so we need to insert another row here during linking
