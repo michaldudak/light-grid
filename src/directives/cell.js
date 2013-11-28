@@ -63,7 +63,7 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 			
 			// ...and so is the width attribute
 			if (scope.columnDefinition.attributes.width) {
-				element.width(scope.columnDefinition.attributes.width);
+				element.css("width", scope.columnDefinition.attributes.width);
 			}
 
 			if (countProperties(views) === 1 && typeof(views["*"]) !== "undefined") {

@@ -66,6 +66,8 @@ grid.module.directive("lgColumn", function () {
 		link: function(scope, instanceElement, instanceAttrs, gridController, linker) {
 			if (scope.visible !== false) {
 				linker(scope, function (clone) {
+					// transcluded content is added to the element so that lgColumnController can be 
+					// required by lgView directives
 					instanceElement.append(clone);
 				});
 

@@ -12,7 +12,7 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 		replace: false,
 		restrict: "A",
 		require: "^lightGrid",
-		link: function (scope, elem, attrs, gridController) {
+		link: function (scope, element, attrs, gridController) {
 			if (!scope.columnDefinition.headerTemplate) {
 				return;
 			}
@@ -24,15 +24,15 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 			transclusionScope.title = scope.columnDefinition.title;
 			
 			if (scope.columnDefinition.attributes.width) {
-				elem.width(scope.columnDefinition.attributes.width);
+				element.css("width", scope.columnDefinition.attributes.width);
 			}
 
-			elem.html("");
+			element.html("");
 			
 			// link the header template with the correct scope...
 			scope.columnDefinition.headerTemplate(transclusionScope, function (clone) {
 				// ...and insert the linked template inside the directive root element
-				elem.append(clone);
+				element.append(clone);
 			});
 		}
 	};

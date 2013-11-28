@@ -4,7 +4,7 @@
  * Enables sorting data by a column specified by the sort-property attribute
  * This directive is meant to be used in header template.
  */
-grid.module.directive("lgSorter", ["lgGridService", function (lgGridService) {
+grid.module.directive("lgSorter", ["lgGridService", "$rootScope", function (lgGridService, $rootScope) {
 	"use strict";
 
 	return {
@@ -38,7 +38,7 @@ grid.module.directive("lgSorter", ["lgGridService", function (lgGridService) {
 					scope.sortDirectionDescending = sortOptions.sortDirectionDescending;
 				}
 
-				if (!scope.$$phase) {
+				if (!scope.$$phase && !$rootScope.$$phase) {
 					scope.$digest();
 				}
 			});
