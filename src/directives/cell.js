@@ -11,7 +11,7 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 	"use strict";
 	
 	function countProperties(obj) {
-		if (typeof Object.keys === "function") {
+		if (typeof (Object.keys) === "function") {
 			return Object.keys(obj).length;
 		}
 		
@@ -40,7 +40,7 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 			// The scope of the cell content inherits from grid's parent (so creating column templates in markup is intuitive)
 			// This scope is augmented with several properties from the row scope (so it's possible to reference e.g. row
 			// data in the column template).
-			var transclusionScope = gridController.getScope().$parent.$new();
+			var transclusionScope = gridController.createTransclusionScope();
 
 			// these properties won't ever be overwritten, so it's safe to use simple assignment here
 			transclusionScope.rowData = scope.rowData;

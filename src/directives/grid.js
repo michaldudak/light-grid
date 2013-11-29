@@ -96,6 +96,14 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 		this.getScope = function() {
 			return $scope;
 		};
+		
+		/**
+		 * Creates a new scope for transcluded elements. The new scope inherits from the grid's parent scope.
+		 * @returns {Scope} The new scope.
+		 */
+		this.createTransclusionScope = function () {
+			return $scope.$parent.$new();
+		};
 
 		/**
 		 * Gets the ID property of the grid.

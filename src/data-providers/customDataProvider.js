@@ -1,4 +1,4 @@
-﻿/* global grid, $ */
+﻿/* global grid, angular */
 
 /**
  * Customizable data provider.
@@ -38,17 +38,17 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 
 	var customDataProviderController = ["$scope", function CustomDataProviderController($scope) {
 		this.sort = function (sortProperty, descending) {
-			var properties = $.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
+			var properties = angular.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
 			updateGridModel($scope.getMethod({ options: properties }, $scope));
 		};
 
 		this.changePage = function (pageNumber, pageSize) {
-			var properties = $.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
+			var properties = angular.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
 			updateGridModel($scope.getMethod({ options: properties }, $scope));
 		};
 
 		this.filter = function (filter) {
-			var properties = $.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
+			var properties = angular.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
 			updateGridModel($scope.getMethod({ options: properties }, $scope));
 		};
 
@@ -88,7 +88,7 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 
 			lgGridService.registerDataProvider(scope.gridId, scope.controller);
 
-			scope.displayedDataProperties = $.extend({}, defaultOptions, scope.initialOptions);
+			scope.displayedDataProperties = angular.extend({}, defaultOptions, scope.initialOptions);
 			var modelPromise = scope.getMethod({ options: scope.displayedDataProperties });
 			updateGridModel(modelPromise, scope);
 			

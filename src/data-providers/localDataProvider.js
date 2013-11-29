@@ -1,4 +1,4 @@
-﻿/* global grid, $ */
+﻿/* global grid, angular */
 
 /**
  * Data provider to be used with a local array as a model.
@@ -77,17 +77,17 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 		};
 
 		this.sort = function (sortProperty, descending) {
-			$.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
+			angular.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
 			updateGridModel($scope);
 		};
 
 		this.changePage = function (pageNumber, pageSize) {
-			$.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
+			angular.extend($scope.displayedDataProperties, { pageNumber: pageNumber, pageSize: pageSize });
 			updateGridModel($scope);
 		};
 
 		this.filter = function (filter) {
-			$.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
+			angular.extend($scope.displayedDataProperties, { filter: filter, pageNumber: 1 });
 			updateGridModel($scope);
 		};
 
@@ -142,9 +142,13 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 				scope.gridId = attrs.gridId;
 			}
 
-			scope.displayedDataProperties = $.extend({}, defaultOptions, scope.initialOptions);
+			scope.displayedDataProperties = angular.extend({}, defaultOptions, scope.initialOptions);
 
 			scope.$watch("model", function () {
+				updateGridModel(scope);
+			});
+
+			scope.$watchCollection("model", function() {
 				updateGridModel(scope);
 			});
 

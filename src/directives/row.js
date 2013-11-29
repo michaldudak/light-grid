@@ -28,7 +28,7 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 
 			/**
 			 * Shows the expanded row below the original one, containing the provided template.
-			 * The expanded row has only one cell (spanning across the entire grid width)
+			 * The expanded row has only one cell (spanning across the entire grid width).
 			 * @param {String} detailsTemplate - name of the template to load
 			 */
 			this.openDetails = function (detailsTemplate) {
@@ -73,7 +73,7 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			 * Copies values from the row's view model to the data model.
 			 */
 			this.acceptViewModel = function() {
-				$.extend($scope.rowData, $scope.viewData);
+				angular.extend($scope.rowData, $scope.viewData);
 				defineViewDataProperty($scope.rowData);
 				$scope.rowData._viewData = $scope.viewData;
 			};
@@ -94,6 +94,22 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			 */
 			this.getDomElement = function () {
 				return $element;
+			};
+			
+			/**
+			 * Adds the specified CSS class to the row node.
+			 * @param {String} className - class to add
+			 */
+			this.addCssClass = function (className) {
+				$element.addClass(className);
+			};
+			
+			/**
+			 * Removes the specified CSS class from the row node.
+			 * @param {String} className - class to remove
+			 */
+			this.removeCssClass = function (className) {
+				$element.removeClass(className);
 			};
 
 			// listening to grid's events
@@ -119,7 +135,7 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 
 			// angular templates can't have several top-level elements (also TR can't be a template root),
 			// so we need to insert another row here during linking
-			var expandingRow = $(expandingRowMarkup);
+			var expandingRow = angular.element(expandingRowMarkup);
 			expandingRow.data(element.data());
 			$compile(expandingRow)(scope);
 

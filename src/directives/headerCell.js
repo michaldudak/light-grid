@@ -18,7 +18,7 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 			}
 
 			// same as in the lgCell directive
-			var transclusionScope = gridController.getScope().$parent.$new();
+			var transclusionScope = gridController.createTransclusionScope();
 			transclusionScope.data = scope.data;
 			transclusionScope.gridController = scope.gridController;
 			transclusionScope.title = scope.columnDefinition.title;
@@ -27,7 +27,7 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 				element.css("width", scope.columnDefinition.attributes.width);
 			}
 
-			element.html("");
+			element.empty();
 			
 			// link the header template with the correct scope...
 			scope.columnDefinition.headerTemplate(transclusionScope, function (clone) {
