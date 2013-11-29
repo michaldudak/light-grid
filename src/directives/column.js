@@ -8,11 +8,11 @@
  */
 grid.module.directive("lgColumn", function () {
 	"use strict";
-
+	
 	return {
 		scope: {
 			title: "=",
-			visible: "="
+			visible: "=?"
 		},
 		restrict: "EA",
 		require: "^lightGrid",
@@ -64,27 +64,39 @@ grid.module.directive("lgColumn", function () {
 		}],
 		controllerAs: "templateColumnController",
 		link: function(scope, instanceElement, instanceAttrs, gridController, linker) {
-			if (scope.visible !== false) {
-				linker(scope, function (clone) {
-					// transcluded content is added to the element so that lgColumnController can be 
-					// required by lgView directives
-					instanceElement.append(clone);
-				});
-
-				if (scope.viewCount === 0) {
-					// simple mode - if no views are defined, the content of the directive is treated
-					// as the default view
-					scope.templateColumnController.registerView("*", linker);
-				}
-
-				gridController.defineColumn({
-					title: scope.title,
-					views: scope.views,
-					headerTemplate: scope.headerTemplate,
-					footerTemplate: scope.footerTemplate,
-					attributes: instanceAttrs
-				});
+			
+			if (!instanceAttrs.visible) {
+				scope.visible = true;
 			}
+			
+			scope.$watch("visible", function (newValue, oldValue) {
+				if (newValue !== oldValue) {
+					gridController.updateColumn(scope.$id, {
+						visible: !!scope.visible
+					});
+				}
+			});
+
+			linker(scope, function (clone) {
+				// transcluded content is added to the element so that lgColumnController can be 
+				// required by lgView directives
+				instanceElement.append(clone);
+			});
+
+			if (scope.viewCount === 0) {
+				// simple mode - if no views are defined, the content of the directive is treated
+				// as the default view
+				scope.templateColumnController.registerView("*", linker);
+			}
+
+			gridController.defineColumn(scope.$id, {
+				title: scope.title,
+				views: scope.views,
+				headerTemplate: scope.headerTemplate,
+				footerTemplate: scope.footerTemplate,
+				attributes: instanceAttrs,
+				visible: !!scope.visible
+			});
 
 			// this element should not be rendered
 			instanceElement.remove();

@@ -188,6 +188,11 @@
 			var dataProvider = lgGridService.getDataProvider("sampleGrid");
 			dataProvider.filter($scope.filterExpression);
 		});
+
+		$scope.initialOptions = {
+			pageNumber: 1,
+			pageSize: 10
+		};
 	});
 
 }(window, window.angular));

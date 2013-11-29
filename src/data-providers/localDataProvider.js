@@ -136,12 +136,12 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 		controllerAs: "controller",
 		controller: localDataProviderController,
 		link: function (scope, elem, attrs, gridController) {
-			if (gridController) {
-				scope.gridId = gridController.getId();
-			} else {
-				scope.gridId = attrs.gridId;
+			if (!gridController && !attrs.gridId) {
+				throw Error("lgLocalDataProvider has no associated grid.");
 			}
-
+			
+			scope.gridId = gridController ? gridController.getId() : attrs.gridId;
+			
 			scope.displayedDataProperties = angular.extend({}, defaultOptions, scope.initialOptions);
 
 			scope.$watch("model", function () {

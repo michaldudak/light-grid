@@ -13,7 +13,8 @@ module.exports = function (config) {
 		files: [
 			"libs/jquery*.js",
 			"libs/angular*.js",
-			"dist/light-grid-0.1.0.js",
+			"src/moduleDefinition.js",
+			"src/**/*.js",
 			"test/lib/angular-mocks.js",
 			"test/resources/markup.js",
 			"test/unit/*.js"

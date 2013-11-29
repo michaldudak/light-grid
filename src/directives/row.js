@@ -3,7 +3,7 @@
 grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 	"use strict";
 
-	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{columnDefinitions.length}}' ng-include='expandedTemplate'></td></tr>";
+	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{visibleColumns.length}}' ng-include='expandedTemplate'></td></tr>";
 	
 	function defineViewDataProperty(obj) {
 		try {
@@ -20,7 +20,7 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 	}
 
 	return {
-		template: "<td lg-cell ng-repeat='columnDefinition in columnDefinitions'></td>",
+		template: "<td lg-cell ng-repeat='columnDefinition in visibleColumns'></td>",
 		controller: ["$scope", "$element", function rowController($scope, $element) {
 			var self = this;
 			

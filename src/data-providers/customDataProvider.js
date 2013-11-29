@@ -9,7 +9,7 @@
  *  - delete-method(function(record)) - method called when the provider wants to delete an existing resource
  *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
  */
-grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScope", function (lgGridService, $q, $rootScope) {
+grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScope", "$timeout", function (lgGridService, $q, $rootScope, $timeout) {
 	"use strict";
 
 	var defaultOptions = {
@@ -24,10 +24,12 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 		// modelPromise may be either a promise or an actual object, so we have to wrap it in
 		// $q.when() to make sure it's a promise.
 		$q.when(modelPromise).then(function (model) {
+			var gridController = lgGridService.getGridController(scope.gridId);
+
 			if (model && model.data) {
-				scope.gridController.setData(model.data);
+				gridController.setData(model.data);
 			} else {
-				scope.gridController.setData({ data: [] });
+				gridController.setData({ data: [] });
 			}
 
 			if (!scope.$$phase && !$rootScope.$$phase) {
@@ -79,20 +81,21 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 		controller: customDataProviderController,
 		link: function (scope, elem, attrs, gridController) {
 			// TODO: this looks quite error-prone
-			if (gridController) {
-				scope.gridId = gridController.getId();
-				scope.gridController = gridController;
-			} else {
-				scope.gridId = attrs.gridId;
+			if (!gridController && !attrs.gridId) {
+				throw Error("lgCustomDataProvider has no associated grid.");
 			}
+			
+			scope.gridId = gridController ? gridController.getId() : attrs.gridId;
 
 			lgGridService.registerDataProvider(scope.gridId, scope.controller);
-
 			scope.displayedDataProperties = angular.extend({}, defaultOptions, scope.initialOptions);
-			var modelPromise = scope.getMethod({ options: scope.displayedDataProperties });
-			updateGridModel(modelPromise, scope);
 			
 			elem.remove();
+
+			$timeout(function() {
+				var modelPromise = scope.getMethod({ options: scope.displayedDataProperties });
+				updateGridModel(modelPromise, scope);
+			});
 		}
 	};
 }]);

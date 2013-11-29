@@ -11,8 +11,9 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 	"use strict";
 
 	var gridController = ["$scope", "$element", function GridController($scope, $element) {
-		
-		$scope.columnDefinitions = [];
+
+		var columnDefinitions = {};
+		$scope.visibleColumns = [];
 		
 		/**
 		 * Gets the model displayed on the grid.
@@ -52,12 +53,37 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 			$scope.data = newData;
 		};
 
+		function updateVisibleColumns() {
+			$scope.visibleColumns.length = 0;
+			
+			for (var id in columnDefinitions) {
+				if (columnDefinitions.hasOwnProperty(id) && columnDefinitions[id].definition.visible) {
+					$scope.visibleColumns.push(columnDefinitions[id].definition);
+				}
+			}
+		}
+
 		/**
 		 * Registers a column template.
-		 * @param  {Object} column Column definition object
+		 * @param  {Object} columnDefinition Column definition object
 		 */
-		this.defineColumn = function(column) {
-			$scope.columnDefinitions.push(column);
+		this.defineColumn = function(id, columnDefinition) {
+			columnDefinitions[id] = { definition: columnDefinition };
+
+			updateVisibleColumns();
+		};
+
+		/**
+		 * Updates a registered column template.
+		 * @param  {Object} columnDefinition Column definition object
+		 */
+		this.updateColumn = function (id, columnDefinition) {
+			if (!columnDefinitions.hasOwnProperty(id)) {
+				throw new Error("Column " + id + " was not registered.");
+			}
+
+			angular.extend(columnDefinitions[id].definition, columnDefinition);
+			updateVisibleColumns();
 		};
 
 		/**

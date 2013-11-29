@@ -12,6 +12,8 @@
 			<div ng-controller="SampleController">
 				<h2>Grid with local model</h2>
 				
+				<input type="checkbox" ng-model="colVisible" /> Col visible
+				
 				<div class="btn-toolbar">
 					<div class="btn-group btn-group-sm">
 						<button class=" btn btn-default" ng-click="modifyModel()">
@@ -30,46 +32,48 @@
 					</div>
 				</div>
 
-				<light-grid id="sampleGrid" class="table">
-					<lg-local-data-provider data-model="localModel"></lg-local-data-provider>
+				<table light-grid id="sampleGrid" class="table">
+					<tr lg-local-data-provider data-model="localModel" initial-options="initialOptions"></tr>
 
-					<lg-sortable-column property="firstName" title="'First name'"></lg-sortable-column>
-					<lg-sortable-column property="lastName" title="'Last name'"></lg-sortable-column>
+					<tr lg-column-templates>
+						<td lg-sortable-column property="firstName" title="'First name'" visible="colVisible"></td>
+						<td lg-sortable-column property="lastName" title="'Last name'" visible="colVisible"></td>
 
-					<lg-column title="'Formatted data'">
-						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{staticText}}
-					</lg-column>
-					
-					<lg-editable-column title="'lgEditableColumn'" property="lastName"></lg-editable-column>
+						<td lg-column title="'Formatted data'">
+							<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{staticText}}
+						</td>
 
-					<lg-column title="'Combined editable data'">
-						<lg-view>
-							{{ rowData.firstName }}
-							{{ rowData.lastName }}
-						</lg-view>
-						<lg-view view="edit">
-							<div class="row">
-								<div class="col-xs-4">
-									<input ng-model="rowData.firstName" class="form-control input-sm" />
+						<td lg-editable-column title="'lgEditableColumn'" property="lastName"></td>
+
+						<td lg-column title="'Combined editable data'">
+							<lg-view>
+								{{ rowData.firstName }}
+								{{ rowData.lastName }}
+							</lg-view>
+							<lg-view view="edit">
+								<div class="row">
+									<div class="col-xs-4">
+										<input ng-model="rowData.firstName" class="form-control input-sm" />
+									</div>
+									<div class="col-xs-4">
+										<input ng-model="viewData.lastName" class="form-control input-sm" />
+									</div>
 								</div>
-								<div class="col-xs-4">
-									<input ng-model="viewData.lastName" class="form-control input-sm" />
-								</div>
-							</div>
-						</lg-view>
-					</lg-column>
+							</lg-view>
+						</td>
 
-					<lg-column title="'Actions'">
-						<lg-view>
-							<button class="btn btn-default btn-sm" switch-view="edit">Edit</button>
-							<button class="btn btn-default btn-sm" toggle-details="detailsTemplate.html">Details</button>
-						</lg-view>
-						<lg-view view="edit">
-							<button class="btn btn-primary btn-sm" persist-data>Save</button>
-							<button class="btn btn-default btn-sm" switch-view="read">Cancel</button>
-						</lg-view>
-					</lg-column>
-				</light-grid>
+						<td lg-column title="'Actions'">
+							<lg-view>
+								<button class="btn btn-default btn-sm" switch-view="edit">Edit</button>
+								<button class="btn btn-default btn-sm" lg-toggle-expanded-row="detailsTemplate.html">Details</button>
+							</lg-view>
+							<lg-view view="edit">
+								<button class="btn btn-primary btn-sm" persist-data>Save</button>
+								<button class="btn btn-default btn-sm" switch-view="read">Cancel</button>
+							</lg-view>
+						</td>
+					</tr>
+				</table>
 				
 				<h2>Grid with custom data provider</h2>
 				<light-grid id="customProviderGrid" class="table">
@@ -107,7 +111,7 @@
 					<lg-column title="'Actions'">
 						<lg-view>
 							<button class="btn btn-default btn-sm" switch-view="edit">Edit</button>
-							<button class="btn btn-default btn-sm" toggle-details="detailsTemplate.html">Details</button>
+							<button class="btn btn-default btn-sm" lg-toggle-expanded-row="detailsTemplate.html">Details</button>
 						</lg-view>
 						<lg-view view="edit">
 							<button class="btn btn-primary btn-sm" persist-data>Save</button>
@@ -134,6 +138,7 @@
 		<script src="../src/directives/column.js"></script>
 		<script src="../src/directives/view.js"></script>
 		<script src="../src/directives/headerView.js"></script>
+		<script src="../src/directives/columnTemplates.js"></script>
 
 		<script src="../src/services/gridService.js"></script>
 
@@ -145,7 +150,7 @@
 		<script src="../src/data-providers/customDataProvider.js"></script>
 
 		<script src="../src/cell-elements/switchView.js"></script>
-		<script src="../src/cell-elements/toggleDetails.js"></script>
+		<script src="../src/cell-elements/toggleExpandedRow.js"></script>
 		<script src="../src/cell-elements/persistData.js"></script>
 		<script src="../src/cell-elements/sorter.js"></script>
 
