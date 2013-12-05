@@ -8,7 +8,6 @@ grid.module.directive("lgHeaderView", function () {
 	"use strict";
 
 	return {
-		scope: {},
 		restrict: "EA",
 		require: "^?lgColumn",
 		transclude: true,

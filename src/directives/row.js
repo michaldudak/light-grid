@@ -24,7 +24,35 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 		controller: ["$scope", "$element", function rowController($scope, $element) {
 			var self = this;
 			
+			// The scope of the cell content inherits from grid's parent (so creating column templates in markup is intuitive)
+			// This scope is augmented with several properties from the row scope (so it's possible to reference e.g. row
+			// data in the column template).
+			var cellsScope = $scope.gridController.createTransclusionScope();
+			
+			// these properties won't ever be overwritten, so it's safe to use simple assignment here
+			cellsScope.rowData = $scope.rowData;
+			cellsScope.data = $scope.data;
+			cellsScope.gridController = $scope.gridController;
+			cellsScope.rowController = this;
+
+			// the next two properties may be overwritten in a row scope, so it's necessary to update the cell's scope
+			// when this happens
+			$scope.$watch("view", function () {
+				cellsScope.view = $scope.view;
+			});
+
+			$scope.$watch("viewData", function () {
+				cellsScope.viewData = $scope.viewData;
+			});
+			
 			$scope.expandedTemplate = null;
+
+			/**
+			 * Gets the scope which the cells should be linked to.
+			 */
+			this.getCellScope = function () {
+				return cellsScope;
+			};
 
 			/**
 			 * Shows the expanded row below the original one, containing the provided template.

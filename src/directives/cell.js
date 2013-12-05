@@ -33,30 +33,11 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 
 	return {
 		restrict: "EA",
-		require: "^lightGrid",
-		link: function(scope, element, attrs, gridController) {
+		require: "^lgRow",
+		link: function(scope, element, attrs, rowController) {
 			var views = scope.columnDefinition.views;
-
-			// The scope of the cell content inherits from grid's parent (so creating column templates in markup is intuitive)
-			// This scope is augmented with several properties from the row scope (so it's possible to reference e.g. row
-			// data in the column template).
-			var transclusionScope = gridController.createTransclusionScope();
-
-			// these properties won't ever be overwritten, so it's safe to use simple assignment here
-			transclusionScope.rowData = scope.rowData;
-			transclusionScope.data = scope.data;
-			transclusionScope.gridController = scope.gridController;
-			transclusionScope.rowController = scope.rowController;
-
-			// the next two properties may be overwritten in a row scope, so it's necessary to update the cell's scope
-			// when this happens
-			scope.$watch("view", function() {
-				transclusionScope.view = scope.view;
-			});
-
-			scope.$watch("viewData", function () {
-				transclusionScope.viewData = scope.viewData;
-			});
+			
+			var transclusionScope = rowController.getCellScope();
 			
 			// CSS class defined on column template is copied to the rendered TD element...
 			element.attr("class", scope.columnDefinition.attributes.class);
