@@ -122,24 +122,26 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			});
 		}],
 		controllerAs: "rowController",
-		link: function(scope, element, attrs) {
-			if (element[0].nodeName !== "TR") {
+		compile: function (tElement) {
+			if (tElement[0].nodeName !== "TR") {
 				throw new Error("Row directive must be placed on a tr element.");
 			}
-
-			scope.$watch("rowData", function() {
-				scope.rowController.resetViewModel();
-			});
 			
-			scope.view = attrs.initialView;
+			var expandingRowLinker = $compile(expandingRowMarkup);
 
-			// angular templates can't have several top-level elements (also TR can't be a template root),
-			// so we need to insert another row here during linking
-			var expandingRow = angular.element(expandingRowMarkup);
-			expandingRow.data(element.data());
-			$compile(expandingRow)(scope);
+			return function(scope, element, attrs, controller) {
+				scope.$watch("rowData", function () {
+					controller.resetViewModel();
+				});
 
-			element.after(expandingRow);
+				scope.view = attrs.initialView;
+
+				// angular templates can't have several top-level elements (also TR can't be a template root),
+				// so we need to insert another row here during linking
+				expandingRowLinker(scope, function (clone) {
+					element.after(clone);
+				});
+			};
 		}
 	};
 }]);
