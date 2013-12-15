@@ -40,7 +40,7 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 			var transclusionScope = rowController.getCellScope();
 			
 			// CSS class defined on column template is copied to the rendered TD element...
-			element.attr("class", scope.columnDefinition.attributes.class);
+			element.addClass(scope.columnDefinition.attributes.class);
 			
 			// ...and so is the width attribute
 			if (scope.columnDefinition.attributes.width) {

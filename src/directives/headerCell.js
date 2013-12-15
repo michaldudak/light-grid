@@ -13,6 +13,9 @@ grid.module.directive("lgHeaderCell", function headerCellDirective() {
 		restrict: "A",
 		require: "^lightGrid",
 		link: function (scope, element, attrs, gridController) {
+			// CSS class defined on column template is copied to the rendered TH element
+			element.addClass(scope.columnDefinition.attributes.class);
+
 			if (!scope.columnDefinition.headerTemplate) {
 				return;
 			}
