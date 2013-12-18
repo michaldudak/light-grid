@@ -51,7 +51,7 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 						element.append(transcludedClone);
 					});
 				} else {
-					var onlyViewNode = angular.element(onlyView);
+					var onlyViewNode = angular.element("<div>" + onlyView + "</div>");
 					$compile(onlyViewNode)(transclusionScope);
 					element.append(onlyViewNode);
 				}
@@ -67,13 +67,13 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 					// processing all the views except the default one:
 					// each view gets linked with the cell scope and wrapped in a ng-switch-when container
 					// that shows it only when scope's view property matches the view name
-					var viewLinker = views[view];
+					var viewDefinition = views[view];
 					var switchElement = angular.element("<div ng-switch-when='" + view + "' />");
 
 					// view content is added to the container with a ng-switch attribute
 					switchRoot.append(switchElement);
 
-					cases.push({ node: switchElement, content: viewLinker });
+					cases.push({ node: switchElement, content: viewDefinition });
 				}
 			}
 
