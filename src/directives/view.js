@@ -9,12 +9,18 @@ grid.module.directive("lgView", function () {
 	return {
 		restrict: "EA",
 		require: "^lgColumn",
-		transclude: true,
-		link: function (scope, element, attrs, templateColumnController, linker) {
-			var view = attrs.lgView || attrs.view;
+		compile: function(tElement, tAttrs) {
+			var innerHtml = tElement.html();
 			
-			templateColumnController.registerView(view, linker);
-			element.remove();
+			// we don't want to compile the contents of the view at this point
+			// it'll be done later, in cell directive
+			tElement.empty();
+
+			return function(scope, element, attrs, templateColumnController) {
+				var view = tAttrs.lgView || tAttrs.view;
+				templateColumnController.registerView(view, innerHtml);
+				element.remove();
+			};
 		}
 	};
 });

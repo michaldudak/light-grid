@@ -24,12 +24,6 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 
 		return count;
 	}
-	
-	function cloneLinkerHandlerBuilder(switchElem) {
-		return function (clone) {
-			switchElem.append(clone);
-		};
-	}
 
 	return {
 		restrict: "EA",
@@ -50,15 +44,24 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 			if (countProperties(views) === 1 && typeof(views["*"]) !== "undefined") {
 				// optimization: if there is just default view defined, we don't need ngSwitch
 
-				views["*"](transclusionScope, function (clone) {
-					element.append(clone);
-				});
+				var onlyView = views["*"];
 
+				if (typeof(onlyView) === "function") {
+					onlyView(transclusionScope, function (transcludedClone) {
+						element.append(transcludedClone);
+					});
+				} else {
+					var onlyViewNode = angular.element(onlyView);
+					$compile(onlyViewNode)(transclusionScope);
+					element.append(onlyViewNode);
+				}
+				
 				return;
 			}
 
 			var switchRoot = angular.element("<div ng-switch='view' />");
-			
+			var cases = [];
+
 			for (var view in views) {
 				if (views.hasOwnProperty(view) && view !== "*") {
 					// processing all the views except the default one:
@@ -67,27 +70,34 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 					var viewLinker = views[view];
 					var switchElement = angular.element("<div ng-switch-when='" + view + "' />");
 
-					// compiled and linked view content is placed inside a switchElement container...
-					viewLinker(transclusionScope, cloneLinkerHandlerBuilder(switchElement));
-
-					// ...and added to the container with a ng-switch attribute
+					// view content is added to the container with a ng-switch attribute
 					switchRoot.append(switchElement);
+
+					cases.push({ node: switchElement, content: viewLinker });
 				}
 			}
 
 			// The '*' view is a special case - it defines the 'fallback' view used if no other view matches
 			if (views["*"]) {
 				var defaultElement = angular.element("<div ng-switch-default />");
-				views["*"](transclusionScope, function (clone) {
-					// this view is placed inside a ng-switch-default directive which covers this case
-					defaultElement.append(clone);
-				});
-
 				switchRoot.append(defaultElement);
+				cases.push({ node: defaultElement, content: views["*"] });
 			}
-
-			element.append(switchRoot);
 			
+			for (var i = 0; i < cases.length; ++i) {
+				if (typeof (cases[i].content) === "function") {
+					var linker = cases[i].content;
+					linker(transclusionScope, function(c) {
+						cases[i].node.append(c);
+					});
+				} else {
+					var clone = cases[i].content;
+					cases[i].node.append(clone);
+				}
+			}
+			
+			element.append(switchRoot);
+
 			// the whole container needs to be compiled to enable the ng-switch directive
 			$compile(switchRoot)(transclusionScope);
 		}
