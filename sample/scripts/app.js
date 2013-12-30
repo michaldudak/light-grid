@@ -1,11 +1,32 @@
 ﻿(function (window, ng) {
 	"use strict";
 
-	var app = ng.module("lightGridSamples", ["light-grid"]);
+	var app = ng.module("lightGridSamples", ["light-grid", "ngRoute"]);
 	window.app = app;
 
-	app.controller("SampleController", function($scope, $rootScope, $http, lgGridService) {
+	app.config(function($routeProvider, $controllerProvider) {
 
+		$controllerProvider.allowGlobals();
+
+		$routeProvider
+			.when("/simplest", {
+				templateUrl: "views/simplest.html"
+			})
+			.when("/local-data", {
+				templateUrl: "views/localData.html"
+			})
+			.when("/expanded-row", {
+				templateUrl: "views/expandedRow.html"
+			})
+			.when("/local-editable-row", {
+				templateUrl: "views/localEditableRow.html"
+			})
+			.otherwise({
+				redirectTo: "/simplest"
+			});
+	});
+
+	app.run(function ($rootScope) {
 		// log all Angular events to the console for debugging
 		var originalBroadcast = $rootScope.constructor.prototype.$broadcast;
 		$rootScope.constructor.prototype.$broadcast = function (event) {
@@ -18,6 +39,9 @@
 			window.console.log("Emitting event: " + event + ". Source and data:", this, [].slice.call(arguments, 1));
 			return originalEmit.call(this, arguments);
 		};
+	});
+
+	app.controller("SampleController", function($scope, $rootScope, $http, lgGridService) {
 
 		$scope.localModel = [
 				{
@@ -124,7 +148,7 @@
 
 		$scope.getRecords = function (options) {
 			console.log("Requesting data", options);
-			return $http.get("sampleData.json");
+			return $http.get("scripts/sampleData.json");
 		};
 		
 		$scope.addRecord = function (record) {

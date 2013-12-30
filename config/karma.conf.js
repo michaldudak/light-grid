@@ -11,8 +11,8 @@ module.exports = function (config) {
 		browsers: ["PhantomJS", "Chrome", "Firefox"],
 
 		files: [
-			"libs/jquery*.js",
-			"libs/angular*.js",
+			"libs/jquery.js",
+			"libs/angular.js",
 			"dist/light-grid.js",
 			"test/lib/angular-mocks.js",
 			"test/unit/*.js"

@@ -1,0 +1,51 @@
+﻿<script>
+	function localEditableRowController($scope) {
+		$scope.model = [{
+				make: "Honda",
+				model: "CBF 1000F",
+				engine: "1000ccm R4"
+			}, {
+				make: "BMW",
+				model: "F800 GT",
+				engine: "800ccm R2"
+			}, {
+				make: "Suzuki",
+				model: "V-Strom 1000",
+				engine: "1000ccm V2"
+			}];
+	}
+</script>
+
+<h2>Editable row with local data provider</h2>
+
+<div data-ng-controller="localEditableRowController">
+	<table data-light-grid id="sampleGrid" class="table">
+		<tr data-lg-local-data-provider data-model="model"></tr>
+		<tr data-lg-column-templates>
+			<td data-lg-column title="'Make'" data-width="28%">
+				<div data-lg-view>{{ rowData.make }}</div>
+				<div data-lg-view="edit"><input data-ng-model="viewData.make" class="form-control input-sm" /></div>
+			</td>
+
+			<td data-lg-column title="'Model'" data-width="28%">
+				<div data-lg-view>{{ rowData.model }}</div>
+				<div data-lg-view="edit"><input data-ng-model="viewData.model" class="form-control input-sm" /></div>
+			</td>
+
+			<td data-lg-column title="'Engine'" data-width="28%">
+				<div data-lg-view>{{ rowData.engine }}</div>
+				<div data-lg-view="edit"><input data-ng-model="viewData.engine" class="form-control input-sm" /></div>
+			</td>
+
+			<td data-lg-column data-width="16%">
+				<div data-lg-view>
+					<button class="btn btn-default btn-sm" data-switch-view="edit">Edit</button>
+				</div>
+				<div data-lg-view="edit">
+					<button class="btn btn-primary btn-sm" data-persist-data>Save</button>
+					<button class="btn btn-default btn-sm" data-switch-view="read">Cancel</button>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>

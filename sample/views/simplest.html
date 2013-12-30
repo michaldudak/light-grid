@@ -1,0 +1,31 @@
+﻿<script>
+	function simplestGridController($scope) {
+		$scope.model = [
+			{
+				make: "Honda",
+				model: "CBF 1000F",
+				engine: "1000ccm R4"
+			}, {
+				make: "BMW",
+				model: "F800 GT",
+				engine: "800ccm R2"
+			}, {
+				make: "Suzuki",
+				model: "V-Strom 1000",
+				engine: "1000ccm V2"
+			}
+		];
+	};
+</script>
+
+<h2>The simplest grid</h2>
+
+<div data-ng-controller="simplestGridController">
+	<table data-light-grid id="sampleGrid" class="table" model="model">
+		<tr data-lg-column-templates>
+			<td data-lg-column title="'Make'">{{ rowData.make }}</td>
+			<td data-lg-column title="'Model'">{{ rowData.model }}</td>
+			<td data-lg-column title="'Engine'">{{ rowData.engine }}</td>
+		</tr>
+	</table>
+</div>
