@@ -3,12 +3,12 @@
 module.exports = function (config) {
 	config.set({
 		basePath: "..",
-		singleRun: false,
-		autoWatch: true,
+		singleRun: true,
+		autoWatch: false,
 
 		frameworks: ["jasmine"],
 		
-		browsers: ["Chrome", "Firefox", "PhantomJS"],
+		browsers: ["PhantomJS"],
 
 		files: [
 			"libs/jquery*.js",
