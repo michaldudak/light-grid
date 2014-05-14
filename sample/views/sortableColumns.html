@@ -1,0 +1,30 @@
+﻿<script>
+	function sortableColumnsController($scope) {
+		$scope.model = [{
+				make: "Honda",
+				model: "CBF 1000F",
+				engine: "1000ccm R4"
+			}, {
+				make: "BMW",
+				model: "F800 GT",
+				engine: "800ccm R2"
+			}, {
+				make: "Suzuki",
+				model: "V-Strom 1000",
+				engine: "1000ccm V2"
+			}];
+	}
+</script>
+
+<h2>Sortable columns</h2>
+
+<div data-ng-controller="sortableColumnsController">
+	<table data-light-grid id="sampleGrid" class="table">
+		<tr data-lg-local-data-provider data-model="model"></tr>
+		<tr data-lg-column-templates>
+			<td data-lg-sortable-column data-property="make" title="'Make'"></td>
+			<td data-lg-sortable-column data-property="model" title="'Model'"></td>
+			<td data-lg-sortable-column data-property="engine" title="'Engine'"></td>
+		</tr>
+	</table>
+</div>

@@ -21,6 +21,9 @@
 			.when("/local-editable-row", {
 				templateUrl: "views/localEditableRow.html"
 			})
+			.when("/sortable-columns", {
+				templateUrl: "views/sortableColumns.html"
+			})
 			.otherwise({
 				redirectTo: "/simplest"
 			});
