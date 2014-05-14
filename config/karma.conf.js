@@ -16,7 +16,6 @@ module.exports = function (config) {
 			"src/moduleDefinition.js",
 			"src/**/*.js",
 			"test/lib/angular-mocks.js",
-			"test/resources/markup.js",
 			"test/unit/*.js"
 		]
 	});
