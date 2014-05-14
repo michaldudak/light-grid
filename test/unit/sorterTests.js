@@ -11,7 +11,13 @@ describe("Light Grid: Sorter directive tests", function () {
 	var $compile;
 	var $rootScope;
 
-	var gridMarkup = "<light-grid id='grid' data='model'><lg-column><lg-header-view><span lg-sorter sort-property='firstName'>First Name<span></lg-header-view><lg-view></lg-view></lg-column></light-grid>";
+	var gridMarkup =
+		"<light-grid id='grid' data='model'>" +
+			"<lg-column>" +
+				"<lg-header-view><span lg-sorter sort-property='firstName'>First Name<span></lg-header-view>" +
+				"<lg-view></lg-view>" +
+			"</lg-column>" +
+		"</light-grid>";
 
 	var gridService;
 

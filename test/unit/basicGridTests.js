@@ -2,7 +2,6 @@
 /// <reference path="/libs/angular-1.2.2.js" />
 /// <reference path="/dist/light-grid-0.1.0.min.js" />
 /// <reference path="/test/lib/angular-mocks.js" />
-/// <reference path="/test/resources/markup.js" />
 
 /* global beforeEach, describe, it, expect, inject, module, markup */
 
@@ -13,8 +12,11 @@ describe("Grid directive tests:", function () {
 	var $rootScope;
 	var gridService;
 
-	var emptyGrid = markup.emptyGrid;
-	var singleColumnGrid = markup.singleColumnGrid;
+	var emptyGrid = "<light-grid id='testGrid' class='table'></light-grid>";
+	var singleColumnGrid =
+		"<light-grid id='testGrid' data='model'>" +
+			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
+		"</light-grid>";
 
 	beforeEach(module("light-grid"));
 
