@@ -24,6 +24,9 @@
 			.when("/sortable-columns", {
 				templateUrl: "views/sortableColumns.html"
 			})
+			.when("/client-side-search", {
+				templateUrl: "views/clientSideSearch.html"
+			})
 			.otherwise({
 				redirectTo: "/simplest"
 			});

@@ -1,0 +1,42 @@
+﻿<script>
+	function clientSideSearchController($scope, lgGridService) {
+		$scope.model = [{
+			make: "Honda",
+			model: "CBF 1000F",
+			engine: "1000ccm R4"
+		}, {
+			make: "BMW",
+			model: "F800 GT",
+			engine: "800ccm R2"
+		}, {
+			make: "Suzuki",
+			model: "V-Strom 1000",
+			engine: "1000ccm V2"
+		}];
+
+		$scope.$watch("filterExpression", function () {
+			var dataProvider = lgGridService.getDataProvider("sampleGrid");
+			dataProvider.filter($scope.filterExpression);
+		});
+	}	
+</script>
+
+<h2>Client-side search example</h2>
+
+<div ng-controller="clientSideSearchController">
+	<div class="btn-toolbar">
+		<div class="btn-group btn-group-sm">
+			<input type="text" ng-model="filterExpression" class="form-control" placeholder="type here to search" />
+		</div>
+	</div>
+
+	<table data-light-grid id="sampleGrid" class="table">
+		<tr data-lg-local-data-provider data-model="model"></tr>
+		<tr data-lg-column-templates>
+			<td data-lg-column title="'Make'">{{ rowData.make }}</td>
+			<td data-lg-column title="'Model'">{{ rowData.model }}</td>
+			<td data-lg-column title="'Engine'">{{ rowData.engine }}</td>
+		</tr>
+	</table>
+</div>
+
