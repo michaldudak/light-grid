@@ -52,8 +52,8 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 					});
 				} else {
 					var onlyViewNode = angular.element("<div>" + onlyView + "</div>");
-					$compile(onlyViewNode)(transclusionScope);
 					element.append(onlyViewNode);
+					$compile(onlyViewNode)(transclusionScope);
 				}
 				
 				return;
