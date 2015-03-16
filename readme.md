@@ -1,4 +1,4 @@
-﻿Light Grid [![Build Status](https://travis-ci.org/doodack/light-grid.svg?branch=master)](https://travis-ci.org/doodack/light-grid)
+﻿Light Grid [![Build Status](https://travis-ci.org/michaldudak/light-grid.svg?branch=master)](https://travis-ci.org/michaldudak/light-grid)
 ==========
 
 ##Overview
@@ -11,7 +11,7 @@ Just run `grunt` and look for the output file in the dist directory.
 Type in `grunt karma`, sit back and enjoy.
 
 ##Author
-[Michał Dudak](http://dudak.pl)
+[Michał Dudak](http://dudak.me)
 
 ##License
 MIT, see the LICENSE file.

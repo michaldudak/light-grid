@@ -4,3 +4,5 @@
 /*.suo
 /node_modules
 dist/
+.ntvs_analysis.dat
+*.DotSettings

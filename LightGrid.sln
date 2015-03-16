@@ -1,32 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "AngularGrid", "http://localhost:7403", "{63CCCF57-B9A9-48D7-A823-4F2746F617FB}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_7403"
-		Debug.AspNetCompiler.PhysicalPath = "..\AngularGrid\"
+		Debug.AspNetCompiler.PhysicalPath = "..\LightGrid\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7403\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_7403"
-		Release.AspNetCompiler.PhysicalPath = "..\AngularGrid\"
+		Release.AspNetCompiler.PhysicalPath = "..\LightGrid\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7403\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		SlnRelativePath = "..\AngularGrid\"
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F4C84E7-F70C-4540-B440-333050A53C0B}"
-	ProjectSection(SolutionItems) = preProject
-		WE-Markdown.css = WE-Markdown.css
+		SlnRelativePath = "..\LightGrid\"
 	EndProjectSection
 EndProject
 Global
