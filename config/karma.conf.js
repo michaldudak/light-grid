@@ -8,7 +8,7 @@ module.exports = function (config) {
 
 		frameworks: ["jasmine"],
 		
-		browsers: ["PhantomJS"],
+		browsers: ["PhantomJS", "Firefox", "Chrome"],
 
 		files: [
 			"libs/jquery*.js",

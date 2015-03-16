@@ -61,7 +61,6 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			 */
 			this.openDetails = function (detailsTemplate) {
 				$scope.expandedTemplate = detailsTemplate;
-				console.log("Opening details on row " + $scope.$index);
 			};
 
 			/**
@@ -69,7 +68,6 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			 */
 			this.closeDetails = function () {
 				$scope.expandedTemplate = null;
-				console.log("Closing details on row " + $scope.$index);
 			};
 			
 			/**

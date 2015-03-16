@@ -1,9 +1,9 @@
-﻿/// <reference path="/libs/jquery-1.10.2.js" />
-/// <reference path="/libs/angular-1.2.2.js" />
+﻿/// <reference path="/libs/jquery.js" />
+/// <reference path="/libs/angular.js" />
 /// <reference path="/dist/light-grid-0.1.0.min.js" />
 /// <reference path="/test/lib/angular-mocks.js" />
 
-/* global beforeEach, describe, it, expect, inject, module, markup */
+/* global beforeEach, describe, it, expect, inject, module, markup, spyOn */
 
 describe("Grid directive tests:", function () {
 	"use strict";
@@ -59,7 +59,7 @@ describe("Grid directive tests:", function () {
 		$rootScope.$digest();
 
 		expect(gridService.registerGrid).toHaveBeenCalled();
-		expect(gridService.registerGrid.mostRecentCall.args[0]).toEqual("testGrid");
+		expect(gridService.registerGrid.calls.mostRecent().args[0]).toEqual("testGrid");
 	});
 	
 	it("should unregister itself from the grid service after its scope is destroyed", function () {

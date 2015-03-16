@@ -1,5 +1,5 @@
-﻿/// <reference path="/libs/jquery-1.10.2.js" />
-/// <reference path="/libs/angular-1.2.2.js" />
+﻿/// <reference path="/libs/jquery.js" />
+/// <reference path="/libs/angular.js" />
 /// <reference path="/dist/light-grid-0.1.0.min.js" />
 /// <reference path="/test/lib/angular-mocks.js" />
 
@@ -51,7 +51,7 @@ describe("Light Grid: Sorter directive tests", function () {
 			sort: jasmine.createSpy("sort")
 		};
 
-		spyOn(gridService, "getDataProvider").andReturn(mockDataProvider);
+		spyOn(gridService, "getDataProvider").and.returnValue(mockDataProvider);
 
 		var compiledGrid = $compile(gridMarkup)($rootScope);
 		$rootScope.$digest();

@@ -24,7 +24,7 @@ module.exports = function (grunt) {
 		uglify: {
 			dist: {
 				options: {
-					sourceMap: "dist/light-grid-<%= pkg.version %>.min.js.map"
+					sourceMap: true
 				},
 				files: {
 					"dist/light-grid-<%= pkg.version %>.min.js": ["dist/light-grid-<%= pkg.version %>.js"]
