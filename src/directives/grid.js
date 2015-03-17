@@ -1,13 +1,11 @@
-﻿/* global angular, grid */
-
-/**
+﻿/**
  * The root grid directive.
  * Parameters:
  *  - id - {String} ID of the grid. This attribute must be present and unique.
  *  - data - {Array} (interpolated) data model displayed on the grid (optional).
  *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
  */
-grid.module.directive("lightGrid", function gridDirective(lgGridService) {
+angular.module("light-grid").directive("lightGrid", function gridDirective(lgGridService) {
 	"use strict";
 
 	var gridController = function GridController($scope, $element) {
@@ -25,7 +23,7 @@ grid.module.directive("lightGrid", function gridDirective(lgGridService) {
 
 		/**
 		 * Gets the current view model displayed on the grid.
-		 * @return {Array} Current state of the grid's view model 
+		 * @return {Array} Current state of the grid's view model
 		 */
 		this.getViewData = function getViewData() {
 			if (angular.isArray($scope.data)) {
@@ -89,7 +87,7 @@ grid.module.directive("lightGrid", function gridDirective(lgGridService) {
 		/**
 		 * Changes a view in all visible rows of the grid.
 		 * This method is asynchronous.
-		 * 
+		 *
 		 * @param  {String} viewName Name of the new view.
 		 * @async
 		 */
@@ -100,7 +98,7 @@ grid.module.directive("lightGrid", function gridDirective(lgGridService) {
 		/**
 		 * Copies values from the view model to the data model.
 		 * This method is asynchronous.
-		 * 
+		 *
 		 * @async
 		 */
 		this.acceptViewModel = function() {
@@ -116,7 +114,7 @@ grid.module.directive("lightGrid", function gridDirective(lgGridService) {
 		};
 
 		/**
-		 * Gets the scope of the grid directive. 
+		 * Gets the scope of the grid directive.
 		 * @return {Scope} Scope of the grid directive.
 		 */
 		this.getScope = function() {

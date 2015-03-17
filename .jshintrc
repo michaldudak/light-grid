@@ -1,0 +1,18 @@
+{
+	"curly": true,
+	"eqeqeq": true,
+	"forin": true,
+	"freeze": true,
+	"browser": true,
+	"jquery": true,
+	"futurehostile": true,
+	"globals": {
+		"angular": false
+	},
+	"latedef": "nofunc",
+	"noarg": true,
+	"nocomma": true,
+	"shadow": false,
+	"undef": true,
+	"unused": true
+}

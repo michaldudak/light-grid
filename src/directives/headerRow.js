@@ -1,10 +1,8 @@
-﻿/* global grid */
-
-/**
+﻿/**
  * Represents a row inside grid's header.
  * Does not expose any API.
  */
-grid.module.directive("lgHeaderRow", function headerRowDirective() {
+angular.module("light-grid").directive("lgHeaderRow", function headerRowDirective() {
 	"use strict";
 
 	return {

@@ -1,9 +1,7 @@
-﻿/* global grid */
-
-/**
+﻿/**
  * Simple sortable column bound to a model's property
  */
-grid.module.directive("lgSortableColumn", function () {
+angular.module("light-grid").directive("lgSortableColumn", function () {
 	"use strict";
 
 	var template = "<lg-column><lg-header-view><span lg-sorter sort-property='{property}'>{{ {title} }}</span></lg-header-view><lg-view>{{rowData['{property}']}}</lg-view></lg-column>";

@@ -1,9 +1,7 @@
-﻿/* global grid */
-
-/**
+﻿/**
  * Provides methods exposing grid controllers to other elements on a page.
  */
-grid.module.service("lgGridService", function gridService() {
+angular.module("light-grid").service("lgGridService", function gridService() {
 	"use strict";
 	
 	var grids = {};

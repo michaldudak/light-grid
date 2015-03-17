@@ -1,12 +1,10 @@
-﻿/* global grid */
-
-/**
+﻿/**
  * Defines a column template.
  * Attributes:
  *  - title - {String} (interpolated) title of the column (used to render a header if header template is not specified)
  *  - visible - {Boolean} specifies if a column should be rendered
  */
-grid.module.directive("lgColumn", function () {
+angular.module("light-grid").directive("lgColumn", function () {
 	"use strict";
 	
 	return {
@@ -78,7 +76,7 @@ grid.module.directive("lgColumn", function () {
 			});
 
 			linker(scope, function (clone) {
-				// transcluded content is added to the element so that lgColumnController can be 
+				// transcluded content is added to the element so that lgColumnController can be
 				// required by lgView directives
 				instanceElement.append(clone);
 			});

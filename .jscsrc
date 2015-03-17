@@ -1,0 +1,64 @@
+{
+	"disallowEmptyBlocks": true,
+	"disallowKeywordsOnNewLine": ["else", "catch", "while"],
+	"disallowKeywords": ["with"],
+	"disallowMixedSpacesAndTabs": "smart",
+	"disallowMultipleLineBreaks": true,
+	"disallowNewlineBeforeBlockStatements": true,
+	"disallowSpacesInCallExpression": true,
+	"disallowTrailingComma": true,
+	"disallowTrailingWhitespace": "ignoreEmptyLines",
+	"disallowYodaConditions": true,
+	"requireBlocksOnNewline": true,
+	"requireCapitalizedComments": true,
+	"requireCapitalizedConstructors": true,
+	"requireCommaBeforeLineBreak": true,
+	"requireCurlyBraces": true,
+	"requireDotNotation": true,
+	"requireLineBreakAfterVariableAssignment": true,
+	"requireOperatorBeforeLineBreak": true,
+	"requireParenthesesAroundIIFE": true,
+	"requireSpaceAfterBinaryOperators": true,
+	"requireSpaceBeforeBinaryOperators": true,
+	"requireSpaceAfterKeywords": [
+		"do",
+		"for",
+		"if",
+		"else",
+		"switch",
+		"case",
+		"try",
+		"catch",
+		"void",
+		"while",
+		"with",
+		"return",
+		"typeof"
+	],
+	"requireSpaceBeforeBlockStatements": true,
+	"requireSpaceAfterLineComment": "allowSlash",
+	"requireSpaceBeforeKeywords": [
+		"else",
+		"while",
+		"catch"
+	],
+	"requireSpaceBetweenArguments": true,
+	"requireSpacesInConditionalExpression": {
+		"afterTest": true,
+		"beforeConsequent": true,
+		"afterConsequent": true,
+		"beforeAlternate": true
+	},
+	"requireSpacesInForStatement": true,
+	"requireSpacesInFunction": {
+		"beforeOpeningCurlyBrace": true
+	},
+	"requireSpacesInsideObjectBrackets": "allButNested",
+	"safeContextKeyword": "self",
+	"validateIndentation": "\t",
+	"validateParameterSeparator": ", ",
+	"validateQuoteMarks": {
+		"mark": "\"",
+		"escape": true
+	}
+}

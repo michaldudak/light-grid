@@ -1,6 +1,4 @@
-﻿/* global grid, angular */
-
-/**
+﻿/**
  * Customizable data provider.
  * Attributes:
  *  - get-method (function(options)) - method called when the provider need new data. The options parameter contain the view options (filter, paging ans sorting)
@@ -9,7 +7,7 @@
  *  - delete-method(function(record)) - method called when the provider wants to delete an existing resource
  *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
  */
-grid.module.directive("lgCustomDataProvider", function (lgGridService, $q, $rootScope, $timeout) {
+angular.module("light-grid").directive("lgCustomDataProvider", function (lgGridService, $q, $rootScope, $timeout) {
 	"use strict";
 
 	var defaultOptions = {

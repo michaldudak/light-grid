@@ -1,6 +1,4 @@
-﻿/* global angular, grid */
-
-grid.module.directive("lgRow", function rowDirective($compile) {
+﻿angular.module("light-grid").directive("lgRow", function rowDirective($compile) {
 	"use strict";
 
 	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{visibleColumns.length}}' ng-include='expandedTemplate'></td></tr>";
@@ -11,7 +9,7 @@ grid.module.directive("lgRow", function rowDirective($compile) {
 				configurable: true,
 				writable: true
 			});
-		} catch(err) {
+		} catch (err) {
 			// IE < 9 does not support properties
 			// falling back to plain field
 

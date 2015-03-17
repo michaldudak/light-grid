@@ -8,12 +8,12 @@ module.exports = function (config) {
 
 		frameworks: ["jasmine"],
 		
-		browsers: ["PhantomJS"],
+		browsers: ["PhantomJS", "Chrome", "Firefox"],
 
 		files: [
 			"libs/jquery*.js",
 			"libs/angular*.js",
-			"dist/light-grid-0.1.0.js",
+			"dist/light-grid.js",
 			"test/lib/angular-mocks.js",
 			"test/unit/*.js"
 		]

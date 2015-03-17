@@ -1,10 +1,8 @@
-﻿/* global grid */
-
-/**
+﻿/**
  * Represents a cell in a header of a table.
  * Does not expose any API.
  */
-grid.module.directive("lgHeaderCell", function headerCellDirective() {
+angular.module("light-grid").directive("lgHeaderCell", function headerCellDirective() {
 	"use strict";
 
 	return {

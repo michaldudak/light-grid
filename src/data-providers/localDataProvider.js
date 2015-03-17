@@ -1,12 +1,10 @@
-﻿/* global grid, angular */
-
-/**
+﻿/**
  * Data provider to be used with a local array as a model.
  * Attributes:
  *  - model (interpolated) - an array with a data model to display
  *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
  */
-grid.module.directive("lgLocalDataProvider", function (lgGridService, $filter, $rootScope) {
+angular.module("light-grid").directive("lgLocalDataProvider", function (lgGridService, $filter, $rootScope) {
 	"use strict";
 
 	var defaultOptions = {

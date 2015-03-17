@@ -1,10 +1,8 @@
-﻿/* global grid */
-
-/**
+﻿/**
  * Template for the header (defined in the lgColumn)
  * Does not expose any API.
  */
-grid.module.directive("lgHeaderView", function () {
+angular.module("light-grid").directive("lgHeaderView", function () {
 	"use strict";
 
 	return {

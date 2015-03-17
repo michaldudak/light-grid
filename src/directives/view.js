@@ -1,9 +1,7 @@
-﻿/* global grid */
-
-/**
+﻿/**
  * Defines a view in the column template
  */
-grid.module.directive("lgView", function () {
+angular.module("light-grid").directive("lgView", function () {
 	"use strict";
 	
 	return {

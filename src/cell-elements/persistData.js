@@ -1,9 +1,7 @@
-/* global grid */
-
 /**
  * Directive persisting data from the viewModel of the row.
  */
-grid.module.directive("persistData", function ($q, $rootScope, lgGridService) {
+angular.module("light-grid").directive("persistData", function ($q, $rootScope, lgGridService) {
 	"use strict";
 	
 	return {
