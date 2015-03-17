@@ -17,7 +17,7 @@ grid.module.directive("lgColumn", function () {
 		restrict: "EA",
 		require: "^lightGrid",
 		transclude: true,
-		controller: ["$scope", function ($scope) {
+		controller: function ($scope) {
 			$scope.views = {};
 			$scope.viewCount = 0;
 			$scope.headerTemplate = null;
@@ -61,7 +61,7 @@ grid.module.directive("lgColumn", function () {
 			this.registerFooterTemplate = function (viewLinker) {
 				$scope.footerTemplate = viewLinker;
 			};
-		}],
+		},
 		controllerAs: "templateColumnController",
 		link: function(scope, instanceElement, instanceAttrs, gridController, linker) {
 			

@@ -3,7 +3,7 @@
 /**
  * Directive persisting data from the viewModel of the row.
  */
-grid.module.directive("persistData", ["$q", "$rootScope", "lgGridService", function ($q, $rootScope, lgGridService) {
+grid.module.directive("persistData", function ($q, $rootScope, lgGridService) {
 	"use strict";
 	
 	return {
@@ -25,4 +25,4 @@ grid.module.directive("persistData", ["$q", "$rootScope", "lgGridService", funct
 			});
 		}
 	};
-}]);
+});

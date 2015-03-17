@@ -33,12 +33,12 @@ module.exports = function (grunt) {
 		},
 		karma: {
 			unit: {
-				configFile: "config/karma.conf.js",
+				configFile: "config/karma.conf.js"
 			}
 		},
 		watch: {
 			files: ["src/**/*.js"],
-			tasks: ["concat", "uglify"]
+			tasks: ["build", "karma"]
 		},
 		jsdoc : {
 			dist : {
@@ -47,7 +47,15 @@ module.exports = function (grunt) {
 					destination: "doc"
 				}
 			}
-	}
+		},
+		ngAnnotate: {
+			bundle: {
+				src: ["dist/light-grid-<%= pkg.version %>.js"],
+				expand: true,
+				ext: '.js',
+				extDot: 'last'
+			}
+		}
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
@@ -55,6 +63,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-karma");
 	grunt.loadNpmTasks("grunt-jsdoc");
+	grunt.loadNpmTasks("grunt-ng-annotate");
 	
-	grunt.registerTask("default", ["concat", "uglify"]);
+	grunt.registerTask("build", ["concat", "ngAnnotate", "uglify"]);
+	grunt.registerTask("default", ["build", "karma"]);
 };

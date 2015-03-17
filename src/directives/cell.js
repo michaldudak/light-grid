@@ -7,7 +7,7 @@
  * @function cellDirective
  * @module lightGrid
  */
-grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
+grid.module.directive("lgCell", function cellDirective($compile) {
 	"use strict";
 	
 	function countProperties(obj) {
@@ -102,4 +102,4 @@ grid.module.directive("lgCell", ["$compile", function cellDirective($compile) {
 			$compile(switchRoot)(transclusionScope);
 		}
 	};
-}]);
+});

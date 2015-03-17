@@ -1,6 +1,6 @@
 ﻿/* global angular, grid */
 
-grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
+grid.module.directive("lgRow", function rowDirective($compile) {
 	"use strict";
 
 	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{visibleColumns.length}}' ng-include='expandedTemplate'></td></tr>";
@@ -21,7 +21,7 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 
 	return {
 		template: "<td lg-cell ng-repeat='columnDefinition in visibleColumns'></td>",
-		controller: ["$scope", "$element", function rowController($scope, $element) {
+		controller: function rowController($scope, $element) {
 			var self = this;
 			
 			// The scope of the cell content inherits from grid's parent (so creating column templates in markup is intuitive)
@@ -146,7 +146,7 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			$scope.$on("lightGrid.row.acceptViewModel", function () {
 				self.acceptViewModel();
 			});
-		}],
+		},
 		controllerAs: "rowController",
 		compile: function (tElement) {
 			if (tElement[0].nodeName !== "TR") {
@@ -170,4 +170,4 @@ grid.module.directive("lgRow", ["$compile", function rowDirective($compile) {
 			};
 		}
 	};
-}]);
+});

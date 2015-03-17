@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Native Angular JS Grid implementation",
   "scripts": {
-    "test": "grunt karma"
+    "test": "grunt"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "karma-jasmine": "~0.3.5",
     "jasmine-core": "~2.2.0",
     "grunt-karma": "~0.10.1",
-    "grunt-jsdoc": "~0.5.8"
+    "grunt-jsdoc": "~0.5.8",
+    "grunt-ng-annotate": "~0.10.0"
   }
 }

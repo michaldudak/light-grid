@@ -3,7 +3,7 @@
 /**
  * Provides methods exposing grid controllers to other elements on a page.
  */
-grid.module.service("lgGridService", [function gridService() {
+grid.module.service("lgGridService", function gridService() {
 	"use strict";
 	
 	var grids = {};
@@ -73,4 +73,4 @@ grid.module.service("lgGridService", [function gridService() {
 	this.unregisterGrid = function unregisterGrid(id) {
 		delete dataProviders[id];
 	};
-}]);
+});

@@ -6,7 +6,7 @@
  *  - model (interpolated) - an array with a data model to display
  *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
  */
-grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$rootScope", function (lgGridService, $filter, $rootScope) {
+grid.module.directive("lgLocalDataProvider", function (lgGridService, $filter, $rootScope) {
 	"use strict";
 
 	var defaultOptions = {
@@ -71,7 +71,7 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 		}
 	}
 
-	var localDataProviderController = ["$scope", "$q", function ($scope, $q) {
+	var localDataProviderController = function ($scope, $q) {
 		this.getViewProperties = function () {
 			return $scope.displayedDataProperties;
 		};
@@ -124,7 +124,7 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 
 			return deferred.promise;
 		};
-	}];
+	};
 
 	return {
 		scope: {
@@ -156,4 +156,4 @@ grid.module.directive("lgLocalDataProvider", ["lgGridService", "$filter", "$root
 			elem.remove();
 		}
 	};
-}]);
+});

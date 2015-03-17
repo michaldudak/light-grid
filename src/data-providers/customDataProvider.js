@@ -9,7 +9,7 @@
  *  - delete-method(function(record)) - method called when the provider wants to delete an existing resource
  *  - initial-options (interpolated, optional) - an object containing the initial view options (search, sorting, paging)
  */
-grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScope", "$timeout", function (lgGridService, $q, $rootScope, $timeout) {
+grid.module.directive("lgCustomDataProvider", function (lgGridService, $q, $rootScope, $timeout) {
 	"use strict";
 
 	var defaultOptions = {
@@ -38,7 +38,7 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 		});
 	}
 
-	var customDataProviderController = ["$scope", function CustomDataProviderController($scope) {
+	var customDataProviderController = function CustomDataProviderController($scope) {
 		this.sort = function (sortProperty, descending) {
 			var properties = angular.extend($scope.displayedDataProperties, { sortProperty: sortProperty, sortDirectionDescending: descending });
 			updateGridModel($scope.getMethod({ options: properties }, $scope));
@@ -65,7 +65,7 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 		this.deleteRecord = function (record) {
 			return $q.when($scope.deleteMethod({ record: record }));
 		};
-	}];
+	};
 
 	return {
 		scope: {
@@ -98,4 +98,4 @@ grid.module.directive("lgCustomDataProvider", ["lgGridService", "$q", "$rootScop
 			});
 		}
 	};
-}]);
+});

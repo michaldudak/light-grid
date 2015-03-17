@@ -7,10 +7,10 @@
  *  - data - {Array} (interpolated) data model displayed on the grid (optional).
  *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
  */
-grid.module.directive("lightGrid", ["lgGridService", function gridDirective(gridService) {
+grid.module.directive("lightGrid", function gridDirective(lgGridService) {
 	"use strict";
 
-	var gridController = ["$scope", "$element", function GridController($scope, $element) {
+	var gridController = function GridController($scope, $element) {
 
 		var columnDefinitions = {};
 		$scope.visibleColumns = [];
@@ -138,7 +138,7 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 		this.getId = function() {
 			return $scope.id;
 		};
-	}];
+	};
 
 	// TODO: footer support
 	var defaultTemplate =
@@ -169,13 +169,13 @@ grid.module.directive("lightGrid", ["lgGridService", function gridDirective(grid
 				elem.append(clone);
 			});
 				
-			gridService.registerGrid(scope.id, scope.gridController);
+			lgGridService.registerGrid(scope.id, scope.gridController);
 
 			scope.$on("$destroy", function() {
-				gridService.unregisterGrid(scope.id);
+				lgGridService.unregisterGrid(scope.id);
 			});
 		},
 		controller: gridController,
 		controllerAs: "gridController"
 	};
-}]);
+});
