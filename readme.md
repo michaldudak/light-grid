@@ -10,6 +10,8 @@ Just run `grunt build` and look for the output file in the dist directory.
 ##Running tests
 Type in `grunt test`, sit back and enjoy. This will check code style, run JSHint, build the project and run all the tests.
 
+To continuously run code checks and tests, execute `grunt sanity-check`.
+
 ##Author
 [Michał Dudak](http://dudak.me)
 

@@ -6,7 +6,7 @@ module.exports = function (grunt) {
 		concat: {
 			options: {
 				separator: "\n\n",
-				banner: "/*!\n Light Grid <%= pkg.version %> \n <%= pkg.repository.url %>\n by <%= pkg.author %>\n <%= pkg.license %> license\n*/\n\n" + 
+				banner: "/*!\n Light Grid <%= pkg.version %> \n <%= pkg.repository.url %>\n by <%= pkg.author %>\n <%= pkg.license %> license\n*/\n\n" +
 					"(function (window, angular, $, undefined) {\n\n",
 				footer: "\n\n}(window, window.angular, window.jQuery));"
 			},
@@ -43,13 +43,19 @@ module.exports = function (grunt) {
 			},
 			singleRun: {
 			},
+			continuous: {
+				singleRun: false,
+				background: true
+			},
 			ci: {
 				browsers: ["PhantomJS"]
 			}
 		},
 		watch: {
-			files: ["src/**/*.js"],
-			tasks: ["default"]
+			check: {
+				files: ["src/**/*.js", "test/unit/*.js"],
+				tasks: ["code-check", "concat", "karma:continuous:run"]
+			}
 		},
 		ngAnnotate: {
 			bundle: {
@@ -90,6 +96,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-jscs");
 	grunt.loadNpmTasks("grunt-ng-annotate");
 
+	grunt.registerTask("sanity-check", ["karma:continuous:start", "watch:check"]);
 	grunt.registerTask("code-check", ["jscs", "jshint:beforeConcat"]);
 	grunt.registerTask("build", ["code-check", "concat", "jshint:afterConcat", "ngAnnotate", "uglify"]);
 	grunt.registerTask("test", ["build", "karma:singleRun"]);
