@@ -92,6 +92,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask("code-check", ["jscs", "jshint:beforeConcat"]);
 	grunt.registerTask("build", ["code-check", "concat", "jshint:afterConcat", "ngAnnotate", "uglify"]);
-	grunt.registerTask("default", ["build", "karma:singleRun"]);
+	grunt.registerTask("test", ["build", "karma:singleRun"]);
 	grunt.registerTask("ci", ["build", "karma:ci"]);
+	grunt.registerTask("default", "test");
 };

@@ -8,7 +8,7 @@ Simple, customizable grid component for Angular JS.
 Just run `grunt build` and look for the output file in the dist directory.
 
 ##Running tests
-Type in `grunt`, sit back and enjoy. This will check code style, run JSHint, build the project and run all the tests.
+Type in `grunt test`, sit back and enjoy. This will check code style, run JSHint, build the project and run all the tests.
 
 ##Author
 [Michał Dudak](http://dudak.me)

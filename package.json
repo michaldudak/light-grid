@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Native Angular JS Grid implementation",
   "scripts": {
-    "test": "grunt"
+    "test": "grunt test"
   },
   "repository": {
     "type": "git",
