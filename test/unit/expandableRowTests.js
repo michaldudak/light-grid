@@ -1,7 +1,4 @@
-﻿/// <reference path="/libs/jquery.js" />
-/// <reference path="/libs/angular.js" />
-/// <reference path="/dist/light-grid-0.1.0.min.js" />
-/// <reference path="/test/lib/angular-mocks.js" />
+﻿/* global beforeEach, describe, it, expect, inject, module */
 
 describe("Expandable row", function () {
 	"use strict";
@@ -14,7 +11,6 @@ describe("Expandable row", function () {
 		"<script type='text/ng-template' id='detailsTemplate'>" +
 			"Details for row {{rowData.id}}" +
 		"</script>";
-
 
 	var grid =
 		"<light-grid id='testGrid'>" +

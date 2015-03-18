@@ -10,7 +10,6 @@
 	"disallowTrailingWhitespace": "ignoreEmptyLines",
 	"disallowYodaConditions": true,
 	"requireBlocksOnNewline": true,
-	"requireCapitalizedComments": true,
 	"requireCapitalizedConstructors": true,
 	"requireCommaBeforeLineBreak": true,
 	"requireCurlyBraces": true,

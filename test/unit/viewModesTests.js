@@ -1,9 +1,4 @@
-﻿/// <reference path="/libs/jquery.js" />
-/// <reference path="/libs/angular.js" />
-/// <reference path="/dist/light-grid-0.1.0.min.js" />
-/// <reference path="/test/lib/angular-mocks.js" />
-
-/* global beforeEach, describe, it, expect, inject, module */
+﻿/* global beforeEach, describe, it, expect, inject, module */
 
 describe("Light Grid: View modes tests", function () {
 	"use strict";

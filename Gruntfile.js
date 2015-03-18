@@ -19,7 +19,7 @@ module.exports = function (grunt) {
 					"src/column-templates/*.js",
 					"src/data-providers/*.js"
 				],
-				dest: "dist/light-grid.js",
+				dest: "dist/light-grid.js"
 			}
 		},
 		uglify: {
@@ -35,7 +35,7 @@ module.exports = function (grunt) {
 				files: {
 					"dist/light-grid.min.js": ["dist/light-grid.js"]
 				}
-			},
+			}
 		},
 		karma: {
 			options: {
@@ -64,7 +64,7 @@ module.exports = function (grunt) {
 				jshintrc: true
 			},
 			beforeConcat: {
-				src: ["src/**/*.js"]
+				src: ["src/**/*.js", "test/unit/*.js"]
 			},
 			afterConcat: {
 				src: ["dist/light-grid.js"]
@@ -73,7 +73,7 @@ module.exports = function (grunt) {
 		jscs: {
 			default: {
 				files: {
-					src: "src/**/*.js"
+					src: ["src/**/*.js", "test/unit/*.js"]
 				},
 				options: {
 					config: ".jscsrc"
