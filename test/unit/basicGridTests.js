@@ -9,7 +9,7 @@ describe("Grid directive tests:", function () {
 
 	var emptyGrid = "<light-grid id='testGrid' class='table'></light-grid>";
 	var singleColumnGrid =
-		"<light-grid id='testGrid' data='model'>" +
+		"<light-grid id='testGrid' model='model'>" +
 			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
 		"</light-grid>";
 

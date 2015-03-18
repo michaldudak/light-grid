@@ -6,17 +6,17 @@ describe("Light Grid: View modes tests", function () {
 	var $compile;
 	var $rootScope;
 
-	var gridMarkup = "<light-grid id='grid' data='model'><lg-column>" +
+	var gridMarkup = "<light-grid id='grid' model='model'><lg-column>" +
 		"<lg-view>Default view</lg-view>" +
 		"<lg-view view='alternate'>Alternate view</lg-view>" +
 		"</lg-column></light-grid>";
 
-	var gridWithAlternateViewMarkup = "<light-grid id='grid' data='model' initial-view='alternate'><lg-column>" +
+	var gridWithAlternateViewMarkup = "<light-grid id='grid' model='model' initial-view='alternate'><lg-column>" +
 		"<lg-view>Default view</lg-view>" +
 		"<lg-view view='alternate'>Alternate view</lg-view>" +
 		"</lg-column></light-grid>";
 	
-	var gridWithMultiviewsMarkup = "<light-grid id='grid' data='model'><lg-column>" +
+	var gridWithMultiviewsMarkup = "<light-grid id='grid' model='model'><lg-column>" +
 		"<lg-view>Default view</lg-view>" +
 		"<lg-view view='alternate1, alternate2'>Alternate view</lg-view>" +
 		"</lg-column></light-grid>";

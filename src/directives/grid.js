@@ -2,7 +2,7 @@
  * The root grid directive.
  * Parameters:
  *  - id - {String} ID of the grid. This attribute must be present and unique.
- *  - data - {Array} (interpolated) data model displayed on the grid (optional).
+ *  - model - {Array} (interpolated) data model displayed on the grid (optional).
  *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
  */
 angular.module("light-grid").directive("lightGrid", function gridDirective(lgGridService) {
@@ -18,7 +18,7 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 		 * @return {Array} Model displayed on the grid.
 		 */
 		this.getData = function getData() {
-			return $scope.data;
+			return $scope.model;
 		};
 
 		/**
@@ -26,16 +26,16 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 		 * @return {Array} Current state of the grid's view model
 		 */
 		this.getViewData = function getViewData() {
-			if (angular.isArray($scope.data)) {
-				return $scope.data.map(function(elem) {
+			if (angular.isArray($scope.model)) {
+				return $scope.model.map(function(elem) {
 					return elem._viewData;
 				});
 			} else {
 				var gridViewData = {};
 
-				for (var prop in $scope.data) {
-					if ($scope.data.hasOwnProperty(prop)) {
-						gridViewData[prop] = $scope.data[prop]._viewData;
+				for (var prop in $scope.model) {
+					if ($scope.model.hasOwnProperty(prop)) {
+						gridViewData[prop] = $scope.model[prop]._viewData;
 					}
 				}
 
@@ -48,7 +48,7 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 		 * @param {[type]} newData [description]
 		 */
 		this.setData = function setData(newData) {
-			$scope.data = newData;
+			$scope.model = newData;
 		};
 
 		function updateVisibleColumns() {
@@ -142,12 +142,12 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 	var defaultTemplate =
 		"<table class='light-grid'>" +
 			"<thead><tr lg-header-row></tr></thead>" +
-			"<tbody><tr lg-row default-view='read' initial-view='{{ initialView || \"read\" }}' ng-repeat='rowData in data'></tr></tbody>" +
+			"<tbody><tr lg-row default-view='read' initial-view='{{ initialView || \"read\" }}' ng-repeat='rowData in model'></tr></tbody>" +
 		"</table>";
 	
 	return {
 		scope: {
-			data: "=?",
+			model: "=?",
 			id: "@",
 			initialView: "@"
 		},

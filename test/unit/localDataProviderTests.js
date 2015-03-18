@@ -14,7 +14,7 @@ describe("Local data provider", function () {
 		"</light-grid>";
 
 	var gridWithoutDataProviderMarkup =
-		"<light-grid id='testGrid' data='model'>" +
+		"<light-grid id='testGrid' model='model'>" +
 			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
 		"</light-grid>";
 
