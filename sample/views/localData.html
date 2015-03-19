@@ -1,32 +1,18 @@
 ﻿<script>
-	function localDataGridController($scope) {
-		$scope.model = [
-			{
-				make: "Honda",
-				model: "CBF 1000F",
-				engine: "1000ccm R4"
-			}, {
-				make: "BMW",
-				model: "F800 GT",
-				engine: "800ccm R2"
-			}, {
-				make: "Suzuki",
-				model: "V-Strom 1000",
-				engine: "1000ccm V2"
-			}
-		];
+	function localDataGridController($scope, sampleModel) {
+		$scope.model = sampleModel;
 	};
 </script>
 
 <h2>Grid with a local data provider</h2>
 
-<div data-ng-controller="localDataGridController">
-	<table data-light-grid id="sampleGrid" class="table">
-		<tr data-lg-local-data-provider data-model="model"></tr>
-		<tr data-lg-column-templates>
-			<td data-lg-column title="'Make'">{{ rowData.make }}</td>
-			<td data-lg-column title="'Model'">{{ rowData.model }}</td>
-			<td data-lg-column title="'Engine'">{{ rowData.engine }}</td>
+<div ng-controller="localDataGridController">
+	<table light-grid id="sampleGrid" class="table table-striped">
+		<tr lg-local-data-provider model="model"></tr>
+		<tr lg-column-templates>
+			<td lg-column title="'Make'">{{ rowData.make }}</td>
+			<td lg-column title="'Model'">{{ rowData.model }}</td>
+			<td lg-column title="'Engine'">{{ rowData.engine }}</td>
 		</tr>
 	</table>
 </div>

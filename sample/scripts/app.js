@@ -27,10 +27,32 @@
 			.when("/client-side-search", {
 				templateUrl: "views/clientSideSearch.html"
 			})
+			.when("/client-side-paging", {
+				templateUrl: "views/clientSidePaging.html"
+			})
+			.when("/hidden-columns", {
+				templateUrl: "views/hiddenColumns.html"
+			})
 			.otherwise({
 				redirectTo: "/simplest"
 			});
 	});
+
+	app.constant("sampleModel", [
+		{
+			make: "Honda",
+			model: "CBF 1000F",
+			engine: "1000ccm R4"
+		}, {
+			make: "BMW",
+			model: "F800 GT",
+			engine: "800ccm R2"
+		}, {
+			make: "Suzuki",
+			model: "V-Strom 1000",
+			engine: "1000ccm V2"
+		}
+	]);
 
 	app.run(function ($rootScope) {
 		// log all Angular events to the console for debugging
