@@ -6,6 +6,7 @@ angular.module("light-grid").directive("lgHeaderRow", function headerRowDirectiv
 	"use strict";
 
 	return {
+		restrict: "A",
 		template: "<th lg-header-cell ng-repeat='columnDefinition in visibleColumns'></th>"
 	};
 });

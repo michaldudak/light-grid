@@ -10,10 +10,14 @@
  *     </tr>
  *   </table>
  */
-angular.module("light-grid").directive("lgColumnTemplates", function () {
+angular.module("light-grid").directive("lgColumnTemplates", function() {
 	"use strict";
 
-	return function (scope, element) {
-		element.remove();
+	return {
+		restrict: "A",
+		link: function (scope, element) {
+			element.remove();
+		}
 	};
+
 });

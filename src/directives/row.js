@@ -18,6 +18,7 @@
 	}
 
 	return {
+		restrict: "A",
 		template: "<td lg-cell ng-repeat='columnDefinition in visibleColumns'></td>",
 		controller: function rowController($scope, $element) {
 			var self = this;
