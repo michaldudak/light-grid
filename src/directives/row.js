@@ -2,10 +2,10 @@
 	"use strict";
 
 	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{visibleColumns.length}}' ng-include='expandedTemplate'></td></tr>";
-	
+
 	function defineViewDataProperty(obj) {
 		try {
-			Object.defineProperty(obj, "_viewData", {
+			Object.defineProperty(obj, "$viewData", {
 				configurable: true,
 				writable: true
 			});
@@ -13,7 +13,7 @@
 			// IE < 9 does not support properties
 			// falling back to plain field
 
-			obj._viewData = null;
+			obj.$viewData = null;
 		}
 	}
 
@@ -22,12 +22,12 @@
 		template: "<td lg-cell ng-repeat='columnDefinition in visibleColumns'></td>",
 		controller: function rowController($scope, $element) {
 			var self = this;
-			
+
 			// The scope of the cell content inherits from grid's parent (so creating column templates in markup is intuitive)
 			// This scope is augmented with several properties from the row scope (so it's possible to reference e.g. row
 			// data in the column template).
 			var cellsScope = $scope.gridController.createTransclusionScope();
-			
+
 			// these properties won't ever be overwritten, so it's safe to use simple assignment here
 			cellsScope.rowData = $scope.rowData;
 			cellsScope.data = $scope.data;
@@ -43,7 +43,7 @@
 			$scope.$watch("viewData", function () {
 				cellsScope.viewData = $scope.viewData;
 			});
-			
+
 			$scope.expandedTemplate = null;
 
 			/**
@@ -68,7 +68,7 @@
 			this.closeDetails = function () {
 				$scope.expandedTemplate = null;
 			};
-			
+
 			/**
 			 * If the row is expanded, collapses it. Otherwise expands it with a given template.
 			 * @param {String} detailsTemplate - name of the template to load
@@ -89,7 +89,7 @@
 				if ($scope.view === viewName) {
 					return;
 				}
-				
+
 				$scope.view = viewName;
 				self.resetViewModel();
 			};
@@ -100,19 +100,19 @@
 			this.acceptViewModel = function() {
 				angular.extend($scope.rowData, $scope.viewData);
 				defineViewDataProperty($scope.rowData);
-				$scope.rowData._viewData = $scope.viewData;
+				$scope.rowData.$viewData = $scope.viewData;
 			};
-			
+
 			/**
 			 * Discards the row's view model.
 			 */
 			this.resetViewModel = function() {
-				delete $scope.rowData._viewData;
+				delete $scope.rowData.$viewData;
 				$scope.viewData = angular.copy($scope.rowData);
 				defineViewDataProperty($scope.rowData);
-				$scope.rowData._viewData = $scope.viewData;
+				$scope.rowData.$viewData = $scope.viewData;
 			};
-			
+
 			/**
 			 * Gets a jQuery wrapper over the DOM element of the row (TR).
 			 * @return {jQuery} jQuery object representing the TR row node.
@@ -120,7 +120,7 @@
 			this.getDomElement = function () {
 				return $element;
 			};
-			
+
 			/**
 			 * Adds the specified CSS class to the row node.
 			 * @param {String} className - class to add
@@ -128,7 +128,7 @@
 			this.addCssClass = function (className) {
 				$element.addClass(className);
 			};
-			
+
 			/**
 			 * Removes the specified CSS class from the row node.
 			 * @param {String} className - class to remove
@@ -141,7 +141,7 @@
 			$scope.$on("lightGrid.row.switchView", function(event, viewName) {
 				self.switchView(viewName);
 			});
-			
+
 			$scope.$on("lightGrid.row.acceptViewModel", function () {
 				self.acceptViewModel();
 			});
@@ -151,7 +151,7 @@
 			if (tElement[0].nodeName !== "TR") {
 				throw new Error("Row directive must be placed on a tr element.");
 			}
-			
+
 			var expandingRowLinker = $compile(expandingRowMarkup);
 
 			return function(scope, element, attrs, controller) {

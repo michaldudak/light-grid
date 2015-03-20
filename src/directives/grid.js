@@ -12,7 +12,7 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 
 		var columnDefinitions = {};
 		$scope.visibleColumns = [];
-		
+
 		/**
 		 * Gets the model displayed on the grid.
 		 * @return {Array} Model displayed on the grid.
@@ -28,14 +28,14 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 		this.getViewData = function getViewData() {
 			if (angular.isArray($scope.model)) {
 				return $scope.model.map(function(elem) {
-					return elem._viewData;
+					return elem.$viewData;
 				});
 			} else {
 				var gridViewData = {};
 
 				for (var prop in $scope.model) {
 					if ($scope.model.hasOwnProperty(prop)) {
-						gridViewData[prop] = $scope.model[prop]._viewData;
+						gridViewData[prop] = $scope.model[prop].$viewData;
 					}
 				}
 
@@ -53,7 +53,7 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 
 		function updateVisibleColumns() {
 			$scope.visibleColumns.length = 0;
-			
+
 			for (var id in columnDefinitions) {
 				if (columnDefinitions.hasOwnProperty(id) && columnDefinitions[id].definition.visible) {
 					$scope.visibleColumns.push(columnDefinitions[id].definition);
@@ -120,7 +120,7 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 		this.getScope = function() {
 			return $scope;
 		};
-		
+
 		/**
 		 * Creates a new scope for transcluded elements. The new scope inherits from the grid's parent scope.
 		 * @returns {Scope} The new scope.
@@ -144,7 +144,7 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 			"<thead><tr lg-header-row></tr></thead>" +
 			"<tbody><tr lg-row default-view='read' initial-view='{{ initialView || \"read\" }}' ng-repeat='rowData in model'></tr></tbody>" +
 		"</table>";
-	
+
 	return {
 		scope: {
 			model: "=?",
@@ -166,7 +166,7 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 			transclude(transclusionScope, function(clone) {
 				elem.append(clone);
 			});
-				
+
 			lgGridService.registerGrid(scope.id, scope.gridController);
 
 			scope.$on("$destroy", function() {
