@@ -6,7 +6,13 @@ module.exports = function (grunt) {
 		concat: {
 			options: {
 				separator: "\n\n",
-				banner: "/*!\n Light Grid <%= pkg.version %> \n <%= pkg.repository.url %>\n by <%= pkg.author %>\n <%= pkg.license %> license\n*/\n\n" +
+				banner: "/*!\n "+
+					"Light Grid <%= pkg.version %> \n\n " +
+					"by <%= pkg.author %>\n " +
+					"<%= pkg.repository.url %>\n " +
+					"license: <%= pkg.license %>\n\n " +
+					"build date: <%= new Date().toISOString() %>\n" +
+					"*/\n\n" +
 					"(function (window, angular, $, undefined) {\n\n",
 				footer: "\n\n}(window, window.angular, window.jQuery));"
 			},
