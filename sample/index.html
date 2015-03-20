@@ -3,132 +3,41 @@
 	<head>
 		<meta charset="utf-8" />
 		<title>Light Grid samples</title>
-		<link href="bootstrap.css" rel="stylesheet" />
+		<link href="styles/bootstrap.css" rel="stylesheet" />
+		<link href="styles/custom.css" rel="stylesheet"/>
+		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" />
 	</head>
 	<body>
 		<div class="container">
 			<h1>Light Grid samples</h1>
-
-			<div ng-controller="SampleController">
-				<h2>Grid with local model</h2>
-				
-				<input type="checkbox" ng-model="colVisible" /> Col visible
-				
-				<div class="btn-toolbar">
-					<div class="btn-group btn-group-sm">
-						<button class=" btn btn-default" ng-click="modifyModel()">
-						Modify model</button>
-					</div>
-					<div class="btn-group btn-group-sm">
-						<button class="btn btn-default" ng-click="switchView()">Edit all</button>
-						<button class="btn btn-default" ng-click="saveAll()">Save all</button>
-					</div>
-					<div class="btn-group btn-group-sm">
-						<button class="btn btn-default" ng-click="prevPage()">&laquo; Previous page</button>
-						<button class="btn btn-default" ng-click="nextPage()">Next page &raquo;</button>
-					</div>
-					<div class="btn-group btn-group-sm">
-						<input type="text" ng-model="filterExpression" class="form-control" placeholder="search" />
+			<div class="row">
+				<div class="col-md-3">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<ul class="nav nav-stacked">
+								<li><a href="#/simplest">The simplest grid</a></li>
+								<li><a href="#/local-data">Local data provider</a></li>
+								<li><a href="#/expanded-row">Expanded row</a></li>
+								<li><a href="#/local-editable-row">Editable row (local)</a></li>
+								<li><a href="#/sortable-columns">Sortable columns</a></li>
+								<li><a href="#/client-side-search">Client-side search</a></li>
+								<li><a href="#/client-side-paging">Client-side paging</a></li>
+								<li><a href="#/hidden-columns">Hidden columns</a></li>
+							</ul>
+						</div>
 					</div>
 				</div>
-
-				<table light-grid id="sampleGrid" class="table">
-					<tr lg-local-data-provider data-model="localModel" initial-options="initialOptions"></tr>
-
-					<tr lg-column-templates>
-						<td lg-sortable-column property="firstName" title="'First name'" visible="colVisible"></td>
-						<td lg-sortable-column property="lastName" title="'Last name'" visible="colVisible"></td>
-
-						<td lg-column title="'Formatted data'">
-							<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{staticText}}
-						</td>
-
-						<td lg-editable-column title="'lgEditableColumn'" property="lastName" class="foo"></td>
-
-						<td lg-column title="'Combined editable data'">
-							<lg-view>
-								{{ rowData.firstName }}
-								{{ rowData.lastName }}
-							</lg-view>
-							<lg-view view="edit">
-								<div class="row">
-									<div class="col-xs-4">
-										<input ng-model="rowData.firstName" class="form-control input-sm" />
-									</div>
-									<div class="col-xs-4">
-										<input ng-model="viewData.lastName" class="form-control input-sm" />
-									</div>
-								</div>
-							</lg-view>
-						</td>
-
-						<td lg-column title="'Actions'">
-							<lg-view>
-								<button class="btn btn-default btn-sm" switch-view="edit">Edit</button>
-								<button class="btn btn-default btn-sm" lg-toggle-expanded-row="detailsTemplate.html">Details</button>
-							</lg-view>
-							<lg-view view="edit">
-								<button class="btn btn-primary btn-sm" persist-data>Save</button>
-								<button class="btn btn-default btn-sm" switch-view="read">Cancel</button>
-							</lg-view>
-						</td>
-					</tr>
-				</table>
-				
-				<h2>Grid with custom data provider</h2>
-				<light-grid id="customProviderGrid" class="table">
-					<lg-custom-data-provider get-method="getRecords(options)"
-											 update-method="updateRecords(records)">
-
-					</lg-custom-data-provider>
-
-					<lg-bound-column property="firstName" title="'First name'"></lg-bound-column>
-					<lg-bound-column property="lastName" title="'Last name'"></lg-bound-column>
-
-					<lg-column title="'Formatted data'">
-						<span style="color: limegreen; font-family: Consolas, monospace; text-transform: uppercase">{{rowData.firstName}}</span> | {{staticText}}
-					</lg-column>
-
-					<lg-editable-column title="'lgEditableColumn'" property="lastName"></lg-editable-column>
-
-					<lg-column title="'Combined editable data'">
-						<lg-view>
-							{{ rowData.firstName }}
-							{{ rowData.lastName }}
-						</lg-view>
-						<lg-view view="edit">
-							<div class="row">
-								<div class="col-xs-4">
-									<input ng-model="rowData.firstName" class="form-control input-sm" />
-								</div>
-								<div class="col-xs-4">
-									<input ng-model="viewData.lastName" class="form-control input-sm" />
-								</div>
-							</div>
-						</lg-view>
-					</lg-column>
-
-					<lg-column title="'Actions'">
-						<lg-view>
-							<button class="btn btn-default btn-sm" switch-view="edit">Edit</button>
-							<button class="btn btn-default btn-sm" lg-toggle-expanded-row="detailsTemplate.html">Details</button>
-						</lg-view>
-						<lg-view view="edit">
-							<button class="btn btn-primary btn-sm" persist-data>Save</button>
-							<button class="btn btn-default btn-sm" switch-view="read">Cancel</button>
-						</lg-view>
-					</lg-column>
-				</light-grid>
-
-				<h2>Common text</h2>
-				<input ng-model="staticText" class="form-control" />
+				<div class="col-md-9">
+					<div ng-view></div>
+				</div>
 			</div>
 		</div>
 
 		<script src="../libs/jquery.js"></script>
 		<script src="../libs/angular.js"></script>
+		<script src="../libs/angular-route.js"></script>
 
 		<script src="../dist/light-grid.js"></script>
-		<script src="app.js"></script>
+		<script src="scripts/app.js"></script>
 	</body>
 </html>

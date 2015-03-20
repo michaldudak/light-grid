@@ -1,0 +1,18 @@
+﻿<script>
+	function localDataGridController($scope, sampleModel) {
+		$scope.model = sampleModel;
+	};
+</script>
+
+<h2>Grid with a local data provider</h2>
+
+<div ng-controller="localDataGridController">
+	<table light-grid id="sampleGrid" class="table table-striped">
+		<tr lg-local-data-provider model="model"></tr>
+		<tr lg-column-templates>
+			<td lg-column title="'Make'">{{ rowData.make }}</td>
+			<td lg-column title="'Model'">{{ rowData.model }}</td>
+			<td lg-column title="'Engine'">{{ rowData.engine }}</td>
+		</tr>
+	</table>
+</div>

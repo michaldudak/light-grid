@@ -1,0 +1,23 @@
+﻿<script>
+	function hiddenColumnGridController($scope, sampleModel) {
+		$scope.model = sampleModel;
+		$scope.engineColumnVisible = true;
+	}
+</script>
+
+<h2>Hidden columns</h2>
+
+<div ng-controller="hiddenColumnGridController">
+	<table light-grid id="sampleGrid" class="table table-striped" model="model">
+		<tr lg-column-templates>
+			<td lg-column title="'Make'">{{ rowData.make }}</td>
+			<td lg-column title="'Model'">{{ rowData.model }}</td>
+			<td lg-column title="'Engine'" visible="engineColumnVisible">{{ rowData.engine }}</td>
+		</tr>
+	</table>
+	<div class="checkbox">
+		<label>
+			<input type="checkbox" ng-model="engineColumnVisible" /> Show engine data
+		</label>
+	</div>
+</div>
