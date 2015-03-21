@@ -42,7 +42,7 @@
 		{
 			make: "Honda",
 			model: "CBF 1000F",
-			engine: "1000ccm R4"
+			engine: "998cm R4"
 		}, {
 			make: "BMW",
 			model: "F800 GT",
@@ -51,7 +51,16 @@
 			make: "Suzuki",
 			model: "V-Strom 1000",
 			engine: "1000ccm V2"
+		}, {
+			make: "KTM",
+			model: "690 Duke",
+			engine: "690ccm single"
+		}, {
+			make: "Kawasaki",
+			model: "H2R",
+			engine: "998ccm R4 supercharged"
 		}
+
 	]);
 
 	app.run(function ($rootScope) {
