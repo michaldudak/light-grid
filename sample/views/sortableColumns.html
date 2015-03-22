@@ -1,14 +1,14 @@
 ﻿<script>
-	function sortableColumnsController($scope, sampleModel) {
+	function sortableColumnsController($scope, sampleModel, lgLocalDataProviderFactory) {
 		$scope.model = sampleModel;
+		$scope.dataProvider = lgLocalDataProviderFactory.create();
 	}
 </script>
 
 <h2>Sortable columns</h2>
 
 <div ng-controller="sortableColumnsController">
-	<table light-grid id="sampleGrid" class="table table-striped">
-		<tr lg-local-data-provider model="model"></tr>
+	<table light-grid id="sampleGrid" class="table table-striped" model="model | foo:dataProvider">
 		<tr lg-column-templates>
 			<td lg-sortable-column property="make" title="'Make'"></td>
 			<td lg-sortable-column property="model" title="'Model'"></td>

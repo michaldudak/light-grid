@@ -1,4 +1,85 @@
-﻿/**
+﻿angular.module("light-grid").filter("foo", function() {
+	return function(model, dataProvider) {
+		return dataProvider.getViewModel(model);
+	};
+});
+
+angular.module("light-grid").provider("lgLocalDataProviderFactory", function () {
+
+	var self = this;
+
+	this.defaultViewSettings = {
+		orderBy: null,
+		limitTo: null,
+		filter: null
+	};
+
+	this.$get = function($parse, filterFilter, orderByFilter, limitToFilter) {
+		return {
+			create: function() {
+				function LocalDataProvider() {
+					var viewSettings = self.defaultViewSettings;
+
+					this.getViewModel = function(originalModel) {
+						var viewModel = originalModel;
+
+						if (viewSettings.filter) {
+							viewModel = filterFilter(viewModel, viewSettings.filter.expression, viewSettings.filter.comparator);
+						}
+
+						if (viewSettings.orderBy) {
+							viewModel = orderByFilter(viewModel, viewSettings.orderBy.expression, viewSettings.orderBy.reverse);
+						}
+
+						if (viewSettings.limitTo) {
+							viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit, viewSettings.limitTo.begin);
+						}
+
+						return viewModel;
+					};
+
+					this.saveModel = function() {
+					};
+
+					this.orderBy = function(expression, reverse) {
+						viewSettings.orderBy = {
+							expression: expression,
+							reverse: reverse
+						};
+					};
+
+					this.limitTo = function(limit, begin) {
+						viewSettings.limitTo = {
+							limit: limit,
+							begin: begin
+						};
+					};
+
+					this.page = function(pageIndex) {
+						if (viewSettings.limitTo && viewSettings.limitTo.limit) {
+							viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
+						}
+					};
+
+					this.filter = function(expression, comparator) {
+						viewSettings.filter = {
+							expression: expression,
+							comparator: comparator
+						};
+					};
+
+					this.reset = function() {
+						viewSettings = self.defaultViewSettings;
+					};
+				}
+
+				return new LocalDataProvider();
+			}
+		};
+	};
+});
+
+/**
  * Data provider to be used with a local array as a model.
  * Attributes:
  *  - model (interpolated) - an array with a data model to display
@@ -28,7 +109,7 @@ angular.module("light-grid").directive("lgLocalDataProvider", function (lgGridSe
 			var filter = $filter("filter");
 			viewModel = filter(viewModel, options.filter);
 		}
-		
+
 		// recordCount stores the number of results after filtering but before paging
 		var recordCount = viewModel.length;
 
@@ -63,7 +144,7 @@ angular.module("light-grid").directive("lgLocalDataProvider", function (lgGridSe
 			recordCount: modelInfo.recordCount,
 			viewOptions: scope.displayedDataProperties
 		});
-		
+
 		if (!scope.$$phase && !$rootScope.$$phase) {
 			scope.$apply();
 		}
@@ -137,9 +218,9 @@ angular.module("light-grid").directive("lgLocalDataProvider", function (lgGridSe
 			if (!gridController && !attrs.gridId) {
 				throw Error("lgLocalDataProvider has no associated grid.");
 			}
-			
+
 			scope.gridId = gridController ? gridController.getId() : attrs.gridId;
-			
+
 			scope.displayedDataProperties = angular.extend({}, defaultOptions, scope.initialOptions);
 
 			scope.$watch("model", function () {
