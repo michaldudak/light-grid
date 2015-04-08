@@ -1,12 +1,12 @@
 ﻿<script>
-	function clientSideSearchController($scope, lgGridService, sampleModel) {
+	function clientSideSearchController($scope, sampleModel, lgLocalDataProviderFactory) {
 		$scope.model = sampleModel;
+		$scope.dataProvider = lgLocalDataProviderFactory.create(sampleModel);
 
 		$scope.$watch("filterExpression", function () {
-			var dataProvider = lgGridService.getDataProvider("sampleGrid");
-			dataProvider.filter($scope.filterExpression);
+			$scope.dataProvider.filter($scope.filterExpression);
 		});
-	}	
+	}
 </script>
 
 <h2>Client-side search example</h2>
@@ -18,8 +18,7 @@
 		</div>
 	</div>
 
-	<table light-grid id="sampleGrid" class="table table-striped">
-		<tr lg-local-data-provider model="model"></tr>
+	<table light-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
 		<tr lg-column-templates>
 			<td lg-column title="'Make'">{{ rowData.make }}</td>
 			<td lg-column title="'Model'">{{ rowData.model }}</td>
@@ -27,4 +26,3 @@
 		</tr>
 	</table>
 </div>
-

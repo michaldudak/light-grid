@@ -1,28 +1,31 @@
 ﻿<script>
-	function localEditableRowController($scope, sampleModel) {
-		$scope.model = sampleModel;
+	function localEditableRowController($scope, sampleModel, lgLocalDataProviderFactory) {
+		$scope.dataProvider = lgLocalDataProviderFactory.create(sampleModel);
+		$scope.sampleModel = sampleModel;
 	}
 </script>
 
 <h2>Editable row with local data provider</h2>
 
 <div ng-controller="localEditableRowController">
-	<table light-grid id="sampleGrid" class="table table-striped">
-		<tr lg-local-data-provider model="model"></tr>
+	<table light-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
 		<tr lg-column-templates>
 			<td lg-column title="'Make'" width="28%">
 				<div lg-view>{{ rowData.make }}</div>
-				<div lg-view="edit"><input ng-model="viewData.make" class="form-control input-sm" /></div>
+				<div lg-view="edit"><input ng-model="viewData.make" class="form-control input-sm"/>
+				</div>
 			</td>
 
 			<td lg-column title="'Model'" width="28%">
 				<div lg-view>{{ rowData.model }}</div>
-				<div lg-view="edit"><input ng-model="viewData.model" class="form-control input-sm" /></div>
+				<div lg-view="edit"><input ng-model="viewData.model" class="form-control input-sm"/>
+				</div>
 			</td>
 
 			<td lg-column title="'Engine'" width="28%">
 				<div lg-view>{{ rowData.engine }}</div>
-				<div lg-view="edit"><input ng-model="viewData.engine" class="form-control input-sm" /></div>
+				<div lg-view="edit"><input ng-model="viewData.engine" class="form-control input-sm"/>
+				</div>
 			</td>
 
 			<td lg-column width="16%">
@@ -30,10 +33,13 @@
 					<button class="btn btn-default btn-sm" switch-view="edit">Edit</button>
 				</div>
 				<div lg-view="edit">
-					<button class="btn btn-primary btn-sm" persist-data>Save</button>
+					<button class="btn btn-primary btn-sm" persist-data data-provider="dataProvider">Save</button>
 					<button class="btn btn-default btn-sm" switch-view="read">Cancel</button>
 				</div>
 			</td>
 		</tr>
 	</table>
+
+	<h3>Underlying model</h3>
+	<pre>{{sampleModel | json }}</pre>
 </div>

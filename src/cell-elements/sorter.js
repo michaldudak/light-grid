@@ -2,52 +2,48 @@
  * Enables sorting data by a column specified by the sort-property attribute
  * This directive is meant to be used in header template.
  */
-angular.module("light-grid").directive("lgSorter", function (lgGridService, $rootScope) {
+angular.module("light-grid").directive("lgSorter", function ($timeout) {
 	"use strict";
 
 	return {
-		template: "<span class='sorter {{ cssClass() }}'><span ng-transclude class='columnTitle'></span></span>",
+		template: "<span class='sorter {{ cssClass }}'><span ng-transclude class='columnTitle'></span></span>",
 		transclude: true,
 		replace: true,
+		scope: true,
 		link: function (scope, elem, attrs) {
-			var gridId = scope.gridController.getId();
 			var sortProperty = attrs.sortProperty || attrs.lgSorter;
+			var dataProvider = scope.$eval(attrs.provider);
+
+			scope.dataProvider = dataProvider;
+
+			function updateCssClass() {
+				if (!scope.isSorted) {
+					scope.cssClass = "";
+				} else {
+					scope.cssClass = scope.sortDirectionDescending ? "sorter-desc" : "sorter-asc";
+				}
+			}
 
 			scope.isSorted = false;
 			scope.sortDirectionDescending = true;
 
 			elem.on("click", function () {
-				var dataProvider = lgGridService.getDataProvider(gridId);
-				dataProvider.sort(sortProperty, !scope.sortDirectionDescending);
+				$timeout(function () {
+					dataProvider.orderBy(sortProperty, !scope.sortDirectionDescending);
+				});
 			});
 
-			scope.$on("lightGrid.dataUpdated", function (event, sortedGridId, gridProperties) {
-				if (gridId !== sortedGridId) {
-					return;
-				}
-
-				var sortOptions = gridProperties.viewOptions;
-
-				if (sortOptions.sortProperty !== sortProperty) {
+			scope.$watch("dataProvider.getCurrentViewSettings().orderBy", function (sortSettings) {
+				if (!sortSettings) {
 					scope.isSorted = false;
 					scope.sortDirectionDescending = true;
 				} else {
-					scope.isSorted = true;
-					scope.sortDirectionDescending = sortOptions.sortDirectionDescending;
+					scope.isSorted = sortProperty === sortSettings.expression;
+					scope.sortDirectionDescending = scope.isSorted ? sortSettings.reverse : true;
 				}
 
-				if (!scope.$$phase && !$rootScope.$$phase) {
-					scope.$digest();
-				}
+				updateCssClass();
 			});
-
-			scope.cssClass = function () {
-				if (!scope.isSorted) {
-					return "";
-				}
-
-				return scope.sortDirectionDescending ? "sorter-desc" : "sorter-asc";
-			};
 		}
 	};
 });

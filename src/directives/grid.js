@@ -5,7 +5,7 @@
  *  - model - {Array} (interpolated) data model displayed on the grid (optional).
  *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
  */
-angular.module("light-grid").directive("lightGrid", function gridDirective(lgGridService) {
+angular.module("light-grid").directive("lightGrid", function gridDirective() {
 	"use strict";
 
 	var gridController = function GridController($scope, $element) {
@@ -147,7 +147,7 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 
 	return {
 		scope: {
-			model: "=?",
+			model: "=",
 			id: "@",
 			initialView: "@"
 		},
@@ -165,12 +165,6 @@ angular.module("light-grid").directive("lightGrid", function gridDirective(lgGri
 			var transclusionScope = scope.$parent.$new();
 			transclude(transclusionScope, function(clone) {
 				elem.append(clone);
-			});
-
-			lgGridService.registerGrid(scope.id, scope.gridController);
-
-			scope.$on("$destroy", function() {
-				lgGridService.unregisterGrid(scope.id);
 			});
 		},
 		controller: gridController,

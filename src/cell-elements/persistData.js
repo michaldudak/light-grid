@@ -1,24 +1,19 @@
 /**
  * Directive persisting data from the viewModel of the row.
  */
-angular.module("light-grid").directive("persistData", function ($q, $rootScope, lgGridService) {
+angular.module("light-grid").directive("persistData", function ($q) {
 	"use strict";
-	
+
 	return {
-		link: function (scope, elem) {
-			elem.on("click", function () {
+		link: function ($scope, $elem, $params) {
+			$elem.on("click", function () {
 
-				var gridId = scope.gridController.getId();
-				var dataProvider = lgGridService.getDataProvider(gridId);
+				var dataProvider = $scope.$eval($params.provider);
 
-				$q.when(dataProvider.updateRecords(scope.viewData))
+				$q.when(dataProvider.saveModel($scope.viewData))
 					.then(function () {
-						scope.rowController.acceptViewModel();
-						scope.rowController.switchView("read");
-
-						if (!scope.$$phase && !$rootScope.$$phase) {
-							scope.$apply();
-						}
+						$scope.rowController.acceptViewModel();
+						$scope.rowController.switchView("read");
 					});
 			});
 		}
