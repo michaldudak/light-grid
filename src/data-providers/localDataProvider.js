@@ -15,12 +15,20 @@
 		}
 
 		if (viewSettings.limitTo) {
-			viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit, viewSettings.limitTo.begin);
+			if (viewSettings.limitTo.begin) {
+				viewModel = viewModel.slice(viewSettings.limitTo.begin, viewModel.length);
+			}
+
+			viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit);
 		}
 	}
 
 	this.getGridModel = function() {
 		return viewModel;
+	};
+
+	this.getModelItemCount = function () {
+		return originalModel.length;
 	};
 
 	this.getCurrentViewSettings = function() {
@@ -42,7 +50,7 @@
 	this.limitTo = function (limit, begin) {
 		viewSettings.limitTo = {
 			limit: limit,
-			begin: begin
+			begin: begin || 0
 		};
 
 		updateFilters();

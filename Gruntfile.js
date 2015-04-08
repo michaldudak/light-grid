@@ -23,7 +23,8 @@ module.exports = function (grunt) {
 					"src/services/*.js",
 					"src/cell-elements/*.js",
 					"src/column-templates/*.js",
-					"src/data-providers/*.js"
+					"src/data-providers/*.js",
+					"src/controls/*.js"
 				],
 				dest: "dist/light-grid.js"
 			}

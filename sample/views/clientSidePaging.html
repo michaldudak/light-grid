@@ -1,3 +1,27 @@
-﻿<h2>Client-side paging example</h2>
+﻿<script>
+	function clientSidePagingController($scope, lgLocalDataProviderFactory) {
+		var model = [];
+		for (var i = 1; i <= 100; ++i) {
+			model.push({
+				id: i,
+				name: "Item " + i
+			});
+		}
 
-// TODO
+		$scope.dataProvider = lgLocalDataProviderFactory.create(model);
+		$scope.dataProvider.limitTo(15);
+	}
+</script>
+
+<h2>Client-side paging</h2>
+
+<div ng-controller="clientSidePagingController">
+	<lg-pager data-provider="dataProvider"></lg-pager>
+
+	<table light-grid id="sampleGrid" class="table table-striped" model="dataProvider.getGridModel()">
+		<tr lg-column-templates>
+			<td lg-column title="'ID'">{{ rowData.id }}</td>
+			<td lg-column title="'Name'">{{ rowData.name }}</td>
+		</tr>
+	</table>
+</div>
