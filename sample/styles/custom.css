@@ -82,3 +82,8 @@
 .pager .last:after {
 	content: "\f101";
 }
+
+.pager-summary {
+	margin: 0 5px;
+	display: inline-block;
+}

@@ -8,6 +8,7 @@
 		template: "<div class='pager'>" +
 			"<button ng-disabled='isFirst' class='first' ng-click='goToFirst()'>Last</button>" +
 			"<button ng-disabled='isFirst' class='previous' ng-click='goToPrevious()'>Previous</button>" +
+			"<span class='pager-summary'>Page {{currentPage + 1}} of {{pageCount}}</span>" +
 			"<button ng-disabled='isLast' class='next' ng-click='goToNext()'>Next</button>" +
 			"<button ng-disabled='isLast' class='last' ng-click='goToLast()'>Last</button>" +
 			"</div>",
