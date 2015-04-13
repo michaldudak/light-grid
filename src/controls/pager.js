@@ -23,14 +23,28 @@
 				return Math.ceil(totalSize / (pageSize || DEFAULT_PAGE_SIZE));
 			}
 
-			$scope.$watch("provider.getCurrentViewSettings().limitTo", function (limitToSettings) {
+			function update(limitToSettings) {
 				var totalItemCount = $scope.provider.getModelItemCount();
-				$scope.currentPage = !limitToSettings ? 0 : calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
-				$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
 
-				$scope.isFirst = $scope.currentPage === 0;
-				$scope.isLast = $scope.currentPage === $scope.pageCount - 1;
+				if (!limitToSettings) {
+					$scope.currentPage = 0;
+					$scope.pageCount = 1;
+				} else {
+					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
+					$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
+				}
+
+				$scope.isFirst = $scope.currentPage <= 0;
+				$scope.isLast = $scope.currentPage >= $scope.pageCount - 1;
+			}
+
+			$scope.$watch("provider.getCurrentViewSettings().limitTo", function (limitToSettings) {
+				update(limitToSettings);
 			}, true);
+
+			$scope.$watch("provider.getModelItemCount()", function () {
+				update($scope.provider.getCurrentViewSettings().limitTo);
+			});
 
 			$scope.goToFirst = function () {
 				$scope.provider.page(0);

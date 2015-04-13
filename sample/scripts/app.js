@@ -4,7 +4,7 @@
 	var app = ng.module("lightGridSamples", ["light-grid", "ngRoute"]);
 	window.app = app;
 
-	app.config(function($routeProvider, $controllerProvider) {
+	app.config(function ($routeProvider, $controllerProvider, $compileProvider) {
 
 		$controllerProvider.allowGlobals();
 
@@ -33,9 +33,14 @@
 			.when("/hidden-columns", {
 				templateUrl: "views/hiddenColumns.html"
 			})
+			.when("/fully-featured-local", {
+				templateUrl: "views/fullyFeaturedLocal.html"
+			})
 			.otherwise({
 				redirectTo: "/simplest"
 			});
+
+		$compileProvider.debugInfoEnabled(false);
 	});
 
 	app.constant("sampleModel", [

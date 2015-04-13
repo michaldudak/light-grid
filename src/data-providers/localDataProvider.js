@@ -1,7 +1,9 @@
-﻿function LocalDataProvider(originalModel, filterFilter, orderByFilter, limitToFilter, defaultViewSettings) {
+﻿function LocalDataProvider(model, filterFilter, orderByFilter, limitToFilter, defaultViewSettings) {
 
 	var viewSettings;
 	var viewModel;
+	var filteredItemCount;
+	var originalModel = model;
 
 	function updateFilters() {
 		viewModel = originalModel;
@@ -14,8 +16,14 @@
 			viewModel = orderByFilter(viewModel, viewSettings.orderBy.expression, viewSettings.orderBy.reverse);
 		}
 
+		filteredItemCount = viewModel.length;
+
 		if (viewSettings.limitTo) {
 			if (viewSettings.limitTo.begin) {
+				if (viewSettings.limitTo.begin >= filteredItemCount) {
+					viewSettings.limitTo.begin = 0;
+				}
+
 				viewModel = viewModel.slice(viewSettings.limitTo.begin, viewModel.length);
 			}
 
@@ -23,12 +31,17 @@
 		}
 	}
 
+	this.setModel = function (newModel) {
+		originalModel = newModel;
+		updateFilters();
+	};
+
 	this.getGridModel = function() {
 		return viewModel;
 	};
 
 	this.getModelItemCount = function () {
-		return originalModel.length;
+		return filteredItemCount;
 	};
 
 	this.getCurrentViewSettings = function() {
