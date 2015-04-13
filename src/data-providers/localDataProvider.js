@@ -18,7 +18,7 @@
 
 		filteredItemCount = viewModel.length;
 
-		if (viewSettings.limitTo) {
+		if (viewSettings.limitTo && viewSettings.limitTo.limit !== 0) {
 			if (viewSettings.limitTo.begin) {
 				if (viewSettings.limitTo.begin >= filteredItemCount) {
 					viewSettings.limitTo.begin = 0;
@@ -61,10 +61,14 @@
 	};
 
 	this.limitTo = function (limit, begin) {
-		viewSettings.limitTo = {
-			limit: limit,
-			begin: begin || 0
-		};
+		if (limit === undefined || limit === null) {
+			viewSettings.limitTo = null;
+		} else {
+			viewSettings.limitTo = {
+				limit: limit,
+				begin: begin || 0
+			};
+		}
 
 		updateFilters();
 	};

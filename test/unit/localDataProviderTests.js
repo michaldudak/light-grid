@@ -106,6 +106,96 @@ describe("Local data provider", function () {
 		});
 	});
 
+	describe("#limitTo", function() {
+		describe("when no parameters are set", function() {
+			it("should return the whole dataset", function() {
+				dataProvider.limitTo();
+				var gridModel = dataProvider.getGridModel();
+				expect(gridModel.length).toEqual(4);
+			});
+		});
+
+		describe("when page size is larger than dataset length", function() {
+			it("should return the whole dataset", function() {
+				dataProvider.limitTo(10);
+				var gridModel = dataProvider.getGridModel();
+				expect(gridModel.length).toEqual(4);
+			});
+		});
+
+		describe("when page size is equal to than dataset length", function () {
+			it("should return the whole dataset", function () {
+				dataProvider.limitTo(4);
+				var gridModel = dataProvider.getGridModel();
+				expect(gridModel.length).toEqual(4);
+			});
+		});
+
+		describe("when page size is smaller (2) than dataset length", function () {
+			describe("and 'begin' parameter is not set", function() {
+				it("should return just the first items of the dataset", function() {
+					dataProvider.limitTo(2);
+					var gridModel = dataProvider.getGridModel();
+					expect(gridModel.length).toEqual(2);
+					expect(gridModel[0].firstName).toBe("Frodo");
+					expect(gridModel[1].firstName).toBe("Bilbo");
+				});
+			});
+
+			describe("and 'begin' parameter is set to 0", function () {
+				it("should return just the first items of the dataset", function () {
+					dataProvider.limitTo(2, 0);
+					var gridModel = dataProvider.getGridModel();
+					expect(gridModel.length).toEqual(2);
+					expect(gridModel[0].firstName).toBe("Frodo");
+					expect(gridModel[1].firstName).toBe("Bilbo");
+				});
+			});
+
+			describe("and 'begin' parameter is set to 1", function () {
+				it("should return just the second and third item of the dataset", function () {
+					dataProvider.limitTo(2, 1);
+					var gridModel = dataProvider.getGridModel();
+					expect(gridModel.length).toEqual(2);
+					expect(gridModel[0].firstName).toBe("Bilbo");
+					expect(gridModel[1].firstName).toBe("Samwise");
+				});
+			});
+
+			describe("and 'begin' parameter is 1 less than dataset length", function () {
+				it("should return just the last item of the dataset", function () {
+					dataProvider.limitTo(2, 3);
+					var gridModel = dataProvider.getGridModel();
+					expect(gridModel.length).toEqual(1);
+					expect(gridModel[0].firstName).toBe("Meriadok");
+				});
+			});
+
+			describe("and 'begin' parameter is larger than dataset length", function () {
+				it("should reset to 'begin' parameter to 0", function () {
+					dataProvider.limitTo(2, 10);
+					expect(dataProvider.getCurrentViewSettings().limitTo.begin).toEqual(0);
+				});
+
+				it("should return the first items from the dataset", function () {
+					dataProvider.limitTo(2, 10);
+					var gridModel = dataProvider.getGridModel();
+					expect(gridModel.length).toEqual(2);
+					expect(gridModel[0].firstName).toBe("Frodo");
+					expect(gridModel[1].firstName).toBe("Bilbo");
+				});
+			});
+		});
+
+		describe("when page size is set to zero", function () {
+			it("should return the whole dataset", function () {
+				dataProvider.limitTo(0);
+				var gridModel = dataProvider.getGridModel();
+				expect(gridModel.length).toEqual(4);
+			});
+		});
+	});
+
 	describe("when assigned to a given grid and having 4-element array as a model", function() {
 		it("should replace the directive with a table tag", function () {
 			var element = $compile(grid)($rootScope);
