@@ -7,7 +7,9 @@ module.exports = function (config) {
 		autoWatch: false,
 
 		frameworks: ["jasmine"],
-		
+
+		reporters: ["mocha"],
+
 		browsers: ["PhantomJS", "Chrome", "Firefox"],
 
 		files: [

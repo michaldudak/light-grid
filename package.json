@@ -28,6 +28,7 @@
     "karma-chrome-launcher": "~0.1.7",
     "karma-jasmine": "~0.3.5",
     "jasmine-core": "~2.2.0",
+    "karma-mocha-reporter": "~1.0.2",
     "grunt-karma": "~0.10.1",
     "grunt-jsdoc": "~0.5.8",
     "grunt-ng-annotate": "~0.10.0"
