@@ -35,7 +35,14 @@
 	<script type="text/ng-template" id="detailsTemplate.html">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<p>Here we can show additional details of {{ rowData.make }} {{ rowData.model }}.</p>
+				<dl>
+					<dt>City</dt>
+					<dd>{{ rowData.city }}</dd>
+					<dt>State</dt>
+					<dd>{{ rowData.state }}</dd>
+					<dt>ZIP code</dt>
+					<dd>{{ rowData._id }}</dd>
+				</dl>
 			</div>
 		</div>
 	</script>
