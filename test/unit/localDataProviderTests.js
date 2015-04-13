@@ -196,28 +196,27 @@ describe("Local data provider", function () {
 		});
 	});
 
+	describe("#filter", function () {
+		describe("when no parameters are passed", function () {
+			it("should return the full dataset", function () {
+				dataProvider.filter();
+				var model = dataProvider.getGridModel();
+				expect(model.length).toBe(4);
+			});
+		});
+
+		describe("when expression parameter is passed", function () {
+			it("should return the filtered dataset", function () {
+				dataProvider.filter("Baggins");
+				var model = dataProvider.getGridModel();
+				expect(model.length).toBe(2);
+				expect(model[0].firstName).toBe("Frodo");
+				expect(model[1].firstName).toBe("Bilbo");
+			});
+		});
+	});
+
 	describe("when assigned to a given grid and having 4-element array as a model", function() {
-		it("should replace the directive with a table tag", function () {
-			var element = $compile(grid)($rootScope);
-			$rootScope.$digest();
-
-			expect(element[0].nodeName).toEqual("TABLE");
-			expect(element.children("thead").length).toEqual(1);
-			expect(element.children("tbody").length).toEqual(1);
-			expect(element.hasClass("light-grid")).toBeTruthy();
-		});
-
-		it("should render four rows", function() {
-			var element = $compile(grid)($rootScope);
-			$rootScope.$digest();
-
-			expect(element.find("tbody").children("tr").length).toEqual(4);
-			expect(element.find("tbody").children("tr:eq(0)").text()).toEqual("1");
-			expect(element.find("tbody").children("tr:eq(1)").text()).toEqual("2");
-			expect(element.find("tbody").children("tr:eq(2)").text()).toEqual("3");
-			expect(element.find("tbody").children("tr:eq(3)").text()).toEqual("4");
-		});
-
 		it("should render the data as if it was provided to grid's data property", function() {
 			var expectedElement = $compile(gridWithoutDataProviderMarkup)($rootScope);
 			var element = $compile(grid)($rootScope);
