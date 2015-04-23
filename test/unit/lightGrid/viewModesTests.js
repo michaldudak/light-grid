@@ -15,13 +15,17 @@ describe("Light Grid: View modes tests", function () {
 		"<lg-view>Default view</lg-view>" +
 		"<lg-view view='alternate'>Alternate view</lg-view>" +
 		"</lg-column></light-grid>";
-	
+
 	var gridWithMultiviewsMarkup = "<light-grid id='grid' model='model'><lg-column>" +
 		"<lg-view>Default view</lg-view>" +
 		"<lg-view view='alternate1, alternate2'>Alternate view</lg-view>" +
 		"</lg-column></light-grid>";
 
-	beforeEach(module("light-grid"));
+	beforeEach(function () {
+		module("lightGrid");
+		module("lightGridControls");
+		module("lightGridDataProviders");
+	});
 
 	beforeEach(inject(function (_$compile_, _$rootScope_) {
 		$compile = _$compile_;
@@ -80,7 +84,7 @@ describe("Light Grid: View modes tests", function () {
 		expect(firstRow.find("td").text()).toBe("Alternate view");
 		expect(secondRow.find("td").text()).toBe("Alternate view");
 	});
-	
+
 	it("should show the default view when switchView is called with unknown view name", function () {
 		var element = $compile(gridWithAlternateViewMarkup)($rootScope);
 		$rootScope.$digest();
@@ -95,7 +99,7 @@ describe("Light Grid: View modes tests", function () {
 		expect(firstRow.find("td").text()).toBe("Default view");
 		expect(secondRow.find("td").text()).toBe("Alternate view");
 	});
-	
+
 	it("should show the proper view when it's declared as multiview", function () {
 		var element = $compile(gridWithMultiviewsMarkup)($rootScope);
 		$rootScope.$digest();

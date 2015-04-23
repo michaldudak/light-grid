@@ -15,7 +15,11 @@ describe("Light Grid: Sorter directive tests", function () {
 			"</lg-column>" +
 		"</light-grid>";
 
-	beforeEach(module("light-grid"));
+	beforeEach(function () {
+		module("lightGrid");
+		module("lightGridControls");
+		module("lightGridDataProviders");
+	});
 
 	beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _lgLocalDataProviderFactory_) {
 		$compile = _$compile_;

@@ -2,7 +2,7 @@
  * Represents a row inside grid's header.
  * Does not expose any API.
  */
-angular.module("light-grid").directive("lgHeaderRow", function headerRowDirective() {
+angular.module("lightGrid").directive("lgHeaderRow", function headerRowDirective() {
 	"use strict";
 
 	return {

@@ -18,13 +18,14 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				src: [
-					"src/moduleDefinition.js",
-					"src/directives/*.js",
-					"src/services/*.js",
-					"src/cell-elements/*.js",
-					"src/column-templates/*.js",
-					"src/data-providers/*.js",
-					"src/controls/*.js"
+					"src/lightGrid/moduleDefinition.js",
+					"src/lightGrid/*.js",
+					"src/lightGridTemplates/moduleDefinition.js",
+					"src/lightGridTemplates/*.js",
+					"src/lightGridDataProviders/moduleDefinition.js",
+					"src/lightGridDataProviders/*.js",
+					"src/lightGridControls/moduleDefinition.js",
+					"src/lightGridControls/*.js"
 				],
 				dest: "dist/light-grid.js"
 			}

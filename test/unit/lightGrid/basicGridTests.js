@@ -1,4 +1,4 @@
-﻿/* global beforeEach, describe, it, expect, inject, module */
+/* global beforeEach, describe, it, expect, inject, module */
 
 describe("Grid directive tests:", function () {
 	"use strict";
@@ -11,8 +11,14 @@ describe("Grid directive tests:", function () {
 		"<light-grid id='testGrid' model='model'>" +
 			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
 		"</light-grid>";
+	var gridOnTableTag =
+		"<table light-grid id='testGrid' model='model'>" +
+			"<tr lg-column-templates>" +
+				"<td lg-column title='\"Column 1\"'>{{rowData.id}}</td>" +
+			"</tr>" +
+		"</table>";
 
-	beforeEach(module("light-grid"));
+	beforeEach(module("lightGrid"));
 
 	beforeEach(inject(function(_$compile_, _$rootScope_) {
 		$compile = _$compile_;
@@ -118,6 +124,23 @@ describe("Grid directive tests:", function () {
 			var element = $compile(singleColumnGrid)($rootScope);
 			$rootScope.$digest();
 			expect(element.find("tbody").children("tr").length).toEqual(0);
+		});
+	});
+
+	describe("when a grid directive is used as an attribute", function () {
+		it("should render as it was used as a custom element", function () {
+			$rootScope.model = {
+				foo1: { id: 1 },
+				foo2: { id: 2 },
+				foo3: { id: 3 }
+			};
+
+			var elementGrid = $compile(singleColumnGrid)($rootScope);
+			var attributeGrid = $compile(gridOnTableTag)($rootScope);
+
+			$rootScope.$digest();
+
+			expect(attributeGrid.html()).toEqual(elementGrid.html());
 		});
 	});
 });

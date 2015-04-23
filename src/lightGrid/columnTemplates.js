@@ -10,13 +10,19 @@
  *     </tr>
  *   </table>
  */
-angular.module("light-grid").directive("lgColumnTemplates", function() {
+angular.module("lightGrid").directive("lgColumnTemplates", function () {
 	"use strict";
 
 	return {
 		restrict: "A",
 		link: function (scope, element) {
-			element.remove();
+			var parent = element.parent();
+			// browsers may create additional tbody tag surrounding the <td lg-column-templates">. We don't need this.
+			if (parent[0].tagName === "TBODY" && parent.children().length === 1) {
+				parent.remove();
+			} else {
+				element.remove();
+			}
 		}
 	};
 

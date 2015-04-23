@@ -6,4 +6,4 @@ if (angular.element !== $) {
 	throw new Error("jQuery must be included before Angular.");
 }
 
-angular.module("light-grid", []);
+angular.module("lightGrid", []);

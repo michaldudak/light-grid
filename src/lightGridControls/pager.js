@@ -1,4 +1,4 @@
-﻿angular.module("light-grid").directive("lgPager", function () {
+﻿angular.module("lightGridControls").directive("lgPager", function () {
 	"use strict";
 
 	return {

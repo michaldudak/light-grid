@@ -17,7 +17,11 @@ describe("Local data provider", function () {
 			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
 		"</light-grid>";
 
-	beforeEach(module("light-grid"));
+	beforeEach(function () {
+		module("lightGrid");
+		module("lightGridControls");
+		module("lightGridDataProviders");
+	});
 
 	beforeEach(inject(function (_$compile_, _$rootScope_, _lgLocalDataProviderFactory_) {
 		$compile = _$compile_;

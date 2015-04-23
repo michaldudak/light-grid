@@ -2,7 +2,7 @@
  * Template for the header (defined in the lgColumn)
  * Does not expose any API.
  */
-angular.module("light-grid").directive("lgHeaderView", function () {
+angular.module("lightGrid").directive("lgHeaderView", function () {
 	"use strict";
 
 	return {

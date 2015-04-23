@@ -98,7 +98,7 @@
 	this.reset();
 }
 
-angular.module("light-grid").provider("lgLocalDataProviderFactory", function () {
+angular.module("lightGridDataProviders").provider("lgLocalDataProviderFactory", function () {
 
 	var self = this;
 

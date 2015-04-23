@@ -17,7 +17,11 @@ describe("Expandable row", function () {
 			"<lg-column><button data-lg-toggle-expanded-row='detailsTemplate'>Details</button></lg-column>" +
 		"</light-grid>";
 
-	beforeEach(module("light-grid"));
+	beforeEach(function () {
+		module("lightGrid");
+		module("lightGridControls");
+		module("lightGridDataProviders");
+	});
 
 	beforeEach(inject(function (_$compile_, _$rootScope_, _lgLocalDataProviderFactory_) {
 		$compile = _$compile_;

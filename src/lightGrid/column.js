@@ -4,9 +4,9 @@
  *  - title - {String} (interpolated) title of the column (used to render a header if header template is not specified)
  *  - visible - {Boolean} specifies if a column should be rendered
  */
-angular.module("light-grid").directive("lgColumn", function () {
+angular.module("lightGrid").directive("lgColumn", function () {
 	"use strict";
-	
+
 	return {
 		scope: {
 			title: "=",
@@ -62,11 +62,11 @@ angular.module("light-grid").directive("lgColumn", function () {
 		},
 		controllerAs: "templateColumnController",
 		link: function(scope, instanceElement, instanceAttrs, gridController, linker) {
-			
+
 			if (!instanceAttrs.visible) {
 				scope.visible = true;
 			}
-			
+
 			scope.$watch("visible", function (newValue, oldValue) {
 				if (newValue !== oldValue) {
 					gridController.updateColumn(scope.$id, {

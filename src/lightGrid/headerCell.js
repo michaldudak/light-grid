@@ -2,7 +2,7 @@
  * Represents a cell in a header of a table.
  * Does not expose any API.
  */
-angular.module("light-grid").directive("lgHeaderCell", function headerCellDirective() {
+angular.module("lightGrid").directive("lgHeaderCell", function headerCellDirective() {
 	"use strict";
 
 	return {
@@ -23,13 +23,13 @@ angular.module("light-grid").directive("lgHeaderCell", function headerCellDirect
 			transclusionScope.data = scope.data;
 			transclusionScope.gridController = scope.gridController;
 			transclusionScope.title = scope.columnDefinition.title;
-			
+
 			if (scope.columnDefinition.attributes.width) {
 				element.css("width", scope.columnDefinition.attributes.width);
 			}
 
 			element.empty();
-			
+
 			// link the header template with the correct scope...
 			scope.columnDefinition.headerTemplate(transclusionScope, function (clone) {
 				// ...and insert the linked template inside the directive root element

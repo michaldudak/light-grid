@@ -1,15 +1,15 @@
 ﻿/**
  * Defines a view in the column template
  */
-angular.module("light-grid").directive("lgView", function () {
+angular.module("lightGrid").directive("lgView", function () {
 	"use strict";
-	
+
 	return {
 		restrict: "EA",
 		require: "^lgColumn",
 		compile: function(tElement, tAttrs) {
 			var innerHtml = tElement.html();
-			
+
 			// we don't want to compile the contents of the view at this point
 			// it'll be done later, in cell directive
 			tElement.empty();

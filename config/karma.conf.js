@@ -1,4 +1,4 @@
-﻿/* global module */
+/* global module */
 
 module.exports = function (config) {
 	config.set({
@@ -17,7 +17,7 @@ module.exports = function (config) {
 			"libs/angular.js",
 			"dist/light-grid.js",
 			"test/lib/angular-mocks.js",
-			"test/unit/*.js"
+			"test/unit/**/*.js"
 		]
 	});
 };

@@ -2,7 +2,7 @@
  * Enables sorting data by a column specified by the sort-property attribute
  * This directive is meant to be used in header template.
  */
-angular.module("light-grid").directive("lgSorter", function ($timeout) {
+angular.module("lightGridControls").directive("lgSorter", function ($timeout) {
 	"use strict";
 
 	return {
