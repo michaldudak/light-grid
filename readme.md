@@ -1,8 +1,8 @@
-﻿Light Grid [![Build Status](https://travis-ci.org/michaldudak/light-grid.svg?branch=master)](https://travis-ci.org/michaldudak/light-grid)
+Light Grid [![Build Status](https://travis-ci.org/michaldudak/light-grid.svg?branch=master)](https://travis-ci.org/michaldudak/light-grid)
 ==========
 
 ##Overview
-Simple, customizable grid component for Angular JS.
+Simple, customizable grid component for Angular JS. See the docs folder for details of the API.
 
 ##Building from source
 Just run `grunt build` and look for the output file in the dist directory.
