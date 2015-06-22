@@ -16,21 +16,20 @@
   "author": "Michał Dudak",
   "license": "MIT",
   "devDependencies": {
-    "grunt": "~0.4.1",
+    "grunt": "~0.4.5",
     "grunt-contrib-concat": "~0.5.1",
-    "grunt-contrib-uglify": "~0.8.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-contrib-jshint": "~0.11.0",
-    "grunt-jscs": "~1.5.0",
-    "karma": "~0.12.31",
-    "karma-phantomjs-launcher": "~0.1.4",
-    "karma-firefox-launcher": "~0.1.4",
-    "karma-chrome-launcher": "~0.1.7",
+    "grunt-contrib-uglify": "~0.9.1",
+    "grunt-contrib-watch": "~0.6.1" ,
+    "grunt-contrib-jshint": "~0.11.2",
+    "grunt-jscs": "~1.8.0",
+    "karma": "~0.12.36",
+    "karma-phantomjs-launcher": "~0.2.0",
+    "karma-firefox-launcher": "~0.1.6",
+    "karma-chrome-launcher": "~0.1.12",
     "karma-jasmine": "~0.3.5",
-    "jasmine-core": "~2.2.0",
+    "jasmine-core": "~2.3.4",
     "karma-mocha-reporter": "~1.0.2",
-    "grunt-karma": "~0.10.1",
-    "grunt-jsdoc": "~0.5.8",
-    "grunt-ng-annotate": "~0.10.0"
+    "grunt-karma": "~0.11.1",
+    "grunt-ng-annotate": "~1.0.1"
   }
 }
