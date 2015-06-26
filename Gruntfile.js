@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 		},
 		watch: {
 			check: {
-				files: ["src/**/*.js", "test/unit/*.js"],
+				files: ["src/**/*.js", "test/unit/**/*.js"],
 				tasks: ["code-check", "concat", "karma:continuous:run"]
 			}
 		},
