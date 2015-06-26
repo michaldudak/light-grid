@@ -8,14 +8,14 @@ describe("Local data provider", function () {
 	var dataProvider;
 
 	var grid =
-		"<light-grid id='testGrid' data-provider='dataProvider' model='dataProvider.getGridModel()'>" +
+		"<lg-grid id='testGrid' data-provider='dataProvider' model='dataProvider.getGridModel()'>" +
 			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
-		"</light-grid>";
+		"</lg-grid>";
 
 	var gridWithoutDataProviderMarkup =
-		"<light-grid id='testGrid' model='model'>" +
+		"<lg-grid id='testGrid' model='model'>" +
 			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
-		"</light-grid>";
+		"</lg-grid>";
 
 	beforeEach(function () {
 		module("lightGrid");

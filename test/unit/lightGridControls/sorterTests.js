@@ -8,12 +8,12 @@ describe("Light Grid: Sorter directive tests", function () {
 	var $timeout;
 
 	var gridMarkup =
-		"<light-grid id='grid' model='dataProvider.getGridModel()'>" +
+		"<lg-grid id='grid' model='dataProvider.getGridModel()'>" +
 			"<lg-column>" +
 				"<lg-header-view><span lg-sorter sort-property='firstName' data-provider='dataProvider'>First Name<span></lg-header-view>" +
 				"<lg-view></lg-view>" +
 			"</lg-column>" +
-		"</light-grid>";
+		"</lg-grid>";
 
 	beforeEach(function () {
 		module("lightGrid");

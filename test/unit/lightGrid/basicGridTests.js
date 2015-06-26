@@ -6,15 +6,15 @@ describe("Grid directive tests:", function () {
 	var $compile;
 	var $rootScope;
 
-	var emptyGrid = "<light-grid id='testGrid' class='table'></light-grid>";
+	var emptyGrid = "<lg-grid id='testGrid' class='table'></lg-grid>";
 	var singleColumnGrid =
-		"<light-grid id='testGrid' model='model'>" +
+		"<lg-grid id='testGrid' model='model'>" +
 			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
-		"</light-grid>";
+		"</lg-grid>";
 	var gridOnTableTag =
-		"<table light-grid id='testGrid' model='model'>" +
-			"<tr lg-column-templates>" +
-				"<td lg-column title='\"Column 1\"'>{{rowData.id}}</td>" +
+		"<table data-lg-grid id='testGrid' data-model='model'>" +
+			"<tr data-lg-column-templates>" +
+				"<td data-lg-column title='\"Column 1\"'>{{rowData.id}}</td>" +
 			"</tr>" +
 		"</table>";
 

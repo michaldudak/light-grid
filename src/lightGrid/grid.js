@@ -5,7 +5,7 @@
  *  - model - {Array} (interpolated) data model displayed on the grid (optional).
  *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
  */
-angular.module("lightGrid").directive("lightGrid", function gridDirective() {
+angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 	"use strict";
 
 	var gridController = function GridController($scope, $element) {

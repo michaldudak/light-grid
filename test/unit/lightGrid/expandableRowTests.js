@@ -12,10 +12,10 @@ describe("Expandable row", function () {
 		"</script>";
 
 	var grid =
-		"<light-grid id='testGrid' model='dataProvider.getGridModel()'>" +
+		"<lg-grid id='testGrid' model='dataProvider.getGridModel()'>" +
 			"<lg-column>{{rowData.id}}</lg-column>" +
 			"<lg-column><button data-lg-toggle-expanded-row='detailsTemplate'>Details</button></lg-column>" +
-		"</light-grid>";
+		"</lg-grid>";
 
 	beforeEach(function () {
 		module("lightGrid");

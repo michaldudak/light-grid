@@ -13,7 +13,7 @@ angular.module("lightGrid").directive("lgColumn", function () {
 			visible: "=?"
 		},
 		restrict: "EA",
-		require: "^lightGrid",
+		require: "^lgGrid",
 		transclude: true,
 		controller: function ($scope) {
 			$scope.views = {};

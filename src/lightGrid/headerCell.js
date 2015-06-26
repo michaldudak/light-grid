@@ -9,7 +9,7 @@ angular.module("lightGrid").directive("lgHeaderCell", function headerCellDirecti
 		template: "{{columnDefinition.title}}",
 		replace: false,
 		restrict: "A",
-		require: "^lightGrid",
+		require: "^lgGrid",
 		link: function (scope, element, attrs, gridController) {
 			// CSS class defined on column template is copied to the rendered TH element
 			element.addClass(scope.columnDefinition.attributes.class);
