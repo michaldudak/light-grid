@@ -1,8 +1,8 @@
 function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, debounceTime) {
 
 	var viewSettings = angular.copy(defaultViewSettings);
-	var viewModel;
-	var filteredItemCount;
+	var viewModel = [];
+	var filteredItemCount = 0;
 	var pendingRequest = null;
 	this.debounceTime = debounceTime;
 
@@ -148,8 +148,8 @@ angular.module("lightGridDataProviders").provider("lgServerDataProviderFactory",
 
 	this.$get = function($http, $timeout) {
 		return {
-			create: function(resource) {
-				return new ServerDataProvider(resource, $http, $timeout, self.defaultViewSettings, self.debounceTime);
+			create: function(resourceUrl) {
+				return new ServerDataProvider(resourceUrl, $http, $timeout, self.defaultViewSettings, self.debounceTime);
 			}
 		};
 	};

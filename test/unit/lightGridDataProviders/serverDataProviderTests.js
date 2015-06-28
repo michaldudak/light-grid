@@ -259,4 +259,17 @@ describe("Server data provider", function() {
 			expect(viewSettings.orderBy.expression).toBe("id");
 		});
 	});
+	
+	describe("#saveModel", function() {
+		it("should issue a POST request sending the provided model", function() {
+			var model = {
+				name: "Gandalf",
+				race: "Maia"
+			};
+			
+			$httpBackend.expectPOST(testResourceUrl, model).respond("");
+			dataProvider.saveModel(model);
+			$httpBackend.flush();
+		});
+	});
 });
