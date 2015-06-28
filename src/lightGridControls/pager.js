@@ -3,7 +3,8 @@
 
 	return {
 		scope: {
-			provider: "="
+			provider: "=",
+			pageSizeOptions: "@"
 		},
 		template: "<div class='pager'>" +
 			"<button ng-disabled='isFirst' class='first' ng-click='goToFirst()'>Last</button>" +
@@ -11,16 +12,29 @@
 			"<span class='pager-summary'>Page {{currentPage + 1}} of {{pageCount}}</span>" +
 			"<button ng-disabled='isLast' class='next' ng-click='goToNext()'>Next</button>" +
 			"<button ng-disabled='isLast' class='last' ng-click='goToLast()'>Last</button>" +
-			"</div>",
+			"</div>" +
+			"<div class='page-size'><select class='form-control' ng-options='pageSize for pageSize in pageSizes' ng-model='currentPageSize'></select></div>",
 		link: function ($scope) {
-			var DEFAULT_PAGE_SIZE = 10;
-
+			var DEFAULT_PAGE_SIZE_OPTIONS = "10,20,50";
+			
+			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;
+			$scope.pageSizes = $scope.pageSizeOptions
+				.split(",")
+				.map(function(pso) {
+					return parseInt(pso, 10);
+				})
+				.filter(function(pso) {
+					return !isNaN(pso);
+				});
+						
+			$scope.currentPageSize = $scope.pageSizes[0];
+			
 			function calculateCurrentPage(currentIndex, pageSize) {
-				return Math.floor(currentIndex / (pageSize || DEFAULT_PAGE_SIZE));
+				return Math.floor(currentIndex / pageSize);
 			}
 
 			function calculatePageCount(pageSize, totalSize) {
-				return Math.ceil(totalSize / (pageSize || DEFAULT_PAGE_SIZE));
+				return Math.ceil(totalSize / pageSize);
 			}
 
 			function update(limitToSettings) {
@@ -32,10 +46,16 @@
 				} else {
 					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
 					$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
+					$scope.pageSize = limitToSettings.limit;
 				}
 
 				$scope.isFirst = $scope.currentPage <= 0;
 				$scope.isLast = $scope.currentPage >= $scope.pageCount - 1;
+			}
+			
+			function goToPage(pageNumber) {
+				var firstIndex = $scope.pageSize * pageNumber;
+				$scope.provider.limitTo($scope.pageSize, firstIndex);
 			}
 
 			$scope.$watch("provider.getCurrentViewSettings().limitTo", function (limitToSettings) {
@@ -45,21 +65,25 @@
 			$scope.$watch("provider.getModelItemCount()", function () {
 				update($scope.provider.getCurrentViewSettings().limitTo);
 			});
+			
+			$scope.$watch("currentPageSize", function(value) {
+				$scope.provider.limitTo(value, 0);
+			});
 
 			$scope.goToFirst = function () {
-				$scope.provider.page(0);
+				goToPage(0);
 			};
 
 			$scope.goToPrevious = function () {
-				$scope.provider.page($scope.currentPage - 1);
+				goToPage($scope.currentPage - 1);
 			};
 
 			$scope.goToNext = function () {
-				$scope.provider.page($scope.currentPage + 1);
+				goToPage($scope.currentPage + 1);
 			};
 
 			$scope.goToLast = function () {
-				$scope.provider.page($scope.pageCount - 1);
+				goToPage($scope.pageCount - 1);
 			};
 		}
 	};
