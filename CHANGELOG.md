@@ -8,9 +8,9 @@
 * Renamed the `switchView` directive to `lgSwitchView`
 
 ###New features
+* Added the ServerDataProvider
 * Updated Angular JS version to 1.4.1 in tests
 * Added the changelog
-
 
 ##v0.1.0
 The first public release of Light Grid.
