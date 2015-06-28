@@ -263,9 +263,9 @@ describe("Server data provider", function() {
 		});
 		
 		describe("if placed within the debounce threshold", function() {
-			it("should just accept the last one", function() {
+			it("should merge them and call the server just once", function() {
 				
-				$httpBackend.expectGET(testResourceUrl + "?orderBy=id").respond(responseStub);
+				$httpBackend.expectGET(testResourceUrl + "?orderBy=id&search=foo").respond(responseStub);
 				dataProvider.debounceTime = 500;
 				dataProvider.filter("foo");
 				dataProvider.orderBy("id");

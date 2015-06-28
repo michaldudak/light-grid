@@ -3,7 +3,10 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 	var viewSettings = angular.copy(defaultViewSettings);
 	var viewModel = [];
 	var filteredItemCount = 0;
+	
+	// debounce data
 	var pendingRequest = null;
+	var pendingRequestSettings = null;
 	this.debounceTime = debounceTime;
 	
 	var self = this;
@@ -16,7 +19,8 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		if (!requestSettings) {
 			requestSettings = viewSettings;
 		} else {
-			requestSettings = angular.extend({}, viewSettings, requestSettings);
+			pendingRequestSettings = angular.extend({}, pendingRequestSettings, requestSettings);
+			requestSettings = angular.extend({}, viewSettings, pendingRequestSettings);
 		}
 		
 		var url = resourceUrl;
@@ -71,6 +75,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		if (self.debounceTime) {
 			pendingRequest = $timeout(function() {
 				pendingRequest = null;
+				pendingRequestSettings = null;
 				sendRequest();
 			}, self.debounceTime);
 		} else {
