@@ -17,7 +17,8 @@ module.exports = function (config) {
 			"libs/angular.js",
 			"libs/angular-mocks.js",
 			"dist/light-grid.js",
-			"test/unit/**/*.js"
+			"test/unit/**/*.js",
+			"test/integration/**/*.js"
 		]
 	});
 };

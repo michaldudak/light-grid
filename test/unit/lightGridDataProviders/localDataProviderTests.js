@@ -3,19 +3,8 @@
 describe("Local data provider", function () {
 	"use strict";
 
-	var $compile;
-	var $rootScope;
 	var dataProvider;
-
-	var grid =
-		"<lg-grid id='testGrid' data-provider='dataProvider' model='dataProvider.getGridModel()'>" +
-			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
-		"</lg-grid>";
-
-	var gridWithoutDataProviderMarkup =
-		"<lg-grid id='testGrid' model='model'>" +
-			"<lg-column title='\"Column 1\"'>{{rowData.id}}</lg-column>" +
-		"</lg-grid>";
+	var model;
 
 	beforeEach(function () {
 		module("lightGrid");
@@ -24,10 +13,7 @@ describe("Local data provider", function () {
 	});
 
 	beforeEach(inject(function (_$compile_, _$rootScope_, _lgLocalDataProviderFactory_) {
-		$compile = _$compile_;
-		$rootScope = _$rootScope_;
-
-		$rootScope.model = [
+		model = [
 			{
 				id: 1,
 				firstName: "Frodo",
@@ -50,13 +36,12 @@ describe("Local data provider", function () {
 			}
 		];
 
-		dataProvider = _lgLocalDataProviderFactory_.create($rootScope.model);
-		$rootScope.dataProvider = dataProvider;
+		dataProvider = _lgLocalDataProviderFactory_.create(model);
 	}));
 
 	describe("#getGridModel", function () {
 		it("should return the original model", function () {
-			expect(dataProvider.getGridModel()).toEqual($rootScope.model);
+			expect(dataProvider.getGridModel()).toEqual(model);
 		});
 	});
 
@@ -217,16 +202,6 @@ describe("Local data provider", function () {
 				expect(model[0].firstName).toBe("Frodo");
 				expect(model[1].firstName).toBe("Bilbo");
 			});
-		});
-	});
-
-	describe("when assigned to a given grid and having 4-element array as a model", function() {
-		it("should render the data as if it was provided to grid's data property", function() {
-			var expectedElement = $compile(gridWithoutDataProviderMarkup)($rootScope);
-			var element = $compile(grid)($rootScope);
-			$rootScope.$digest();
-
-			expect(element.html()).toEqual(expectedElement.html());
 		});
 	});
 });
