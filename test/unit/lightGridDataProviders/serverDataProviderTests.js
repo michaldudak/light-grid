@@ -241,22 +241,37 @@ describe("Server data provider", function() {
 	});
 	
 	describe("subsequent calls", function() {
-		it("should add up instead of overwriting view settings", function() {
-			$httpBackend.whenGET(testResourceUrl + "?search=foo").respond(responseStub);
-			
-			dataProvider.filter("foo");
-			$timeout.flush();
-			$httpBackend.flush();
-			
-			$httpBackend.expectGET(testResourceUrl + "?orderBy=id&search=foo").respond(responseStub);
-			
-			dataProvider.orderBy("id");
-			$timeout.flush();
-			$httpBackend.flush();
-			
-			var viewSettings = dataProvider.getCurrentViewSettings();
-			expect(viewSettings.filter.expression).toBe("foo");
-			expect(viewSettings.orderBy.expression).toBe("id");
+		describe("if placed after the debounce threshold", function() {
+			it("should add up instead of overwriting view settings", function() {
+				$httpBackend.whenGET(testResourceUrl + "?search=foo").respond(responseStub);
+				
+				dataProvider.filter("foo");
+				$timeout.flush();
+				$httpBackend.flush();
+				
+				$httpBackend.expectGET(testResourceUrl + "?orderBy=id&search=foo").respond(responseStub);
+				
+				dataProvider.orderBy("id");
+				$timeout.flush();
+				$httpBackend.flush();
+				
+				var viewSettings = dataProvider.getCurrentViewSettings();
+				expect(viewSettings.filter.expression).toBe("foo");
+				expect(viewSettings.orderBy.expression).toBe("id");
+			});
+		});		
+		
+		describe("if placed within the debounce threshold", function() {
+			it("should just accept the last one", function() {
+				
+				$httpBackend.expectGET(testResourceUrl + "?orderBy=id").respond(responseStub);
+				dataProvider.debounceTime = 500;
+				dataProvider.filter("foo");
+				dataProvider.orderBy("id");
+				
+				$timeout.flush();
+				$httpBackend.flush();
+			});
 		});
 	});
 	

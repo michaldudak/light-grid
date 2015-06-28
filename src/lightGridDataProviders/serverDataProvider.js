@@ -5,6 +5,8 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 	var filteredItemCount = 0;
 	var pendingRequest = null;
 	this.debounceTime = debounceTime;
+	
+	var self = this;
 
 	function updateFilters(requestSettings) {
 		if (!resourceUrl) {
@@ -58,14 +60,22 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 			pendingRequest = null;
 		}
 		
-		pendingRequest = $timeout(function() {
-			pendingRequest = null;
+		function sendRequest() {
 			$http.get(url).success(function(response) {
 				viewModel = response.data;
 				filteredItemCount = response.totalResults;
 				viewSettings = requestSettings;
 			});
-		}, this.debounceTime);
+		}
+		
+		if (self.debounceTime) {
+			pendingRequest = $timeout(function() {
+				pendingRequest = null;
+				sendRequest();
+			}, self.debounceTime);
+		} else {
+			sendRequest();
+		}
 	}
 
 	this.getGridModel = function() {
