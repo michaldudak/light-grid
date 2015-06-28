@@ -61,7 +61,7 @@ module.exports = function (grunt) {
 		},
 		watch: {
 			check: {
-				files: ["src/**/*.js", "test/unit/**/*.js"],
+				files: ["src/**/*.js", "test/**/*.js"],
 				tasks: ["code-check", "concat", "karma:continuous:run"]
 			}
 		},
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
 				jshintrc: true
 			},
 			beforeConcat: {
-				src: ["src/**/*.js", "test/unit/*.js"]
+				src: ["src/**/*.js", "test/**/*.js"]
 			},
 			afterConcat: {
 				src: ["dist/light-grid.js"]
@@ -87,7 +87,7 @@ module.exports = function (grunt) {
 		jscs: {
 			default: {
 				files: {
-					src: ["src/**/*.js", "test/unit/*.js"]
+					src: ["src/**/*.js", "test/**/*.js"]
 				},
 				options: {
 					config: ".jscsrc"

@@ -1,3 +1,4 @@
+/* global beforeEach, afterEach, describe, it, expect, inject, module */
 /// <reference path="../../../typings/jasmine/jasmine.d.ts"/>
 
 describe("Server data provider", function() {
@@ -9,11 +10,11 @@ describe("Server data provider", function() {
 	var dataProvider;
 	var testResourceUrl = "http://site.com/my-resource";
 	var responseStub = {
-		data: [{id: 1}],
+		data: [{ id: 1 }],
 		totalResults: 14
 	};
 	
-	beforeEach(function () { 
+	beforeEach(function () {
 		module("lightGridDataProviders");
 	});
 
@@ -205,7 +206,7 @@ describe("Server data provider", function() {
 					},
 					limitTo: {
 						limit: 10,
-						begin: 20	
+						begin: 20
 					},
 					filter: {
 						expression: "foo"
@@ -259,7 +260,7 @@ describe("Server data provider", function() {
 				expect(viewSettings.filter.expression).toBe("foo");
 				expect(viewSettings.orderBy.expression).toBe("id");
 			});
-		});		
+		});
 		
 		describe("if placed within the debounce threshold", function() {
 			it("should just accept the last one", function() {
