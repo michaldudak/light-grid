@@ -7,24 +7,27 @@
  */
 angular.module("lightGrid").directive("lgCell", function cellDirective($compile) {
 	"use strict";
-
-	function countProperties(obj) {
-		if (typeof (Object.keys) === "function") {
+	
+	var countProperties;
+	
+	if (typeof (Object.keys) === "function") {
+		countProperties = function (obj) {
 			return Object.keys(obj).length;
-		}
-
-		var count = 0;
-		for (var prop in obj) {
-			if (obj.hasOwnProperty(prop)) {
-				++count;
+		};
+	} else {
+		countProperties = function (obj) {
+			var count = 0;
+			for (var prop in obj) {
+				if (obj.hasOwnProperty(prop)) {
+					++count;
+				}
 			}
-		}
-
-		return count;
+	
+			return count;
+		};
 	}
 
 	return {
-		restrict: "EA",
 		require: "^lgRow",
 		link: function cellLink(scope, element, attrs, rowController) {
 			var views = scope.columnDefinition.views;
