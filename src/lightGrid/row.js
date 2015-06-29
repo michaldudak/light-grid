@@ -147,14 +147,14 @@
 			});
 		},
 		controllerAs: "rowController",
-		compile: function (tElement) {
+		compile: function rowCompile(tElement) {
 			if (tElement[0].nodeName !== "TR") {
 				throw new Error("Row directive must be placed on a tr element.");
 			}
 
 			var expandingRowLinker = $compile(expandingRowMarkup);
 
-			return function(scope, element, attrs, controller) {
+			return function rowLink(scope, element, attrs, controller) {
 				scope.$watch("rowData", function () {
 					controller.resetViewModel();
 				});

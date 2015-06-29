@@ -9,7 +9,7 @@ angular.module("lightGrid").directive("lgHeaderView", function () {
 		restrict: "EA",
 		require: "^?lgColumn",
 		transclude: true,
-		link: function (scope, instanceElement, instanceAttrs, templateColumnController, linker) {
+		link: function headerViewLink(scope, instanceElement, instanceAttrs, templateColumnController, linker) {
 			instanceElement.remove();
 			templateColumnController.registerHeaderTemplate(linker);
 		}

@@ -14,7 +14,7 @@
 			"<button ng-disabled='isLast' class='last' ng-click='goToLast()'>Last</button>" +
 			"</div>" +
 			"<div class='page-size'><select class='form-control' ng-options='pageSize for pageSize in pageSizes' ng-model='currentPageSize'></select></div>",
-		link: function ($scope) {
+		link: function pagerLink($scope) {
 			var DEFAULT_PAGE_SIZE_OPTIONS = "10,20,50";
 			
 			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;

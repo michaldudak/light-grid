@@ -7,7 +7,7 @@ angular.module("lightGridControls").directive("lgSwitchView", function () {
 
 	return {
 		require: "^?lgRow",
-		link: function (scope, elem, attrs, rowController) {
+		link: function switchViewLink(scope, elem, attrs, rowController) {
 			var viewName = attrs.lgSwitchView;
 
 			elem.on("click", function () {

@@ -136,7 +136,7 @@ angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 		replace: true,
 		restrict: "EA",
 		transclude: true,
-		link: function gridPostLink(scope, elem, attrs, controller, transclude) {
+		link: function gridLink(scope, elem, attrs, controller, transclude) {
 			// directives such as dataProvider require access to the parent of the grid scope,
 			// so they can't be linked with the grid scope (as it's isolated).
 			var transclusionScope = scope.$parent.$new();

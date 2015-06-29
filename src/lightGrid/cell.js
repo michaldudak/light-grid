@@ -26,7 +26,7 @@ angular.module("lightGrid").directive("lgCell", function cellDirective($compile)
 	return {
 		restrict: "EA",
 		require: "^lgRow",
-		link: function(scope, element, attrs, rowController) {
+		link: function cellLink(scope, element, attrs, rowController) {
 			var views = scope.columnDefinition.views;
 
 			var transclusionScope = rowController.getCellScope();

@@ -15,7 +15,7 @@ angular.module("lightGrid").directive("lgColumn", function () {
 		restrict: "EA",
 		require: "^lgGrid",
 		transclude: true,
-		controller: function ($scope) {
+		controller: function columnController($scope) {
 			$scope.views = {};
 			$scope.viewCount = 0;
 			$scope.headerTemplate = null;
@@ -61,7 +61,7 @@ angular.module("lightGrid").directive("lgColumn", function () {
 			};
 		},
 		controllerAs: "templateColumnController",
-		link: function(scope, instanceElement, instanceAttrs, gridController, linker) {
+		link: function columnLink(scope, instanceElement, instanceAttrs, gridController, linker) {
 
 			if (!instanceAttrs.visible) {
 				scope.visible = true;

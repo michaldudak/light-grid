@@ -15,7 +15,7 @@ angular.module("lightGrid").directive("lgColumnTemplates", function () {
 
 	return {
 		restrict: "A",
-		link: function (scope, element) {
+		link: function columnTemplatesLink(scope, element) {
 			var parent = element.parent();
 			// browsers may create additional tbody tag surrounding the <td lg-column-templates">. We don't need this.
 			if (parent[0].tagName === "TBODY" && parent.children().length === 1) {

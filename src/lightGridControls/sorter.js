@@ -10,7 +10,7 @@ angular.module("lightGridControls").directive("lgSorter", function ($timeout) {
 		transclude: true,
 		replace: true,
 		scope: true,
-		link: function (scope, elem, attrs) {
+		link: function sorterLink(scope, elem, attrs) {
 			var sortProperty = attrs.sortProperty || attrs.lgSorter;
 			var dataProvider = scope.$eval(attrs.provider);
 

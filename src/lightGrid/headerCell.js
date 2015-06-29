@@ -10,7 +10,7 @@ angular.module("lightGrid").directive("lgHeaderCell", function headerCellDirecti
 		replace: false,
 		restrict: "A",
 		require: "^lgGrid",
-		link: function (scope, element, attrs, gridController) {
+		link: function headerCellLink(scope, element, attrs, gridController) {
 			// CSS class defined on column template is copied to the rendered TH element
 			element.addClass(scope.columnDefinition.attributes.class);
 
