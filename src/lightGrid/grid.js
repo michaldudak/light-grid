@@ -1,4 +1,6 @@
-﻿/**
+﻿/// <reference path="../../typings/angularjs/angular.d.ts"/>
+
+/**
  * The root grid directive.
  * Parameters:
  *  - id - {String} ID of the grid. This attribute must be present and unique.
@@ -8,7 +10,7 @@
 angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 	"use strict";
 
-	var gridController = function GridController($scope, $element) {
+	var gridController = function GridController($scope) {
 
 		var columnDefinitions = {};
 		$scope.visibleColumns = [];
@@ -63,9 +65,9 @@ angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 
 		/**
 		 * Registers a column template.
-		 * @param  {Object} columnDefinition Column definition object
+		 * @param {Object} columnDefinition Column definition object
 		 */
-		this.defineColumn = function(id, columnDefinition) {
+		this.defineColumn = function defineColumn(id, columnDefinition) {
 			columnDefinitions[id] = { definition: columnDefinition };
 
 			updateVisibleColumns();
@@ -73,9 +75,9 @@ angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 
 		/**
 		 * Updates a registered column template.
-		 * @param  {Object} columnDefinition Column definition object
+		 * @param {Object} columnDefinition Column definition object
 		 */
-		this.updateColumn = function (id, columnDefinition) {
+		this.updateColumn = function updateColumn(id, columnDefinition) {
 			if (!columnDefinitions.hasOwnProperty(id)) {
 				throw new Error("Column " + id + " was not registered.");
 			}
@@ -86,38 +88,26 @@ angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 
 		/**
 		 * Changes a view in all visible rows of the grid.
-		 * This method is asynchronous.
 		 *
-		 * @param  {String} viewName Name of the new view.
-		 * @async
+		 * @param {String} viewName Name of the new view.
 		 */
-		this.switchView = function(viewName) {
+		this.switchView = function switchView(viewName) {
 			$scope.$broadcast("lightGrid.row.switchView", viewName);
 		};
 
 		/**
 		 * Copies values from the view model to the data model.
 		 * This method is asynchronous.
-		 *
-		 * @async
 		 */
-		this.acceptViewModel = function() {
+		this.acceptViewModel = function acceptViewModel() {
 			$scope.$broadcast("lightGrid.row.acceptViewModel");
-		};
-
-		/**
-		 * Gets a jQuery wrapper over the root DOM element of the grid.
-		 * @return {jQuery} jQuery object representing the root node of the grid.
-		 */
-		this.getDomElement = function() {
-			return $element;
 		};
 
 		/**
 		 * Gets the scope of the grid directive.
 		 * @return {Scope} Scope of the grid directive.
 		 */
-		this.getScope = function() {
+		this.getScope = function getScope() {
 			return $scope;
 		};
 
@@ -125,16 +115,8 @@ angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 		 * Creates a new scope for transcluded elements. The new scope inherits from the grid's parent scope.
 		 * @returns {Scope} The new scope.
 		 */
-		this.createTransclusionScope = function () {
+		this.createTransclusionScope = function createTransclusionScope() {
 			return $scope.$parent.$new();
-		};
-
-		/**
-		 * Gets the ID property of the grid.
-		 * @return {String} Grid's ID
-		 */
-		this.getId = function() {
-			return $scope.id;
 		};
 	};
 
@@ -142,24 +124,19 @@ angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 	var defaultTemplate =
 		"<table class='light-grid'>" +
 			"<thead><tr lg-header-row></tr></thead>" +
-			"<tbody><tr lg-row default-view='read' initial-view='{{ initialView || \"read\" }}' ng-repeat='rowData in model'></tr></tbody>" +
+			"<tbody><tr lg-row default-view='read' initial-view='{{ ::initialView || \"read\" }}' ng-repeat='rowData in model'></tr></tbody>" +
 		"</table>";
 
 	return {
 		scope: {
 			model: "=",
-			id: "@",
 			initialView: "@"
 		},
 		template: defaultTemplate,
 		replace: true,
 		restrict: "EA",
 		transclude: true,
-		link: function postLink(scope, elem, attrs, controller, transclude) {
-			if (typeof (scope.id) === "undefined" || scope.id === "") {
-				throw new Error("The grid must have an id attribute.");
-			}
-
+		link: function gridPostLink(scope, elem, attrs, controller, transclude) {
 			// directives such as dataProvider require access to the parent of the grid scope,
 			// so they can't be linked with the grid scope (as it's isolated).
 			var transclusionScope = scope.$parent.$new();
