@@ -24,7 +24,6 @@ describe("Light Grid: View modes tests", function () {
 	beforeEach(function () {
 		module("lightGrid");
 		module("lightGridControls");
-		module("lightGridDataProviders");
 	});
 
 	beforeEach(inject(function (_$compile_, _$rootScope_) {

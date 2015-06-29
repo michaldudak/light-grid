@@ -12,7 +12,7 @@ describe("Expandable row", function () {
 		"</script>";
 
 	var grid =
-		"<lg-grid id='testGrid' model='dataProvider.getGridModel()'>" +
+		"<lg-grid id='testGrid' model='model'>" +
 			"<lg-column>{{rowData.id}}</lg-column>" +
 			"<lg-column><button data-lg-toggle-expanded-row='detailsTemplate'>Details</button></lg-column>" +
 		"</lg-grid>";
@@ -20,10 +20,9 @@ describe("Expandable row", function () {
 	beforeEach(function () {
 		module("lightGrid");
 		module("lightGridControls");
-		module("lightGridDataProviders");
 	});
 
-	beforeEach(inject(function (_$compile_, _$rootScope_, _lgLocalDataProviderFactory_) {
+	beforeEach(inject(function (_$compile_, _$rootScope_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 
@@ -32,8 +31,6 @@ describe("Expandable row", function () {
 			{ id: "two" },
 			{ id: "three" }
 		];
-
-		$rootScope.dataProvider = _lgLocalDataProviderFactory_.create($rootScope.model);
 	}));
 
 	describe("when the first toggle button is clicked once", function() {
