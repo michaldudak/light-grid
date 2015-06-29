@@ -4,7 +4,7 @@
  *  - title - {String} (interpolated) title of the column (used to render a header if header template is not specified)
  *  - visible - {Boolean} specifies if a column should be rendered
  */
-angular.module("lightGrid").directive("lgColumn", function () {
+angular.module("lightGrid").directive("lgColumn", function (DEFAULT_VIEW_NAME) {
 	"use strict";
 
 	return {
@@ -23,11 +23,11 @@ angular.module("lightGrid").directive("lgColumn", function () {
 
 			/**
 			 * Registers a view in a column.
-			 * @param  {String} name - Name of the view (optional, defaults to '*')
-			 * @param  {Function} viewLinker - Precompiled view template (as a linking function)
+			 * @param  {String} name - Name of the view (optional, defaults to the DEFAULT_VIEW_NAME constant)
+			 * @param  {String} viewHtml - content of the view as HTML
 			 */
-			this.registerView = function (name, viewLinker) {
-				name = name || "*";
+			this.registerView = function (name, viewHtml) {
+				name = name || DEFAULT_VIEW_NAME;
 
 				// name argument may contain a comma-separated list of view names
 				// we need to register the linking function in all of them
@@ -39,7 +39,7 @@ angular.module("lightGrid").directive("lgColumn", function () {
 						continue;
 					}
 
-					$scope.views[separatedName] = viewLinker;
+					$scope.views[separatedName] = viewHtml;
 					$scope.viewCount += 1;
 				}
 			};
@@ -61,7 +61,7 @@ angular.module("lightGrid").directive("lgColumn", function () {
 			};
 		},
 		controllerAs: "templateColumnController",
-		link: function columnLink(scope, instanceElement, instanceAttrs, gridController, linker) {
+		link: function columnLink(scope, instanceElement, instanceAttrs, gridController, transcludeLink) {
 
 			if (!instanceAttrs.visible) {
 				scope.visible = true;
@@ -75,7 +75,7 @@ angular.module("lightGrid").directive("lgColumn", function () {
 				}
 			});
 
-			linker(scope, function (clone) {
+			transcludeLink(scope, function (clone) {
 				// transcluded content is added to the element so that lgColumnController can be
 				// required by lgView directives
 				instanceElement.append(clone);
@@ -84,7 +84,8 @@ angular.module("lightGrid").directive("lgColumn", function () {
 			if (scope.viewCount === 0) {
 				// simple mode - if no views are defined, the content of the directive is treated
 				// as the default view
-				scope.templateColumnController.registerView("*", linker);
+				var viewContents = instanceElement.html();
+				scope.templateColumnController.registerView(DEFAULT_VIEW_NAME, viewContents);
 			}
 
 			gridController.defineColumn(scope.$id, {

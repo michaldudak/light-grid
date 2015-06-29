@@ -6,8 +6,7 @@ angular.module("lightGrid").directive("lgHeaderCell", function headerCellDirecti
 	"use strict";
 
 	return {
-		template: "{{columnDefinition.title}}",
-		replace: false,
+		template: "{{ columnDefinition.title }}",
 		restrict: "A",
 		require: "^lgGrid",
 		link: function headerCellLink(scope, element, attrs, gridController) {

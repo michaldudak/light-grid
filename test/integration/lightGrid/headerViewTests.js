@@ -1,6 +1,6 @@
-/* global beforeEach, describe, it, expect, inject, module, xdescribe */
+/* global beforeEach, describe, it, expect, inject, module */
 
-xdescribe("Header view", function () {
+describe("Header view", function () {
 	"use strict";
 
 	var $compile;
@@ -8,8 +8,9 @@ xdescribe("Header view", function () {
 
 	var grid =
 		"<lg-grid id='testGrid' model='model'>" +
-			"<lg-column title='columnTitle'></lg-column>" +
-			"<lg-column><lg-header-view>{{columnTitle}}</lg-header-view><lg-view>foo</lg-view></lg-column>" +
+			// "<lg-column title='columnTitle'></lg-column>" +
+			"<lg-column a='with-view'><lg-header-view>{{columnTitle}}</lg-header-view><lg-view>view-here</lg-view></lg-column>" +
+			"<lg-column a='without-view'><lg-header-view>{{columnTitle}}</lg-header-view>nothing-here</lg-column>" +
 		"</lg-grid>";
 
 	beforeEach(function () {
@@ -35,7 +36,7 @@ xdescribe("Header view", function () {
 			var element = $compile(grid)($rootScope);
 			$rootScope.$digest();
 			
-			expect(element.find("th:eq(1)").html()).toBe(element.find("th:eq(0)").html());
+			expect(element.find("th:eq(1)").text()).toBe(element.find("th:eq(0)").text());
 		});
 	});
 });

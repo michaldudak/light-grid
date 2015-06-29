@@ -1,6 +1,4 @@
-﻿/// <reference path="../../typings/angularjs/angular.d.ts"/>
-
-/**
+﻿/**
  * The root grid directive.
  * Parameters:
  *  - id - {String} ID of the grid. This attribute must be present and unique.
