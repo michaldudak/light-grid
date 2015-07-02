@@ -8,9 +8,8 @@ describe("Header view", function () {
 
 	var grid =
 		"<lg-grid id='testGrid' model='model'>" +
-			// "<lg-column title='columnTitle'></lg-column>" +
-			"<lg-column a='with-view'><lg-header-view>{{columnTitle}}</lg-header-view><lg-view>view-here</lg-view></lg-column>" +
-			"<lg-column a='without-view'><lg-header-view>{{columnTitle}}</lg-header-view>nothing-here</lg-column>" +
+			"<lg-column title='columnTitle'></lg-column>" +
+			"<lg-column><lg-header-view>{{columnTitle}}</lg-header-view></lg-column>" +
 		"</lg-grid>";
 
 	beforeEach(function () {
