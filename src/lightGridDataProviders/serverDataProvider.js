@@ -46,7 +46,22 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		}
 		
 		if (requestSettings.filter && requestSettings.filter.expression) {
-			queryString.push("search=" + encodeURIComponent(requestSettings.filter.expression));
+			var expression = requestSettings.filter.expression;
+			if (angular.isString(expression)) {
+				queryString.push("search=" + encodeURIComponent(expression));
+			} else if (angular.isObject(expression)) {
+				var searchQueryParts = [];
+				for (var field in expression) {
+					if (!expression.hasOwnProperty(field)) {
+						continue;
+					}
+					
+					var value = expression[field];
+					searchQueryParts.push(encodeURIComponent(field) + ":" + encodeURIComponent(value));
+				}
+				
+				queryString.push("search=" + searchQueryParts.join(","));
+			}
 		}
 		
 		if (queryString.length > 0) {

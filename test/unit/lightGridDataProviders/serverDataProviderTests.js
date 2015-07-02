@@ -171,7 +171,7 @@ describe("Server data provider", function() {
 	});
 	
 	describe("#filter", function() {
-		describe("with expression parameter", function() {
+		describe("with expression parameter as a string", function() {
 			it("should issue a GET request with a proper query string", function() {
 				$httpBackend.expectGET(testResourceUrl + "?search=foo").respond(responseStub);
 				dataProvider.filter("foo");
@@ -190,6 +190,15 @@ describe("Server data provider", function() {
 				
 				viewSettings = dataProvider.getCurrentViewSettings();
 				expect(viewSettings.filter.expression).toBe("foo");
+			});
+		});
+		
+		describe("with expression parameter as an object", function() {
+			it("should issue a GET request with a proper query string", function() {
+				$httpBackend.expectGET(testResourceUrl + "?search=id:42,name:a").respond(responseStub);
+				dataProvider.filter({ id: 42, name: "a" });
+				$timeout.flush();
+				$httpBackend.flush();
 			});
 		});
 	});
