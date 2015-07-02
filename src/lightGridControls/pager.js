@@ -13,21 +13,30 @@
 			"<button ng-disabled='isLast' class='next' ng-click='goToNext()'>Next</button>" +
 			"<button ng-disabled='isLast' class='last' ng-click='goToLast()'>Last</button>" +
 			"</div>" +
-			"<div class='page-size'><select class='form-control' ng-options='pageSize for pageSize in pageSizes' ng-model='currentPageSize'></select></div>",
+			"<div class='page-size'><select class='form-control' ng-options='size for size in pageSizes' ng-model='pageSize'></select></div>",
 		link: function pagerLink($scope) {
-			var DEFAULT_PAGE_SIZE_OPTIONS = "10,20,50";
+			var DEFAULT_PAGE_SIZE_OPTIONS = "10,25,50";
 			
 			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;
-			$scope.pageSizes = $scope.pageSizeOptions
-				.split(",")
-				.map(function(pso) {
-					return parseInt(pso, 10);
-				})
-				.filter(function(pso) {
-					return !isNaN(pso);
-				});
+			parsePageSizeOptions();
+			
+			if ($scope.pageSizes.length === 0) {
+				$scope.pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS;
+				parsePageSizeOptions();
+			}
+			
+			function parsePageSizeOptions() {
+				$scope.pageSizes = $scope.pageSizeOptions
+					.split(",")
+					.map(function(pso) {
+						return parseInt(pso, 10);
+					})
+					.filter(function(pso) {
+						return !isNaN(pso);
+					});
+			}
 						
-			$scope.currentPageSize = $scope.pageSizes[0];
+			$scope.pageSize = $scope.pageSizes[0];
 			
 			function calculateCurrentPage(currentIndex, pageSize) {
 				return Math.floor(currentIndex / pageSize);
@@ -47,6 +56,13 @@
 					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
 					$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
 					$scope.pageSize = limitToSettings.limit;
+					
+					if ($scope.pageSizes.indexOf($scope.pageSize) === -1) {
+						$scope.pageSizes.push($scope.pageSize);
+						$scope.pageSizes.sort(function(a, b) {
+							return a - b;
+						});
+					}
 				}
 
 				$scope.isFirst = $scope.currentPage <= 0;
@@ -66,7 +82,7 @@
 				update($scope.provider.getCurrentViewSettings().limitTo);
 			});
 			
-			$scope.$watch("currentPageSize", function(value) {
+			$scope.$watch("pageSize", function(value) {
 				$scope.provider.limitTo(value, 0);
 			});
 
