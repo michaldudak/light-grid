@@ -8,6 +8,7 @@ angular.module("lightGridControls").directive("lgToggleExpandedRow", function ()
 
 	return {
 		require: "^?lgRow",
+		restrict: "A",
 		link: function toggleExpandedRowLink(scope, elem, attrs, rowController) {
 			var detailsTemplate = attrs.lgToggleExpandedRow || attrs.detailsTemplate;
 

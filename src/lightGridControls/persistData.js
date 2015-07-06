@@ -5,6 +5,7 @@ angular.module("lightGridControls").directive("lgPersistData", function ($q) {
 	"use strict";
 
 	return {
+		restrict: "A",
 		link: function persistDataLink($scope, $elem, $params) {
 			$elem.on("click", function () {
 

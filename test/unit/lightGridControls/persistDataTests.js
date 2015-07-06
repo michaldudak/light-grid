@@ -6,7 +6,7 @@ describe("lgPager directive tests", function () {
 	var $compile;
 	var $rootScope;
 
-	var markup = "<lg-persist-data provider='providerMock'></lg-persist-data>";
+	var markup = "<button lg-persist-data provider='providerMock'></button>";
 	
 	beforeEach(function () {
 		module("lightGridControls");
