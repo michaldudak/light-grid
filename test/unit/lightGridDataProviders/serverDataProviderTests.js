@@ -297,4 +297,50 @@ describe("Server data provider", function() {
 			$httpBackend.flush();
 		});
 	});
+	
+	describe("custom setting serializer", function() {
+		describe("when provided", function() {
+			it("should build the URL with the help of the serializer", function() {
+				$httpBackend.expectGET(testResourceUrl + "?custom-serializer-query-string").respond(responseStub);
+				
+				var customSerializer = function () {
+					return "custom-serializer-query-string";
+				};
+				
+				dataProvider.settingsSerializer = customSerializer;
+				dataProvider.refresh();
+				
+				$timeout.flush();
+				$httpBackend.flush();
+			});
+		});
+	});
+	
+	describe("custom response parser", function () {
+		describe("when provided", function() {
+			it("should correctly interpret the data returned by a server", function() {
+				$httpBackend.whenGET(testResourceUrl).respond(responseStub);
+				
+				var sampleData = [
+						{ id: 1 },
+						{ id: 2 }
+					];
+				var customResponseParser = function () {
+					return {
+						data: sampleData,
+						totalResults: 42
+					};
+				};
+				
+				dataProvider.responseParser = customResponseParser;
+				dataProvider.refresh();
+				
+				$timeout.flush();
+				$httpBackend.flush();
+				
+				expect(dataProvider.getGridModel()).toEqual(sampleData);
+				expect(dataProvider.getModelItemCount()).toEqual(42);
+			});
+		});
+	});
 });

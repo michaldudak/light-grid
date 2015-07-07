@@ -1,5 +1,51 @@
-function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, debounceTime) {
+function defaultSettingsSerializer(requestSettings) {
+	var queryString = [];
+	
+	if (requestSettings.limitTo) {
+		if (requestSettings.limitTo.limit) {
+			queryString.push("limit=" + requestSettings.limitTo.limit);
+		}
+		
+		if (requestSettings.limitTo.begin) {
+			queryString.push("begin=" + requestSettings.limitTo.begin);
+		}
+	}
+	
+	if (requestSettings.orderBy && requestSettings.orderBy.expression) {
+		queryString.push("orderBy=" + encodeURIComponent(requestSettings.orderBy.expression));
+		
+		if (requestSettings.orderBy.reverse) {
+			queryString.push("reverse=true");
+		}
+	}
+	
+	if (requestSettings.filter && requestSettings.filter.expression) {
+		var expression = requestSettings.filter.expression;
+		if (angular.isString(expression)) {
+			queryString.push("search=" + encodeURIComponent(expression));
+		} else if (angular.isObject(expression)) {
+			var searchQueryParts = [];
+			for (var field in expression) {
+				if (!expression.hasOwnProperty(field)) {
+					continue;
+				}
+				
+				var value = expression[field];
+				searchQueryParts.push(encodeURIComponent(field) + ":" + encodeURIComponent(value));
+			}
+			
+			queryString.push("search=" + searchQueryParts.join(","));
+		}
+	}
+	
+	return queryString.join("&");
+}
 
+function defaultResponseParser(serverResponse) {
+	return serverResponse;
+}
+
+function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, debounceTime) {
 	var viewSettings = angular.copy(defaultViewSettings);
 	var viewModel = [];
 	var filteredItemCount = 0;
@@ -8,6 +54,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 	var pendingRequest = null;
 	var pendingRequestSettings = null;
 	this.debounceTime = debounceTime;
+	this.settingsSerializer = defaultSettingsSerializer;
 	
 	var self = this;
 
@@ -25,45 +72,15 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		
 		var url = resourceUrl;
 		
-		var queryString = [];
-		
-		if (requestSettings.limitTo) {
-			if (requestSettings.limitTo.limit) {
-				queryString.push("limit=" + requestSettings.limitTo.limit);
-			}
-			
-			if (requestSettings.limitTo.begin) {
-				queryString.push("begin=" + requestSettings.limitTo.begin);
-			}
+		if (!angular.isFunction(self.settingsSerializer)) {
+			self.settingsSerializer = defaultSettingsSerializer;
 		}
 		
-		if (requestSettings.orderBy && requestSettings.orderBy.expression) {
-			queryString.push("orderBy=" + encodeURIComponent(requestSettings.orderBy.expression));
-			
-			if (requestSettings.orderBy.reverse) {
-				queryString.push("reverse=true");
-			}
+		if (!angular.isFunction(self.responseParser)) {
+			self.responseParser = defaultResponseParser;
 		}
 		
-		if (requestSettings.filter && requestSettings.filter.expression) {
-			var expression = requestSettings.filter.expression;
-			if (angular.isString(expression)) {
-				queryString.push("search=" + encodeURIComponent(expression));
-			} else if (angular.isObject(expression)) {
-				var searchQueryParts = [];
-				for (var field in expression) {
-					if (!expression.hasOwnProperty(field)) {
-						continue;
-					}
-					
-					var value = expression[field];
-					searchQueryParts.push(encodeURIComponent(field) + ":" + encodeURIComponent(value));
-				}
-				
-				queryString.push("search=" + searchQueryParts.join(","));
-			}
-		}
-		
+		var queryString = self.settingsSerializer(requestSettings);
 		if (queryString.length > 0) {
 			if (url.indexOf("?") === -1) {
 				url += "?";
@@ -71,7 +88,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 				url += "&";
 			}
 			
-			url += queryString.join("&");
+			url += queryString;
 		}
 		
 		if (pendingRequest !== null) {
@@ -81,8 +98,9 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		
 		function sendRequest() {
 			$http.get(url).success(function(response) {
-				viewModel = response.data;
-				filteredItemCount = response.totalResults;
+				var parsedResponse = self.responseParser(response);
+				viewModel = parsedResponse.data;
+				filteredItemCount = parsedResponse.totalResults;
 				viewSettings = requestSettings;
 			});
 		}
