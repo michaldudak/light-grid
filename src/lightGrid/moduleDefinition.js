@@ -1,7 +1,4 @@
-﻿/// <reference path="../../typings/jquery/jquery.d.ts"/>
-/// <reference path="../../typings/angularjs/angular.d.ts"/>
-
-if (typeof ($) === "undefined") {
+﻿if (typeof ($) === "undefined") {
 	throw new Error("Light Grid requires jQuery.");
 }
 

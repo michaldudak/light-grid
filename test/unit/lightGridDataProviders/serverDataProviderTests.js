@@ -1,5 +1,4 @@
 /* global beforeEach, afterEach, describe, it, expect, inject, module */
-/// <reference path="../../../typings/jasmine/jasmine.d.ts"/>
 
 describe("Server data provider", function() {
 	"use strict";
