@@ -4,7 +4,7 @@
 angular.module("lightGridTemplates").directive("lgBoundColumn", function () {
 	"use strict";
 
-	var template = "<lg-column>{{rowData['{property}']}}</lg-column>";
+	var template = "<td>{{ row.data['{property}'] }}</td>";
 
 	return {
 		restrict: "EA",

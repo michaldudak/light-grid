@@ -1,6 +1,6 @@
-﻿/* global beforeEach, describe, it, expect, inject, module */
+﻿/* global beforeEach, describe, xdescribe, it, expect, inject, module */
 
-describe("Expandable row", function () {
+xdescribe("Expandable row", function () {
 	"use strict";
 
 	var $compile;

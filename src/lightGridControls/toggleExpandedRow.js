@@ -3,7 +3,7 @@
  * This can be only used as an attribute. Its value specifies the name of the template
  * used as an expanded row content.
  */
-angular.module("lightGridControls").directive("lgToggleExpandedRow", function () {
+angular.module("lightGridControls").directive("lgToggleExpandedRow", function ($timeout) {
 	"use strict";
 
 	return {
@@ -13,11 +13,9 @@ angular.module("lightGridControls").directive("lgToggleExpandedRow", function ()
 			var detailsTemplate = attrs.lgToggleExpandedRow || attrs.detailsTemplate;
 
 			elem.on("click", function () {
-				rowController.toggleDetails(detailsTemplate);
-
-				if (!scope.$$phase) {
-					scope.$apply();
-				}
+				$timeout(function () {
+					rowController.toggleDetails(detailsTemplate);
+				});
 			});
 		}
 	};

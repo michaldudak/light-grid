@@ -6,20 +6,17 @@ describe("Light Grid: View modes tests", function () {
 	var $compile;
 	var $rootScope;
 
-	var gridMarkup = "<lg-grid id='grid' model='model'><lg-column>" +
-		"<lg-view>Default view</lg-view>" +
-		"<lg-view view='alternate'>Alternate view</lg-view>" +
-		"</lg-column></lg-grid>";
-
-	var gridWithAlternateViewMarkup = "<lg-grid id='grid' model='model' initial-view='alternate'><lg-column>" +
-		"<lg-view>Default view</lg-view>" +
-		"<lg-view view='alternate'>Alternate view</lg-view>" +
-		"</lg-column></lg-grid>";
-
-	var gridWithMultiviewsMarkup = "<lg-grid id='grid' model='model'><lg-column>" +
-		"<lg-view>Default view</lg-view>" +
-		"<lg-view view='alternate1, alternate2'>Alternate view</lg-view>" +
-		"</lg-column></lg-grid>";
+	var gridMarkup = "\
+		<table lg-grid model='model'>                                  \
+			<tr lg-row>                                                \
+				<td>                                                   \
+					<lg-view>Default view</lg-view>                    \
+					<lg-view view='alternate'>Alternate view</lg-view> \
+				</td>                                                  \
+			</tr>                                                      \
+		</table>";
+		
+	var gridElement;
 
 	beforeEach(function () {
 		module("lightGrid");
@@ -34,6 +31,8 @@ describe("Light Grid: View modes tests", function () {
 			{ firstName: "John", lastName: "Doe" },
 			{ firstName: "Adam", lastName: "Smith" }
 		];
+		
+		gridElement = $(gridMarkup);
 	}));
 
 	describe("when initial-view attribute is not set", function () {
@@ -42,19 +41,20 @@ describe("Light Grid: View modes tests", function () {
 			$rootScope.$digest();
 			var cell = element.find("td:first");
 	
-			expect(cell.text()).toBe("Default view");
-			expect(element.html()).not.toMatch("Alternate view");
+			expect(cell.text().trim()).toBe("Default view");
+			expect(element.text()).not.toMatch("Alternate view");
 		});
 	});
 
 	describe("when initial-view attribute is set", function () {
 		it("should initially render the view specified in initial-view attribute", function () {
-			var element = $compile(gridWithAlternateViewMarkup)($rootScope);
+			gridElement.attr("initial-view", "alternate");
+			$compile(gridElement)($rootScope);
 			$rootScope.$digest();
-			var cell = element.find("td:first");
+			var cell = gridElement.find("td:first");
 	
-			expect(cell.text()).toBe("Alternate view");
-			expect(element.html()).not.toMatch("Default view");
+			expect(cell.text().trim()).toBe("Alternate view");
+			expect(gridElement.text()).not.toMatch("Default view");
 		});
 	});
 	
@@ -67,29 +67,30 @@ describe("Light Grid: View modes tests", function () {
 				var firstRow = element.find("tbody tr").eq(0);
 				var secondRow = element.find("tbody tr").eq(1);
 		
-				var rowController = firstRow.scope().rowController;
+				var rowController = firstRow.scope().row.controller;
 				rowController.switchView("alternate");
 				$rootScope.$digest();
 		
-				expect(firstRow.find("td").text()).toBe("Alternate view");
-				expect(secondRow.find("td").text()).toBe("Default view");
+				expect(firstRow.find("td").text().trim()).toBe("Alternate view");
+				expect(secondRow.find("td").text().trim()).toBe("Default view");
 			});
 		});
 		
 		describe("on a row, with unknown view name", function () {
 			it("should show the default view", function () {
-				var element = $compile(gridWithAlternateViewMarkup)($rootScope);
+				gridElement.attr("initial-view", "alternate");
+				$compile(gridElement)($rootScope);
 				$rootScope.$digest();
 		
-				var firstRow = element.find("tbody tr").eq(0);
-				var secondRow = element.find("tbody tr").eq(1);
+				var firstRow = gridElement.find("tbody tr").eq(0);
+				var secondRow = gridElement.find("tbody tr").eq(1);
 		
-				var rowController = firstRow.scope().rowController;
+				var rowController = firstRow.scope().row.controller;
 				rowController.switchView("unknown");
 				$rootScope.$digest();
 		
-				expect(firstRow.find("td").text()).toBe("Default view");
-				expect(secondRow.find("td").text()).toBe("Alternate view");
+				expect(firstRow.find("td").text().trim()).toBe("Default view");
+				expect(secondRow.find("td").text().trim()).toBe("Alternate view");
 			});
 		});
 		
@@ -101,32 +102,33 @@ describe("Light Grid: View modes tests", function () {
 				var firstRow = element.find("tbody tr").eq(0);
 				var secondRow = element.find("tbody tr").eq(1);
 		
-				var gridController = firstRow.scope().gridController;
+				var gridController = firstRow.scope().grid.controller;
 				gridController.switchView("alternate");
 				$rootScope.$digest();
 		
-				expect(firstRow.find("td").text()).toBe("Alternate view");
-				expect(secondRow.find("td").text()).toBe("Alternate view");
+				expect(firstRow.find("td").text().trim()).toBe("Alternate view");
+				expect(secondRow.find("td").text().trim()).toBe("Alternate view");
 			});
 		});
 		
 		describe("when a view is declared as multiview", function () {
 			it("should show the proper view", function () {
-				var element = $compile(gridWithMultiviewsMarkup)($rootScope);
+				gridElement.find("lg-view[view=alternate]").attr("view", "alternate1, alternate2");
+				$compile(gridElement)($rootScope);
 				$rootScope.$digest();
 		
-				var firstRow = element.find("tbody tr").eq(0);
-				var secondRow = element.find("tbody tr").eq(1);
+				var firstRow = gridElement.find("tbody tr").eq(0);
+				var secondRow = gridElement.find("tbody tr").eq(1);
 		
-				var firstRowController = firstRow.scope().rowController;
-				var secondRowController = secondRow.scope().rowController;
+				var firstRowController = firstRow.scope().row.controller;
+				var secondRowController = secondRow.scope().row.controller;
 		
 				firstRowController.switchView("alternate1");
 				secondRowController.switchView("alternate2");
 				$rootScope.$digest();
 		
-				expect(firstRow.find("td").text()).toBe("Alternate view");
-				expect(secondRow.find("td").text()).toBe("Alternate view");
+				expect(firstRow.find("td").text().trim()).toBe("Alternate view");
+				expect(secondRow.find("td").text().trim()).toBe("Alternate view");
 			});
 		});
 	});

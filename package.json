@@ -1,6 +1,6 @@
 {
   "name": "LightGrid",
-  "version": "0.2.0",
+  "version": "0.3.0-wip",
   "description": "Native Angular JS Grid implementation",
   "scripts": {
     "test": "grunt test"

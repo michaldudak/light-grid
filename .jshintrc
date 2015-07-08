@@ -14,5 +14,6 @@
 	"nocomma": true,
 	"shadow": false,
 	"undef": true,
-	"unused": true
+	"unused": true,
+	"multistr": true
 }

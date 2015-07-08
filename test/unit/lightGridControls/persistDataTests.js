@@ -1,10 +1,11 @@
 /* global beforeEach, jasmine, describe, it, expect, inject, module */
 
-describe("lgPager directive tests", function () {
+describe("lgPersistData directive tests", function () {
 	"use strict";
 
 	var $compile;
 	var $rootScope;
+	var $timeout;
 
 	var markup = "<button lg-persist-data provider='providerMock'></button>";
 	
@@ -12,18 +13,21 @@ describe("lgPager directive tests", function () {
 		module("lightGridControls");
 	});
 
-	beforeEach(inject(function (_$compile_, _$rootScope_) {
+	beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
-		$rootScope.viewData = { foo: "bar" };
+		$timeout = _$timeout_;
 
 		$rootScope.providerMock = {
 			saveModel: jasmine.createSpy("acceptViewModel")
 		};
 		
-		$rootScope.rowController = {
-			acceptViewModel: jasmine.createSpy("acceptViewModel"),
-			switchView: jasmine.createSpy("switchView")
+		$rootScope.row = {
+			viewModel: { foo: "bar" },
+			controller: {
+				acceptViewModel: jasmine.createSpy("acceptViewModel"),
+				switchView: jasmine.createSpy("switchView")
+			}
 		};
 	}));
 	
@@ -33,6 +37,7 @@ describe("lgPager directive tests", function () {
 			$rootScope.$digest();
 			
 			element.click();
+			$timeout.flush();
 			
 			expect($rootScope.providerMock.saveModel).toHaveBeenCalledWith($rootScope.viewData);
 		});
@@ -43,9 +48,10 @@ describe("lgPager directive tests", function () {
 			
 			element.click();
 			$rootScope.$digest();
+			$timeout.flush();
 			
-			expect($rootScope.rowController.acceptViewModel).toHaveBeenCalled();
-			expect($rootScope.rowController.switchView).toHaveBeenCalledWith("read");
+			expect($rootScope.row.controller.acceptViewModel).toHaveBeenCalled();
+			expect($rootScope.row.controller.switchView).toHaveBeenCalledWith("read");
 		});
 	});
 });

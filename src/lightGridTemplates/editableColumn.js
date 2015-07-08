@@ -5,14 +5,20 @@
 angular.module("lightGridTemplates").directive("lgEditableColumn", function () {
 	"use strict";
 
-	var template = "<lg-column><lg-view>{{rowData[\"{property}\"]}}</lg-view><lg-view view='edit'>" +
-		"<input type='text' ng-model='viewData[\"{property}\"]' class='form-control input-sm' /></lg-view></lg-column>";
+	var template = "<td>" +
+		"<lg-view>{{ row.data[\"{property}\"] }}</lg-view>" +
+		"<lg-view view='edit'>" +
+		"<input type='text' ng-model='row.data[\"{property}\"]' class='{inputClass}' />" +
+		"</lg-view>" +
+		"</td>";
 
 	return {
 		restrict: "EA",
+		replace: true,
 		template: function(elem, attrs) {
-			return template.replace(/\{property\}/g, attrs.property);
-		},
-		replace: true
+			return template
+				.replace(/\{property\}/g, attrs.property || attrs.lgEditableColumn)
+				.replace("{inputClass}", attrs.inputClass);
+		}
 	};
 });

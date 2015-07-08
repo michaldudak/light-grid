@@ -4,21 +4,63 @@
 angular.module("lightGrid").directive("lgView", function () {
 	"use strict";
 
+	function isInitialized(element) {
+		if (element.length > 1) {
+			return angular.isDefined(element.first().attr("lg-view-initialized"));
+		} else {
+			return angular.isDefined(element.attr("lg-view-initialized"));
+		}
+	}
+
 	return {
-		restrict: "EA",
-		require: "^lgColumn",
-		compile: function viewCompile(tElement, tAttrs) {
-			var innerHtml = tElement.html();
-
-			// we don't want to compile the contents of the view at this point
-			// it'll be done later, in cell directive
-			tElement.empty();
-
-			return function viewLink(scope, element, attrs, templateColumnController) {
-				var view = tAttrs.lgView || tAttrs.view;
-				templateColumnController.registerView(view, innerHtml);
-				element.remove();
+		multiElement: true,
+		link: function lgViewLink($scope, $elem, $attrs) {
+			if (isInitialized($elem)) {
+				return;
+			}
+			
+			var viewNameExpression = $attrs.lgView || $attrs.view;
+			var viewNames;
+			
+			if (!viewNameExpression) {
+				viewNames = [];
+			} else {
+				viewNames = viewNameExpression.split(",").map(function (viewName) {
+					return viewName.trim();
+				});
+			}
+			
+			viewNames.forEach(function (viewName) {
+				if ($scope.row) {
+					$scope.row.controller.registerView(viewName);
+				}
+			});
+			
+			$scope.shouldShowDefaultView = function (requestedViewName) {
+				return !$scope.row.controller.isViewRegistered(requestedViewName);
 			};
+			
+			var displayCondition;
+			
+			if (viewNames.length === 0) {
+				displayCondition = "shouldShowDefaultView(row.view)";
+			} else {
+				displayCondition = viewNames.map(function (viewName) {
+					return "row.view === '" + viewName + "'";
+				}).join(" || ");
+			}
+
+			if ($elem.length > 1) {
+				var first = $elem.first();
+				var last = $elem.last();
+				
+				first.attr("ng-if-start", "displayCondition");
+				first.attr("lg-view-initialized", "");
+				last.attr("ng-if-end", "");
+			} else {
+				$elem.attr("lg-view-initialized", "");
+				$elem.attr("ng-if", displayCondition);
+			}
 		}
 	};
 });

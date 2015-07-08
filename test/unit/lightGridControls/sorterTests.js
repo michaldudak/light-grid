@@ -8,12 +8,14 @@ describe("Light Grid: Sorter directive tests", function () {
 	var $timeout;
 
 	var gridMarkup =
-		"<lg-grid id='grid' model='dataProvider.getGridModel()'>" +
-			"<lg-column>" +
-				"<lg-header-view><span lg-sorter sort-property='firstName' data-provider='dataProvider'>First Name<span></lg-header-view>" +
-				"<lg-view></lg-view>" +
-			"</lg-column>" +
-		"</lg-grid>";
+		"<table lg-grid model='dataProvider.getGridModel()'>" +
+			"<tr>" +
+				"<th><span lg-sorter sort-property='firstName' data-provider='dataProvider'>First Name<span></th>" +
+			"</tr>" +
+			"<tr lg-row>" +
+				"<td>{{ row.data.firstName }}</td>" +
+			"</tr>" +
+		"</table>";
 
 	beforeEach(function () {
 		module("lightGrid");
