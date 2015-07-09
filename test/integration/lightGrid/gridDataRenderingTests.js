@@ -8,6 +8,19 @@ describe("Grid data rendering tests:", function () {
 
 	var gridMarkup = "<table lg-grid model='model'><tr lg-row><td>{{ row.data.id }}</td></tr></table>";
 
+	var multiElementGridMarkup = "\
+		<table lg-grid model='model'> \
+			<tr lg-row-start> \
+				<td>{{ row.data.id }}</td> \
+			</tr> \
+			<tr> \
+				<td>{{ row.data.id }}</td> \
+			</tr> \
+			<tr lg-row-end> \
+				<td>{{ row.data.id }}</td> \
+			</tr> \
+		</table>";
+
 	beforeEach(module("lightGrid"));
 
 	beforeEach(inject(function(_$compile_, _$rootScope_) {
@@ -88,6 +101,28 @@ describe("Grid data rendering tests:", function () {
 			var element = $compile(gridMarkup)($rootScope);
 			$rootScope.$digest();
 			expect(element.find("tbody").children("tr").length).toEqual(0);
+		});
+	});
+
+	describe("when a row spans across multiple elements", function () {
+		it("all of them should have access to row scope", function () {
+			$rootScope.model = {
+				foo1: { id: 1 },
+				foo2: { id: 2 }
+			};
+
+			var element = $compile(multiElementGridMarkup)($rootScope);
+			$rootScope.$digest();
+
+			expect(element.find("tbody").children("tr").length).toEqual(6);
+
+			expect(element.find("tbody").children("tr:eq(0)").text().trim()).toEqual("1");
+			expect(element.find("tbody").children("tr:eq(1)").text().trim()).toEqual("1");
+			expect(element.find("tbody").children("tr:eq(2)").text().trim()).toEqual("1");
+
+			expect(element.find("tbody").children("tr:eq(3)").text().trim()).toEqual("2");
+			expect(element.find("tbody").children("tr:eq(4)").text().trim()).toEqual("2");
+			expect(element.find("tbody").children("tr:eq(5)").text().trim()).toEqual("2");
 		});
 	});
 });
