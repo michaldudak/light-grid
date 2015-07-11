@@ -1,5 +1,23 @@
 #Changelog
 
+##v0.3.0
+
+###Breaking changes
+* Removed the `lgColumn`, `lgColumnTemplates` and `lgHeaderView` directives
+* Added the `lgRow` directive instead
+* Restricted the `lgGrid` directive to an attribute
+* Replaced the `rowData`, `rowController`, `view` and `viewModel` scope properties with a `row` object containing
+  `data`, `controller`, `view` and `viewModel` fields
+* Removed the `lgSortableColumn` template directive
+
+###New features
+* ng-repeat - like properties ($index, $odd, $even, etc.) now available in row scope
+* `lgView` now can span across multiple elements (with `ng-view-start` and `ng-view-end`)
+* Added a `grid` object to grid and row scopes containing `data` and `controller` fields
+* The grid can be built on an arbitrary HTML element, not just a table
+
+Thanks to these changes, it was possible to reduce the size of the script significantly (from 15 kB to 11 kB minified).
+
 ##v0.2.0
 
 ###Breaking changes
