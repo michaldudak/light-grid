@@ -9,14 +9,43 @@ angular.module("lightGridControls").directive("lgToggleExpandedRow", function ($
 	return {
 		require: "^?lgRow",
 		restrict: "A",
-		link: function toggleExpandedRowLink(scope, elem, attrs, rowController) {
-			var detailsTemplate = attrs.lgToggleExpandedRow || attrs.detailsTemplate;
+		link: function toggleExpandedRowLink($scope, $elem) {
 
-			elem.on("click", function () {
+			$elem.on("click", function () {
 				$timeout(function () {
-					rowController.toggleDetails(detailsTemplate);
+					$scope.$broadcast("toggleExpandedRow");
 				});
 			});
+		}
+	};
+});
+
+angular.module("lightGridControls").directive("lgExpandedRow", function () {
+	"use strict";
+
+	return {
+		link: function expandedRowLink($scope, $elem) {
+			var isVisible = false;
+
+			function show() {
+				$elem.removeClass("ng-hide");
+				isVisible = true;
+			}
+
+			function hide() {
+				$elem.addClass("ng-hide");
+				isVisible = false;
+			}
+
+			$scope.$on("toggleExpandedRow", function() {
+				if (isVisible) {
+					hide();
+				} else {
+					show();
+				}
+			});
+
+			hide();
 		}
 	};
 });

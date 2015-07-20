@@ -1,30 +1,35 @@
-﻿/* global beforeEach, describe, xdescribe, it, expect, inject, module */
+﻿/* global beforeEach, describe, fdescribe, it, expect, inject, module */
 
-xdescribe("Expandable row", function () {
+fdescribe("Expandable row", function () {
 	"use strict";
 
 	var $compile;
 	var $rootScope;
+	var $timeout;
 
 	var detailsTemplate =
 		"<script type='text/ng-template' id='detailsTemplate'>" +
-			"Details for row {{rowData.id}}" +
+			"Details for row {{row.data.id}}" +
 		"</script>";
 
 	var grid =
-		"<lg-grid id='testGrid' model='model'>" +
-			"<lg-column>{{rowData.id}}</lg-column>" +
-			"<lg-column><button data-lg-toggle-expanded-row='detailsTemplate'>Details</button></lg-column>" +
-		"</lg-grid>";
+		"<table lg-grid model='model'>" +
+			"<tr>" +
+				"<td>{{row.data.id}}</td>" +
+				"<td><button lg-toggle-expanded-row>Details</button></td>" +
+			"</tr>" +
+			"<tr lg-expanded-row><td colspan='2'><ng-include src='\"detailsTemplate\"'></ng-include></td></tr>" +
+		"</table>";
 
 	beforeEach(function () {
 		module("lightGrid");
 		module("lightGridControls");
 	});
 
-	beforeEach(inject(function (_$compile_, _$rootScope_) {
+	beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
+		$timeout = _$timeout_;
 
 		$rootScope.model = [
 			{ id: "one" },
@@ -43,10 +48,12 @@ xdescribe("Expandable row", function () {
 
 			var button = element.find("button").eq(0);
 			button.click();
+			$timeout.flush();
+			$rootScope.$digest();
 		});
 
 		it("should create additional row", function() {
-			expect(element.find("tbody tr").length).toEqual(4);
+			expect(element.find("tbody tr:not(.ng-hide)").length).toEqual(4);
 		});
 
 		it("should create one column with colspan=2 in the additional row", function () {
@@ -79,7 +86,7 @@ xdescribe("Expandable row", function () {
 		});
 
 		it("should create two additional rows", function() {
-			expect(element.find("tbody tr").length).toEqual(5);
+			expect(element.find("tbody tr:not(.ng-hide)").length).toEqual(5);
 		});
 
 		it("should open the template content inside the new rows", function () {
@@ -99,7 +106,7 @@ xdescribe("Expandable row", function () {
 			button.click();
 			button.click();
 
-			expect(element.find("tbody tr").length).toEqual(3);
+			expect(element.find("tbody tr:not(.ng-hide)").length).toEqual(3);
 			expect(element.text()).not.toMatch("Details for row");
 		});
 	});
