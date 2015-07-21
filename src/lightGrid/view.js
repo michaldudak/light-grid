@@ -1,7 +1,7 @@
 ﻿/**
  * Defines a view in the column template
  */
-angular.module("lightGrid").directive("lgView", function () {
+angular.module("lightGrid").directive("lgView", function ($compile) {
 	"use strict";
 
 	function isInitialized(element) {
@@ -14,8 +14,7 @@ angular.module("lightGrid").directive("lgView", function () {
 
 	return {
 		multiElement: true,
-		require: "^lgRow",
-		link: function lgViewLink($scope, $elem, $attrs, rowController) {
+		link: function lgViewLink($scope, $elem, $attrs) {
 			if (isInitialized($elem)) {
 				return;
 			}
@@ -32,11 +31,11 @@ angular.module("lightGrid").directive("lgView", function () {
 			}
 
 			viewNames.forEach(function (viewName) {
-				rowController.registerView(viewName);
+				$scope.row.controller.registerView(viewName);
 			});
 
 			$scope.shouldShowDefaultView = function (requestedViewName) {
-				return !rowController.isViewRegistered(requestedViewName);
+				return !$scope.row.controller.isViewRegistered(requestedViewName);
 			};
 
 			var displayCondition;
@@ -60,6 +59,8 @@ angular.module("lightGrid").directive("lgView", function () {
 				$elem.attr("lg-view-initialized", "");
 				$elem.attr("ng-if", displayCondition);
 			}
+
+			$compile($elem)($scope);
 		}
 	};
 });

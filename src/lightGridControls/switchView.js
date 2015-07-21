@@ -8,12 +8,12 @@ angular.module("lightGridControls").directive("lgSwitchView", function ($timeout
 	return {
 		require: "^lgRow",
 		restrict: "A",
-		link: function switchViewLink(scope, elem, attrs, rowController) {
+		link: function switchViewLink(scope, elem, attrs) {
 			var viewName = attrs.lgSwitchView;
 
 			elem.on("click", function () {
 				$timeout(function () {
-					rowController.switchView(viewName);
+					scope.row.controller.switchView(viewName);
 				});
 			});
 		}

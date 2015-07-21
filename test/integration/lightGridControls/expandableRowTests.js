@@ -1,6 +1,6 @@
-﻿/* global beforeEach, describe, fdescribe, it, expect, inject, module */
+﻿/* global beforeEach, describe, it, expect, inject, module */
 
-fdescribe("Expandable row", function () {
+describe("Expandable row", function () {
 	"use strict";
 
 	var $compile;
@@ -9,16 +9,16 @@ fdescribe("Expandable row", function () {
 
 	var detailsTemplate =
 		"<script type='text/ng-template' id='detailsTemplate'>" +
-			"Details for row {{row.data.id}}" +
+			"Details for row {{ row.data.id }}" +
 		"</script>";
 
 	var grid =
 		"<table lg-grid model='model'>" +
-			"<tr>" +
+			"<tr lg-row-start>" +
 				"<td>{{row.data.id}}</td>" +
 				"<td><button lg-toggle-expanded-row>Details</button></td>" +
 			"</tr>" +
-			"<tr lg-expanded-row><td colspan='2'><ng-include src='\"detailsTemplate\"'></ng-include></td></tr>" +
+			"<tr lg-row-end lg-expanded-row><td colspan='2'><ng-include src='\"detailsTemplate\"'></ng-include></td></tr>" +
 		"</table>";
 
 	beforeEach(function () {
@@ -83,6 +83,8 @@ fdescribe("Expandable row", function () {
 
 			var thirdButton = element.find("button").eq(2);
 			thirdButton.click();
+
+			$timeout.flush();
 		});
 
 		it("should create two additional rows", function() {
@@ -91,8 +93,7 @@ fdescribe("Expandable row", function () {
 
 		it("should open the template content inside the new rows", function () {
 			expect(element.find("tbody tr:eq(1) td").text()).toEqual("Details for row one");
-			expect(element.find("tbody tr:eq(4) td").text()).toEqual("Details for row three");
-			expect(element.text()).not.toMatch("Details for row two");
+			expect(element.find("tbody tr:eq(5) td").text()).toEqual("Details for row three");
 		});
 	});
 
@@ -107,7 +108,6 @@ fdescribe("Expandable row", function () {
 			button.click();
 
 			expect(element.find("tbody tr:not(.ng-hide)").length).toEqual(3);
-			expect(element.text()).not.toMatch("Details for row");
 		});
 	});
 });
