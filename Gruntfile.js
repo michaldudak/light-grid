@@ -1,4 +1,4 @@
-﻿/* global module*/
+﻿/* global module */
 
 module.exports = function (grunt) {
 	grunt.initConfig({
@@ -19,6 +19,7 @@ module.exports = function (grunt) {
 			dist: {
 				src: [
 					"src/lightGrid/moduleDefinition.js",
+					"src/*.js",
 					"src/lightGrid/*.js",
 					"src/lightGridTemplates/moduleDefinition.js",
 					"src/lightGridTemplates/*.js",

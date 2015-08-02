@@ -18,7 +18,7 @@ describe("Expandable row", function () {
 				"<td>{{row.data.id}}</td>" +
 				"<td><button lg-toggle-expanded-row>Details</button></td>" +
 			"</tr>" +
-			"<tr lg-row-end lg-expanded-row><td colspan='2'><ng-include src='\"detailsTemplate\"'></ng-include></td></tr>" +
+			"<tr class='expanded' lg-row-end lg-expanded-row><td colspan='2'><ng-include src='\"detailsTemplate\"'></ng-include></td></tr>" +
 		"</table>";
 
 	beforeEach(function () {
@@ -38,7 +38,7 @@ describe("Expandable row", function () {
 		];
 	}));
 
-	describe("when the first toggle button is clicked once", function() {
+	describe("when the first toggle button is clicked once", function () {
 		var element;
 
 		beforeEach(function() {
@@ -52,8 +52,8 @@ describe("Expandable row", function () {
 			$rootScope.$digest();
 		});
 
-		it("should create additional row", function() {
-			expect(element.find("tbody tr:not(.ng-hide)").length).toEqual(4);
+		it("should create additional row", function () {
+			expect(element.find("tbody tr").length).toEqual(4);
 		});
 
 		it("should create one column with colspan=2 in the additional row", function () {
@@ -70,7 +70,7 @@ describe("Expandable row", function () {
 		});
 	});
 
-	describe("when two toggle buttons are clicked once", function() {
+	describe("when two toggle buttons are clicked once", function () {
 		var element;
 
 		beforeEach(function () {
@@ -87,17 +87,17 @@ describe("Expandable row", function () {
 			$timeout.flush();
 		});
 
-		it("should create two additional rows", function() {
-			expect(element.find("tbody tr:not(.ng-hide)").length).toEqual(5);
+		it("should create two additional rows", function () {
+			expect(element.find("tbody tr").length).toEqual(5);
 		});
 
 		it("should open the template content inside the new rows", function () {
-			expect(element.find("tbody tr:eq(1) td").text()).toEqual("Details for row one");
-			expect(element.find("tbody tr:eq(5) td").text()).toEqual("Details for row three");
+			expect(element.find("tbody tr.expanded:eq(0) td").text()).toEqual("Details for row one");
+			expect(element.find("tbody tr.expanded:eq(1) td").text()).toEqual("Details for row three");
 		});
 	});
 
-	describe("when the first toggle button is clicked twice", function() {
+	describe("when the first toggle button is clicked twice", function () {
 		it("should delete the additional row", function () {
 			$compile(detailsTemplate)($rootScope);
 			var element = $compile(grid)($rootScope);
@@ -105,9 +105,12 @@ describe("Expandable row", function () {
 
 			var button = element.find("button").eq(0);
 			button.click();
+			$timeout.flush();
+			
 			button.click();
+			$timeout.flush();
 
-			expect(element.find("tbody tr:not(.ng-hide)").length).toEqual(3);
+			expect(element.find("tbody tr").length).toEqual(3);
 		});
 	});
 });

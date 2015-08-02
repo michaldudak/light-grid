@@ -1,8 +1,11 @@
-﻿angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $animate, DEFAULT_VIEW) {
+﻿/* global getBlockNodes */
+
+angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $animate, DEFAULT_VIEW) {
 	"use strict";
 
+	/* Code based on Angular's ngRepeat: https://github.com/angular/angular.js/blob/master/src/ng/directive/ngRepeat.js */
+
 	var NG_REMOVED = "$$NG_REMOVED";
-	var ngRepeatMinErr = angular.$$minErr("lgRow");
 
 	var updateScope = function(scope, index, valueIdentifier, value, arrayLength, rowController, gridController) {
 		// TODO(perf): generate setters to shave off ~40ms or 1-1.5%
@@ -40,25 +43,6 @@
 		return Object.create(null);
 	}
 
-	function getBlockNodes(nodes) {
-		// TODO(perf): just check if all items in `nodes` are siblings and if they are return the original
-		// collection, otherwise update the original collection.
-
-		var node = nodes[0];
-		var endNode = nodes[nodes.length - 1];
-		var blockNodes = [node];
-
-		do {
-			node = node.nextSibling;
-			if (!node) {
-				break;
-			}
-			blockNodes.push(node);
-		} while (node !== endNode);
-
-		return $(blockNodes);
-	}
-
 	function RowController($scope) {
 		var registeredViews = {};
 
@@ -88,19 +72,16 @@
 		$$tlb: true,
 		require: "^lgGrid",
 		compile: function lgRowCompile() {
-			var expression = "$$rowData in grid.data";
-			var ngRepeatEndComment = document.createComment(" end ngRow ");
+			var lgRowEndComment = document.createComment(" end lgRow ");
 
-			var lhs = "$$rowData";
-			var rhs = "grid.data";
+			var valueIdentifier = "$$rowData";
+			var collectionIdentifier = "grid.data";
 
-			var valueIdentifier = lhs;
-
-			var trackByIdObjFn = function(key) {
+			var trackByIdObjFn = function identity(key) {
 				return key;
 			};
 
-			return function ngRepeatLink($scope, $element, $attr, gridController, $transclude) {
+			return function lgRowLink($scope, $element, $attr, gridController, $transclude) {
 
 				// Store a list of elements from previous run. This is a hash where key is the item from the
 				// iterator, and the value is objects with following properties.
@@ -112,7 +93,7 @@
 				var lastBlockMap = createMap();
 
 				// watch props
-				$scope.$watchCollection(rhs, function ngRepeatAction(collection) {
+				$scope.$watchCollection(collectionIdentifier, function lgRowWatchAction(collection) {
 					var index,
 						length,
 						previousNode = $element[0], // node that cloned nodes should be inserted after
@@ -154,6 +135,7 @@
 						key = (collection === collectionKeys) ? index : collectionKeys[index];
 						value = collection[key];
 						trackById = trackByIdFn(key, value, index);
+						
 						if (lastBlockMap[trackById]) {
 							// found previously seen block
 							block = lastBlockMap[trackById];
@@ -163,7 +145,7 @@
 						} else if (nextBlockMap[trackById]) {
 							// if collision detected restore lastBlockMap and throw an error
 							angular.forEach(nextBlockOrder, restoreLastBlockMap);
-							throw ngRepeatMinErr("dupes", "Duplicates in a repeater are not allowed. Use 'track by' expression to specify unique keys. Repeater: {0}, Duplicate key: {1}, Duplicate value: {2}", expression, trackById, value);
+							throw new Error("Duplicate rows detected. The grid cannot render the same row twice. Use angular.copy to create a new instance. Duplicate value: " + value);
 						} else {
 							// new never before seen block
 							nextBlockOrder[index] = { id: trackById, scope: undefined, clone: undefined };
@@ -177,6 +159,7 @@
 						block = lastBlockMap[blockKey];
 						elementsToRemove = getBlockNodes(block.clone);
 						$animate.leave(elementsToRemove);
+						
 						if (elementsToRemove[0].parentNode) {
 							// if the element was not removed yet because of pending animation, mark it as deleted
 							// so that we can ignore it later
@@ -186,6 +169,7 @@
 								elementsToRemove[index][NG_REMOVED] = true;
 							}
 						}
+						
 						block.scope.$destroy();
 					}
 					/* jshint forin:true */
@@ -209,21 +193,21 @@
 
 							if (getBlockStart(block) !== nextNode) {
 								// existing item which got moved
-								$animate.move(getBlockNodes(block.clone), null, $(previousNode));
+								$animate.move(getBlockNodes(block.clone), null, angular.element(previousNode));
 							}
 							previousNode = getBlockEnd(block);
 							updateScope(block.scope, index, valueIdentifier, value, collectionLength, new RowController(block.scope), gridController);
 						} else {
 							/* jshint loopfunc:true */
 							// new item which we don't know about
-							$transclude(function ngRepeatTransclude(clone, scope) {
+							$transclude(function lgRowTransclude(clone, scope) {
 								block.scope = scope;
 								// http://jsperf.com/clone-vs-createcomment
-								var endNode = ngRepeatEndComment.cloneNode(false);
+								var endNode = lgRowEndComment.cloneNode(false);
 								clone[clone.length++] = endNode;
 
 								// TODO(perf): support naked previousNode in `enter` to avoid creation of jqLite wrapper?
-								$animate.enter(clone, null, $(previousNode));
+								$animate.enter(clone, null, angular.element(previousNode));
 								previousNode = endNode;
 								// Note: We only need the first/last node of the cloned nodes.
 								// However, we need to keep the reference to the jqlite wrapper as it might be changed later

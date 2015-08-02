@@ -13,39 +13,9 @@ angular.module("lightGridControls").directive("lgToggleExpandedRow", function ($
 
 			$elem.on("click", function () {
 				$timeout(function () {
-					$scope.$broadcast("toggleExpandedRow");
+					$scope.row.expanded = !$scope.row.expanded;
 				});
 			});
-		}
-	};
-});
-
-angular.module("lightGridControls").directive("lgExpandedRow", function () {
-	"use strict";
-
-	return {
-		link: function expandedRowLink($scope, $elem) {
-			var isVisible = false;
-
-			function show() {
-				$elem.removeClass("ng-hide");
-				isVisible = true;
-			}
-
-			function hide() {
-				$elem.addClass("ng-hide");
-				isVisible = false;
-			}
-
-			$scope.$on("toggleExpandedRow", function() {
-				if (isVisible) {
-					hide();
-				} else {
-					show();
-				}
-			});
-
-			hide();
 		}
 	};
 });
