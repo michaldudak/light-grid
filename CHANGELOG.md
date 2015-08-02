@@ -8,7 +8,7 @@
 * Restricted the `lgGrid` directive to an attribute
 * Replaced the `rowData`, `rowController`, `view` and `viewModel` scope properties with a `row` object containing
   `data`, `controller`, `view` and `viewModel` fields
-* Removed the `lgSortableColumn` template directive
+* Removed the `lgSortableColumn` and `lgBoundColumn` template directives
 
 ###New features
 * ng-repeat - like properties ($index, $odd, $even, etc.) now available in row scope
