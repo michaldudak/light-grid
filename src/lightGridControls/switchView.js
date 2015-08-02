@@ -6,7 +6,6 @@ angular.module("lightGridControls").directive("lgSwitchView", function ($timeout
 	"use strict";
 
 	return {
-		require: "^lgRow",
 		restrict: "A",
 		link: function switchViewLink(scope, elem, attrs) {
 			var viewName = attrs.lgSwitchView;

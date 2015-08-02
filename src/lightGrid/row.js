@@ -1,17 +1,12 @@
-﻿/* global angular, $ */
-
-angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $animate, DEFAULT_VIEW) {
+﻿angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $animate, DEFAULT_VIEW) {
 	"use strict";
 
 	var NG_REMOVED = "$$NG_REMOVED";
 	var ngRepeatMinErr = angular.$$minErr("lgRow");
 
-	var updateScope = function(scope, index, valueIdentifier, value, keyIdentifier, key, arrayLength, rowController, gridController) {
+	var updateScope = function(scope, index, valueIdentifier, value, arrayLength, rowController, gridController) {
 		// TODO(perf): generate setters to shave off ~40ms or 1-1.5%
 		scope[valueIdentifier] = value;
-		if (keyIdentifier) {
-			scope[keyIdentifier] = key;
-		}
 
 		scope.$index = index;
 		scope.$first = (index === 0);
@@ -41,20 +36,8 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 		return block.clone[block.clone.length - 1];
 	};
 
-	var uid = 0;
-
-	var NODE_TYPE_ELEMENT = 1;
-
-	function nextUid() {
-		return ++uid;
-	}
-
 	function createMap() {
 		return Object.create(null);
-	}
-
-	function isWindow(obj) {
-		return obj && obj.window === obj;
 	}
 
 	function getBlockNodes(nodes) {
@@ -74,42 +57,6 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 		} while (node !== endNode);
 
 		return $(blockNodes);
-	}
-
-	function isArrayLike(obj) {
-		if (angular.isUndefined(obj) || obj === null || isWindow(obj)) {
-			return false;
-		}
-
-		// Support: iOS 8.2 (not reproducible in simulator)
-		// "length" in obj used to prevent JIT error (gh-11508)
-		var length = "length" in Object(obj) && obj.length;
-
-		if (obj.nodeType === NODE_TYPE_ELEMENT && length) {
-			return true;
-		}
-
-		return angular.isString(obj) || angular.isArray(obj) || length === 0 || typeof length === "number" && length > 0 && (length - 1) in obj;
-	}
-
-	function hashKey(obj, nextUidFn) {
-		var key = obj && obj.$$hashKey;
-
-		if (key) {
-			if (typeof key === "function") {
-				key = obj.$$hashKey();
-			}
-			return key;
-		}
-
-		var objType = typeof obj;
-		if (objType === "function" || (objType === "object" && obj !== null)) {
-			key = obj.$$hashKey = objType + ":" + (nextUidFn || nextUid)();
-		} else {
-			key = objType + ":" + obj;
-		}
-
-		return key;
 	}
 
 	function RowController($scope) {
@@ -142,105 +89,54 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 		require: "^lgGrid",
 		compile: function lgRowCompile() {
 			var expression = "$$rowData in grid.data";
-			var ngRepeatEndComment = document.createComment(" end ngRepeat: " + expression + " ");
+			var ngRepeatEndComment = document.createComment(" end ngRow ");
 
-			var match = expression.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
+			var lhs = "$$rowData";
+			var rhs = "grid.data";
 
-			if (!match) {
-				throw ngRepeatMinErr("iexp", "Expected expression in form of '_item_ in _collection_[ track by _id_]' but got '{0}'.",
-						expression);
-			}
+			var valueIdentifier = lhs;
 
-			var lhs = match[1];
-			var rhs = match[2];
-			var aliasAs = match[3];
-			var trackByExp = match[4];
-
-			match = lhs.match(/^(?:(\s*[\$\w]+)|\(\s*([\$\w]+)\s*,\s*([\$\w]+)\s*\))$/);
-
-			if (!match) {
-				throw ngRepeatMinErr("iidexp", "'_item_' in '_item_ in _collection_' should be an identifier or '(_key_, _value_)' expression, but got '{0}'.",	lhs);
-			}
-			var valueIdentifier = match[3] || match[1];
-			var keyIdentifier = match[2];
-
-			if (aliasAs && (!/^[$a-zA-Z_][$a-zA-Z0-9_]*$/.test(aliasAs) ||
-					/^(null|undefined|this|\$index|\$first|\$middle|\$last|\$even|\$odd|\$parent|\$root|\$id)$/.test(aliasAs))) {
-				throw ngRepeatMinErr("badident", "alias '{0}' is invalid --- must be a valid JS identifier which is not a reserved name.",
-					aliasAs);
-			}
-
-			var trackByExpGetter, trackByIdExpFn, trackByIdArrayFn, trackByIdObjFn;
-			var hashFnLocals = { $id: hashKey };
-
-			if (trackByExp) {
-				trackByExpGetter = $parse(trackByExp);
-			} else {
-				trackByIdArrayFn = function(key, value) {
-					return hashKey(value);
-				};
-				trackByIdObjFn = function(key) {
-					return key;
-				};
-			}
+			var trackByIdObjFn = function(key) {
+				return key;
+			};
 
 			return function ngRepeatLink($scope, $element, $attr, gridController, $transclude) {
-
-				if (trackByExpGetter) {
-					trackByIdExpFn = function(key, value, index) {
-						// assign key, value, and $index to the locals so that they can be used in hash functions
-						if (keyIdentifier) {
-							hashFnLocals[keyIdentifier] = key;
-						}
-
-						hashFnLocals[valueIdentifier] = value;
-						hashFnLocals.$index = index;
-						return trackByExpGetter($scope, hashFnLocals);
-					};
-				}
 
 				// Store a list of elements from previous run. This is a hash where key is the item from the
 				// iterator, and the value is objects with following properties.
 				// - scope: bound scope
 				// - element: previous element.
 				// - index: position
-				// We are using no-proto object so that we don"t need to guard against inherited props via
+				// We are using no-proto object so that we don't need to guard against inherited props via
 				// hasOwnProperty.
 				var lastBlockMap = createMap();
 
 				// watch props
 				$scope.$watchCollection(rhs, function ngRepeatAction(collection) {
-					var index, length,
-							previousNode = $element[0], // node that cloned nodes should be inserted after
-							                            // initialized to the comment node anchor
-							nextNode,
-							// Same as lastBlockMap but it has the current state. It will become the
-							// lastBlockMap on the next iteration.
-							nextBlockMap = createMap(),
-							collectionLength,
-							key, value, // key/value of iteration
-							trackById,
-							trackByIdFn,
-							collectionKeys,
-							block,			 // last object information {scope, element, id}
-							nextBlockOrder,
-							elementsToRemove;
+					var index,
+						length,
+						previousNode = $element[0], // node that cloned nodes should be inserted after
+						                            // initialized to the comment node anchor
+						nextNode,
+						// Same as lastBlockMap but it has the current state. It will become the
+						// lastBlockMap on the next iteration.
+						nextBlockMap = createMap(),
+						collectionLength,
+						key, value, // key/value of iteration
+						trackById,
+						trackByIdFn,
+						collectionKeys,
+						block,			 // last object information {scope, element, id}
+						nextBlockOrder,
+						elementsToRemove;
 
-					if (aliasAs) {
-						$scope[aliasAs] = collection;
-					}
+					trackByIdFn = trackByIdObjFn;
 
-					if (isArrayLike(collection)) {
-						collectionKeys = collection;
-						trackByIdFn = trackByIdExpFn || trackByIdArrayFn;
-					} else {
-						trackByIdFn = trackByIdExpFn || trackByIdObjFn;
-						// if object, extract keys, in enumeration order, unsorted
-						collectionKeys = [];
-						for (var itemKey in collection) {
-							if (collection.hasOwnProperty(itemKey) && itemKey.charAt(0) !== "$") {
-								collectionKeys.push(itemKey);
-							}
+					// if object, extract keys, in enumeration order, unsorted
+					collectionKeys = [];
+					for (var itemKey in collection) {
+						if (collection.hasOwnProperty(itemKey) && itemKey.charAt(0) !== "$") {
+							collectionKeys.push(itemKey);
 						}
 					}
 
@@ -265,11 +161,9 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 							nextBlockMap[trackById] = block;
 							nextBlockOrder[index] = block;
 						} else if (nextBlockMap[trackById]) {
-							// if collision detected. restore lastBlockMap and throw an error
+							// if collision detected restore lastBlockMap and throw an error
 							angular.forEach(nextBlockOrder, restoreLastBlockMap);
-							throw ngRepeatMinErr("dupes",
-									"Duplicates in a repeater are not allowed. Use 'track by' expression to specify unique keys. Repeater: {0}, Duplicate key: {1}, Duplicate value: {2}",
-									expression, trackById, value);
+							throw ngRepeatMinErr("dupes", "Duplicates in a repeater are not allowed. Use 'track by' expression to specify unique keys. Repeater: {0}, Duplicate key: {1}, Duplicate value: {2}", expression, trackById, value);
 						} else {
 							// new never before seen block
 							nextBlockOrder[index] = { id: trackById, scope: undefined, clone: undefined };
@@ -318,7 +212,7 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 								$animate.move(getBlockNodes(block.clone), null, $(previousNode));
 							}
 							previousNode = getBlockEnd(block);
-							updateScope(block.scope, index, valueIdentifier, value, keyIdentifier, key, collectionLength, new RowController(block.scope), gridController);
+							updateScope(block.scope, index, valueIdentifier, value, collectionLength, new RowController(block.scope), gridController);
 						} else {
 							/* jshint loopfunc:true */
 							// new item which we don't know about
@@ -336,7 +230,7 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 								// by a directive with templateUrl when its template arrives.
 								block.clone = clone;
 								nextBlockMap[block.id] = block;
-								updateScope(block.scope, index, valueIdentifier, value, keyIdentifier, key, collectionLength, new RowController(block.scope), gridController);
+								updateScope(block.scope, index, valueIdentifier, value, collectionLength, new RowController(block.scope), gridController);
 							});
 							/* jshint loopfunc:false */
 						}
