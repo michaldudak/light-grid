@@ -5,11 +5,11 @@
  * @function cellDirective
  * @module lightGrid
  */
-angular.module("lightGrid").directive("lgCell", function cellDirective($compile, DEFAULT_VIEW_NAME) {
+angular.module("lightGrid").directive("lgCell", ['$compile', 'DEFAULT_VIEW_NAME', function cellDirective($compile, DEFAULT_VIEW_NAME) {
 	"use strict";
-	
+
 	var countProperties;
-	
+
 	if (typeof (Object.keys) === "function") {
 		countProperties = function (obj) {
 			return Object.keys(obj).length;
@@ -22,7 +22,7 @@ angular.module("lightGrid").directive("lgCell", function cellDirective($compile,
 					++count;
 				}
 			}
-	
+
 			return count;
 		};
 	}
@@ -48,7 +48,7 @@ angular.module("lightGrid").directive("lgCell", function cellDirective($compile,
 
 				var singleView = views[DEFAULT_VIEW_NAME];
 				var singleViewNode = angular.element("<div>").append(singleView);
-				
+
 				element.append(singleViewNode);
 				$compile(singleViewNode)(transclusionScope);
 
@@ -85,4 +85,4 @@ angular.module("lightGrid").directive("lgCell", function cellDirective($compile,
 			$compile(switchRoot)(transclusionScope);
 		}
 	};
-});
+} ]);
