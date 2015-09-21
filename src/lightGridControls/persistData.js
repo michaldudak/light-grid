@@ -1,7 +1,7 @@
 /**
  * Directive persisting data from the viewModel of the row.
  */
-angular.module("lightGridControls").directive("lgPersistData", function ($q) {
+angular.module("lightGridControls").directive("lgPersistData", ["$q", function ($q) {
 	"use strict";
 
 	return {
@@ -19,4 +19,4 @@ angular.module("lightGridControls").directive("lgPersistData", function ($q) {
 			});
 		}
 	};
-});
+} ]);

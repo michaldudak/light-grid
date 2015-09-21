@@ -1,4 +1,4 @@
-﻿angular.module("lightGrid").directive("lgRow", function rowDirective($compile) {
+﻿angular.module("lightGrid").directive("lgRow", ["$compile", function rowDirective($compile) {
 	"use strict";
 
 	var expandingRowMarkup = "<tr ng-if='expandedTemplate'><td colspan='{{visibleColumns.length}}' ng-include='expandedTemplate'></td></tr>";
@@ -169,4 +169,4 @@
 			};
 		}
 	};
-});
+} ]);
