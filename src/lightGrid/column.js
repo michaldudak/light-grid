@@ -4,7 +4,7 @@
  *  - title - {String} (interpolated) title of the column (used to render a header if header template is not specified)
  *  - visible - {Boolean} specifies if a column should be rendered
  */
-angular.module("lightGrid").directive("lgColumn", ['DEFAULT_VIEW_NAME', function (DEFAULT_VIEW_NAME) {
+angular.module("lightGrid").directive("lgColumn", ["DEFAULT_VIEW_NAME", function (DEFAULT_VIEW_NAME) {
 	"use strict";
 
 	return {

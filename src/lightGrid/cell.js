@@ -5,7 +5,7 @@
  * @function cellDirective
  * @module lightGrid
  */
-angular.module("lightGrid").directive("lgCell", ['$compile', 'DEFAULT_VIEW_NAME', function cellDirective($compile, DEFAULT_VIEW_NAME) {
+angular.module("lightGrid").directive("lgCell", ["$compile", "DEFAULT_VIEW_NAME", function cellDirective($compile, DEFAULT_VIEW_NAME) {
 	"use strict";
 
 	var countProperties;
