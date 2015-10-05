@@ -159,10 +159,16 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 	};
 
 	this.filter = function (expression) {
+		var newLimitToSettings = angular.copy(viewSettings.limitTo);
+		if (!!newLimitToSettings) {
+			newLimitToSettings.begin = 0;
+		}
+		
 		var requestSettings = {
 			filter: {
 				expression: expression
-			}
+			},
+			limitTo: newLimitToSettings
 		};
 
 		updateFilters(requestSettings);
