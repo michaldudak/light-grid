@@ -202,6 +202,19 @@ describe("Local data provider", function () {
 				expect(model[0].firstName).toBe("Frodo");
 				expect(model[1].firstName).toBe("Bilbo");
 			});
+
+			it("should remove the paging constraints", function () {
+				dataProvider.limitTo(1, 3);
+				dataProvider.filter("Frodo");
+
+				var model = dataProvider.getGridModel();
+				expect(model.length).toBe(1);
+				expect(model[0].firstName).toBe("Frodo");
+
+				var viewSettings = dataProvider.getCurrentViewSettings();
+				expect(viewSettings.limitTo.begin).toBe(0);
+				expect(viewSettings.limitTo.limit).toBe(1);
+			});
 		});
 	});
 });
