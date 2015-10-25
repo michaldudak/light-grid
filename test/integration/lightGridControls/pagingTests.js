@@ -52,6 +52,15 @@ describe("Paging", function () {
 		it("should start from the beginning of the data set", function () {
 			expect(grid.find("tr:first td").text()).toBe("Value 0");
 		});
+
+		it("should allow to choose from a default set of options (10, 25, 50)", function () {
+			var pageSizeOptions = pager.find(".page-size select option");
+
+			expect(pageSizeOptions.length).toEqual(3);
+			expect(pageSizeOptions.eq(0).attr("value")).toEqual("number:10");
+			expect(pageSizeOptions.eq(1).attr("value")).toEqual("number:25");
+			expect(pageSizeOptions.eq(2).attr("value")).toEqual("number:50");
+		});
 	});
 
 	describe("when lg-pager settings are specified", function () {
@@ -66,6 +75,15 @@ describe("Paging", function () {
 
 		it("should start from the beginning of the data set", function () {
 			expect(grid.find("tr:first td").text()).toBe("Value 0");
+		});
+
+		it("should allow to choose from a specified set of options", function () {
+			var pageSizeOptions = pager.find(".page-size select option");
+
+			expect(pageSizeOptions.length).toEqual(3);
+			expect(pageSizeOptions.eq(0).attr("value")).toEqual("number:2");
+			expect(pageSizeOptions.eq(1).attr("value")).toEqual("number:5");
+			expect(pageSizeOptions.eq(2).attr("value")).toEqual("number:8");
 		});
 	});
 
