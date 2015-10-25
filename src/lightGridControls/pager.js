@@ -16,15 +16,15 @@
 			"<div class='page-size'><select class='form-control' ng-options='size for size in pageSizes' ng-model='pageSize'></select></div>",
 		link: function pagerLink($scope) {
 			var DEFAULT_PAGE_SIZE_OPTIONS = "10,25,50";
-			
+
 			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;
 			parsePageSizeOptions();
-			
+
 			if ($scope.pageSizes.length === 0) {
 				$scope.pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS;
 				parsePageSizeOptions();
 			}
-			
+
 			function parsePageSizeOptions() {
 				$scope.pageSizes = $scope.pageSizeOptions
 					.split(",")
@@ -35,9 +35,10 @@
 						return !isNaN(pso);
 					});
 			}
-						
+
 			$scope.pageSize = $scope.pageSizes[0];
-			
+			goToPage(0);
+
 			function calculateCurrentPage(currentIndex, pageSize) {
 				return Math.floor(currentIndex / pageSize);
 			}
@@ -56,7 +57,7 @@
 					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
 					$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
 					$scope.pageSize = limitToSettings.limit;
-					
+
 					if ($scope.pageSizes.indexOf($scope.pageSize) === -1) {
 						$scope.pageSizes.push($scope.pageSize);
 						$scope.pageSizes.sort(function(a, b) {
@@ -68,8 +69,14 @@
 				$scope.isFirst = $scope.currentPage <= 0;
 				$scope.isLast = $scope.currentPage >= $scope.pageCount - 1;
 			}
-			
+
 			function goToPage(pageNumber) {
+				if (pageNumber < 0) {
+					pageNumber = 0;
+				} else if (pageNumber >= $scope.pageCount) {
+					pageNumber = $scope.pageCount - 1;
+				}
+
 				var firstIndex = $scope.pageSize * pageNumber;
 				$scope.provider.limitTo($scope.pageSize, firstIndex);
 			}
@@ -81,7 +88,7 @@
 			$scope.$watch("provider.getModelItemCount()", function () {
 				update($scope.provider.getCurrentViewSettings().limitTo);
 			});
-			
+
 			$scope.$watch("pageSize", function(value) {
 				$scope.provider.limitTo(value, 0);
 			});
