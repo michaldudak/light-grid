@@ -101,16 +101,28 @@ describe("Paging", function () {
 		});
 
 		describe("when on the last page", function () {
+			beforeEach(function () {
+				$rootScope.dataProvider.limitTo(10, 40);
+				$rootScope.$digest();
+			});
+
 			describe("and the 'next' button is clicked", function () {
 				it("should show the same page", function () {
-					$rootScope.dataProvider.limitTo(10, 40);
-					$rootScope.$digest();
-
 					pager.find(".next").click();
 					$rootScope.$digest();
 
 					expect(grid.find("tr").length).toEqual(2);
 					expect(grid.find("tr:first td").text()).toBe("Value 40");
+				});
+			});
+
+			describe("and page size is increased to 25", function () {
+				it("should reset the view to the first page and show 25 elements", function () {
+					pager.find(".page-size select").val("number:25").change();
+					$rootScope.$digest();
+
+					expect(grid.find("tr").length).toEqual(25);
+					expect(grid.find("tr:first td").text()).toBe("Value 0");
 				});
 			});
 		});
@@ -160,8 +172,17 @@ describe("Paging", function () {
 					expect(grid.find("tr:first td").text()).toBe("Value 0");
 				});
 			});
+
+			describe("and the page size is increased to 25", function () {
+				it("should display 25 elements and reset to the first page", function () {
+
+					pager.find(".page-size select").val("number:25").change();
+					$rootScope.$digest();
+
+					expect(grid.find("tr").length).toEqual(25);
+					expect(grid.find("tr:first td").text()).toBe("Value 0");
+				});
+			});
 		});
 	});
-
-	// TODO: Test changing the page size
 });
