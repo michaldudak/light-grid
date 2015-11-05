@@ -20,10 +20,9 @@ describe("Light Grid: Sorter directive tests", function () {
 	beforeEach(function () {
 		module("lightGrid");
 		module("lightGridControls");
-		module("lightGridDataProviders");
 	});
 
-	beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _lgLocalDataProviderFactory_) {
+	beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$timeout = _$timeout_;
@@ -33,7 +32,7 @@ describe("Light Grid: Sorter directive tests", function () {
 			{ firstName: "Adam", lastName: "Smith" }
 		];
 
-		$rootScope.dataProvider = _lgLocalDataProviderFactory_.create($rootScope.model);
+		$rootScope.dataProvider = {};
 	}));
 
 	it("should render the directive properly", function () {
