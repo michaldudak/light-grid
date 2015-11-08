@@ -21,8 +21,6 @@ module.exports = function (grunt) {
 					"src/lightGrid/moduleDefinition.js",
 					"src/*.js",
 					"src/lightGrid/*.js",
-					"src/lightGridTemplates/moduleDefinition.js",
-					"src/lightGridTemplates/*.js",
 					"src/lightGridDataProviders/moduleDefinition.js",
 					"src/lightGridDataProviders/*.js",
 					"src/lightGridControls/moduleDefinition.js",
