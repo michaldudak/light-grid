@@ -3,6 +3,6 @@
 *.user
 /*.suo
 /node_modules
-dist/
+dist/*.zip
 .ntvs_analysis.dat
 *.DotSettings

@@ -1,0 +1,23 @@
+{
+  "name": "light-grid",
+  "description": "Native Angular JS Grid implementation",
+  "main": "dist/light-grid.js",
+  "authors": [
+    "Michał Dudak"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "angular",
+    "grid"
+  ],
+  "homepage": "https://github.com/michaldudak/light-grid",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test",
+    "typings",
+	"config",
+	"libs"
+  ]
+}
