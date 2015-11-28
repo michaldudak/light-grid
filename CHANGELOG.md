@@ -1,5 +1,9 @@
 #Changelog
 
+##v0.3.1
+
+* Added bower.json and build artifacts
+
 ##v0.3.0
 
 ###Breaking changes
