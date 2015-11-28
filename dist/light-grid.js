@@ -1,11 +1,11 @@
 /*!
- Light Grid 0.3.0 
+ Light Grid 0.3.1 
 
- by Michał Dudak
+ by Michał Dudak (http://dudak.me)
  https://github.com/michaldudak/light-grid.git
  license: MIT
 
- build date: 2015-11-08T15:30:29.444Z
+ build date: 2015-11-28T17:22:20.828Z
 */
 
 (function (window, angular, $, undefined) {
