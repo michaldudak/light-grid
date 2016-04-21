@@ -16,7 +16,7 @@ describe("Paging", function () {
 
 	var pagerMarkup = "<lg-pager provider='dataProvider'></lg-pager>";
 
-	var pagerWithSettingsMarkup = "<lg-pager provider='dataProvider' page-size-options='2,5,8'></lg-pager>";
+	var pagerWithSettingsMarkup = "<lg-pager provider='dataProvider' page-size-options='[2,5,8]'></lg-pager>";
 
 	beforeEach(function () {
 		module("lightGridControls");

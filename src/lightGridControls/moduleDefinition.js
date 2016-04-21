@@ -1,1 +1,1 @@
-﻿angular.module("lightGridControls", ["lightGrid"]);
+angular.module("lightGridControls", ["lightGrid"]);
