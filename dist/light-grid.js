@@ -5,18 +5,10 @@
  https://github.com/michaldudak/light-grid.git
  license: MIT
 
- build date: 2015-11-28T17:22:20.828Z
+ build date: 2016-04-21T14:27:21.589Z
 */
 
 (function (window, angular, $, undefined) {
-
-if (typeof ($) === "undefined") {
-	throw new Error("Light Grid requires jQuery.");
-}
-
-if (angular.element !== $) {
-	throw new Error("jQuery must be included before Angular.");
-}
 
 angular.module("lightGrid", []).constant("DEFAULT_VIEW", "read");
 
