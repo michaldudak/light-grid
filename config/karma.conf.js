@@ -10,7 +10,7 @@ module.exports = function (config) {
 
 		reporters: ["mocha"],
 
-		browsers: ["PhantomJS", "Chrome"],
+		browsers: ["PhantomJS", "Chrome", "Firefox"],
 
 		files: [
 			"libs/jquery.js",
