@@ -13,7 +13,8 @@ angular.module("lightGridControls").directive("lgPager", function () {
 			"<button ng-disabled='isLast' class='last' ng-click='goToLast()'>Last</button>" +
 			"</div>",
 		link: function pagerLink($scope) {
-			$scope.pageSize = $scope.pageSizes[0];
+			var pageSize;
+			update($scope.provider.getCurrentViewSettings().limitTo);
 			goToPage(0);
 
 			function calculateCurrentPage(currentIndex, pageSize) {
@@ -30,17 +31,11 @@ angular.module("lightGridControls").directive("lgPager", function () {
 				if (!limitToSettings) {
 					$scope.currentPage = 0;
 					$scope.pageCount = 1;
+					pageSize = 1;
 				} else {
 					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
 					$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
-					$scope.pageSize = limitToSettings.limit;
-
-					if ($scope.pageSizes.indexOf($scope.pageSize) === -1) {
-						$scope.pageSizes.push($scope.pageSize);
-						$scope.pageSizes.sort(function(a, b) {
-							return a - b;
-						});
-					}
+					pageSize = limitToSettings.limit;
 				}
 
 				$scope.isFirst = $scope.currentPage <= 0;
@@ -54,8 +49,8 @@ angular.module("lightGridControls").directive("lgPager", function () {
 					pageNumber = $scope.pageCount - 1;
 				}
 
-				var firstIndex = $scope.pageSize * pageNumber;
-				$scope.provider.limitTo($scope.pageSize, firstIndex);
+				var firstIndex = pageSize * pageNumber;
+				$scope.provider.limitTo(pageSize, firstIndex);
 			}
 
 			$scope.$watch("provider.getCurrentViewSettings().limitTo", function (limitToSettings) {

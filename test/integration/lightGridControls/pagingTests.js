@@ -1,4 +1,4 @@
-/* global beforeEach, describe, it, expect, inject, module */
+/* global beforeEach, describe, it, expect, inject, module, it */
 
 describe("Paging", function () {
 	"use strict";
@@ -9,14 +9,16 @@ describe("Paging", function () {
 	var grid;
 	var pager;
 
+	var DEFAULT_PAGE_SIZE = 11;
+
 	var gridMarkup =
 		"<table lg-grid model='dataProvider.getGridModel()'>" +
 		"<tr lg-row><td>{{row.data.value}}</td></tr>" +
 		"</table>";
 
-	var pagerMarkup = "<lg-pager provider='dataProvider'></lg-pager>";
+	var pagerMarkup = "<lg-pager provider='dataProvider'></lg-pager><lg-page-size-options provider='dataProvider'></lg-page-size-options>";
 
-	var pagerWithSettingsMarkup = "<lg-pager provider='dataProvider' page-size-options='[2,5,8]'></lg-pager>";
+	var pagerWithSettingsMarkup = "<lg-pager provider='dataProvider'></lg-pager><lg-page-size-options options='[2,5,8]' provider='dataProvider'>";
 
 	beforeEach(function () {
 		module("lightGridControls");
@@ -34,6 +36,7 @@ describe("Paging", function () {
 		}
 
 		dataProvider = _lgLocalDataProviderFactory_.create($rootScope.model);
+		dataProvider.limitTo(DEFAULT_PAGE_SIZE, 0);
 		$rootScope.dataProvider = dataProvider;
 	}));
 
@@ -45,8 +48,8 @@ describe("Paging", function () {
 	});
 
 	describe("when lg-pager settings are not specified", function () {
-		it("should initially have the default (10) page size value", function () {
-			expect(grid.find("tr").length).toEqual(10);
+		it("should initially have the page size value specified in the data provider", function () {
+			expect(grid.find("tr").length).toEqual(DEFAULT_PAGE_SIZE);
 		});
 
 		it("should start from the beginning of the data set", function () {
@@ -56,10 +59,11 @@ describe("Paging", function () {
 		it("should allow to choose from a default set of options (10, 25, 50)", function () {
 			var pageSizeOptions = pager.find(".page-size select option");
 
-			expect(pageSizeOptions.length).toEqual(3);
+			expect(pageSizeOptions.length).toEqual(4);
 			expect(pageSizeOptions.eq(0).attr("value")).toEqual("number:10");
-			expect(pageSizeOptions.eq(1).attr("value")).toEqual("number:25");
-			expect(pageSizeOptions.eq(2).attr("value")).toEqual("number:50");
+			expect(pageSizeOptions.eq(1).attr("value")).toEqual("number:" + DEFAULT_PAGE_SIZE);
+			expect(pageSizeOptions.eq(2).attr("value")).toEqual("number:25");
+			expect(pageSizeOptions.eq(3).attr("value")).toEqual("number:50");
 		});
 	});
 
@@ -69,8 +73,8 @@ describe("Paging", function () {
 			$rootScope.$digest();
 		});
 
-		it("should initially have the first specified page size value", function () {
-			expect(grid.find("tr").length).toEqual(2);
+		it("should initially have the page size value specified in the data provider", function () {
+			expect(grid.find("tr").length).toEqual(DEFAULT_PAGE_SIZE);
 		});
 
 		it("should start from the beginning of the data set", function () {
@@ -80,10 +84,11 @@ describe("Paging", function () {
 		it("should allow to choose from a specified set of options", function () {
 			var pageSizeOptions = pager.find(".page-size select option");
 
-			expect(pageSizeOptions.length).toEqual(3);
+			expect(pageSizeOptions.length).toEqual(4);
 			expect(pageSizeOptions.eq(0).attr("value")).toEqual("number:2");
 			expect(pageSizeOptions.eq(1).attr("value")).toEqual("number:5");
 			expect(pageSizeOptions.eq(2).attr("value")).toEqual("number:8");
+			expect(pageSizeOptions.eq(3).attr("value")).toEqual("number:" + DEFAULT_PAGE_SIZE);
 		});
 	});
 
@@ -94,7 +99,7 @@ describe("Paging", function () {
 					pager.find(".previous").click();
 					$rootScope.$digest();
 
-					expect(grid.find("tr").length).toEqual(10);
+					expect(grid.find("tr").length).toEqual(DEFAULT_PAGE_SIZE);
 					expect(grid.find("tr:first td").text()).toBe("Value 0");
 				});
 			});
