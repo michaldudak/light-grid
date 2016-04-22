@@ -38,7 +38,7 @@ describe("lgPageSizeOptions directive tests", function() {
 		};
 	}));
 
-	describe("when page size not explicitly defined", function() {
+	describe("when page size is not explicitly defined", function() {
 		it("should be set to default", function() {
 			var element = $compile(markup)($rootScope);
 			$rootScope.$digest();

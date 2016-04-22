@@ -13,11 +13,11 @@ angular.module("lightGridControls").directive("lgPageSizeOptions", function ($wi
 			var DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50];
 			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;
 			$scope.pageSize = $scope.provider.getCurrentViewSettings().limitTo.limit;
-			appendPotentiallyMissingPageSizeToOptions();
+			appendPotentiallyMissingPageSizeToOptions($scope.pageSize);
 
 			$scope.pageSizeChanged = function () {
+				appendPotentiallyMissingPageSizeToOptions($scope.pageSize);
 				$scope.provider.limitTo($scope.pageSize, 0);
-				appendPotentiallyMissingPageSizeToOptions();
 			};
 
 			$scope.$watchCollection("pageSizeOptions", function validatePageSizeOptions() {
@@ -42,21 +42,21 @@ angular.module("lightGridControls").directive("lgPageSizeOptions", function ($wi
 					$scope.pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS;
 				}
 
-				appendPotentiallyMissingPageSizeToOptions();
+				appendPotentiallyMissingPageSizeToOptions($scope.pageSize);
 			});
 
-			$scope.$watch("$scope.provider.getCurrentViewSettings().limitTo.limit", function (newLimit) {
+			$scope.$watch("provider.getCurrentViewSettings().limitTo.limit", function (newLimit) {
+				appendPotentiallyMissingPageSizeToOptions(newLimit);
 				$scope.pageSize = newLimit;
-				appendPotentiallyMissingPageSizeToOptions();
 			});
 
-			function appendPotentiallyMissingPageSizeToOptions() {
-				if (!angular.isNumber($scope.pageSize)) {
+			function appendPotentiallyMissingPageSizeToOptions(value) {
+				if (!angular.isNumber(value) || value === null || !angular.isDefined(value)) {
 					return;
 				}
 
-				if ($scope.pageSizeOptions.indexOf($scope.pageSize) === -1) {
-					$scope.pageSizeOptions.push($scope.pageSize);
+				if ($scope.pageSizeOptions.indexOf(value) === -1) {
+					$scope.pageSizeOptions.push(value);
 					$scope.pageSizeOptions = $scope.pageSizeOptions.sort(function (a, b) {
 						return a - b;
 					});
