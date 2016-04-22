@@ -14,7 +14,8 @@ module.exports = function (grunt) {
 					"build date: <%= new Date().toISOString() %>\n" +
 					"*/\n\n" +
 					"(function (window, angular, $, undefined) {\n\n",
-				footer: "\n\n}(window, window.angular, window.jQuery));"
+				footer: "\n\n}(window, window.angular, window.jQuery));",
+				stripBanners: true
 			},
 			dist: {
 				src: [
