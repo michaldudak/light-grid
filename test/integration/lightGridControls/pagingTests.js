@@ -1,5 +1,3 @@
-/* global beforeEach, describe, it, expect, inject, module, it */
-
 describe("Paging", function () {
 	"use strict";
 

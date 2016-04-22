@@ -1,5 +1,3 @@
-/* global beforeEach, afterEach, describe, it, expect, inject, module */
-
 describe("Server data provider", function() {
 	"use strict";
 

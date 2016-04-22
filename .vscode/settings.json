@@ -6,5 +6,7 @@
 		"dist": true,
 		"libs": true,
 		"typings": true
-	}
+	},
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false
 }

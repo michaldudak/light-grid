@@ -1,5 +1,3 @@
-/* global beforeEach, jasmine, describe, it, expect, inject, module */
-
 describe("lgPager directive tests", function () {
 	"use strict";
 

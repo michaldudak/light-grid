@@ -1,6 +1,4 @@
-/* global beforeEach, jasmine, describe, it, expect, inject, module, fdescribe */
-
-fdescribe("lgPageSizeOptions directive tests", function() {
+describe("lgPageSizeOptions directive tests", function() {
 	"use strict";
 
 	var $compile;

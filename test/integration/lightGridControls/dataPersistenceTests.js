@@ -1,5 +1,3 @@
-/* global beforeEach, describe, it, expect, inject, module */
-
 describe("Data persistence", function () {
 	"use strict";
 

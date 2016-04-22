@@ -1,5 +1,3 @@
-/* global beforeEach, jasmine, describe, it, expect, inject, module */
-
 describe("lgPersistData directive tests", function () {
 	"use strict";
 
@@ -8,7 +6,7 @@ describe("lgPersistData directive tests", function () {
 	var $timeout;
 
 	var markup = "<button lg-persist-data provider='providerMock'></button>";
-	
+
 	beforeEach(function () {
 		module("lightGridControls");
 	});
@@ -21,7 +19,7 @@ describe("lgPersistData directive tests", function () {
 		$rootScope.providerMock = {
 			saveModel: jasmine.createSpy("acceptViewModel")
 		};
-		
+
 		$rootScope.row = {
 			viewModel: { foo: "bar" },
 			controller: {
@@ -30,26 +28,26 @@ describe("lgPersistData directive tests", function () {
 			}
 		};
 	}));
-	
+
 	describe("when clicked", function() {
 		it("should call the provider's saveModel method", function() {
 			var element = $compile(markup)($rootScope);
 			$rootScope.$digest();
-			
+
 			element.click();
 			$timeout.flush();
-			
+
 			expect($rootScope.providerMock.saveModel).toHaveBeenCalledWith($rootScope.viewData);
 		});
-		
+
 		it("should accept the view model and switch view to 'read'", function() {
 			var element = $compile(markup)($rootScope);
 			$rootScope.$digest();
-			
+
 			element.click();
 			$rootScope.$digest();
 			$timeout.flush();
-			
+
 			expect($rootScope.row.controller.acceptViewModel).toHaveBeenCalled();
 			expect($rootScope.row.controller.switchView).toHaveBeenCalledWith("read");
 		});

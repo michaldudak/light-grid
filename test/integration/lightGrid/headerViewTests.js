@@ -1,5 +1,3 @@
-/* global beforeEach, describe, it, expect, inject, module */
-
 describe("Header view", function () {
 	"use strict";
 
@@ -26,7 +24,7 @@ describe("Header view", function () {
 			{ id: "two" },
 			{ id: "three" }
 		];
-		
+
 		$rootScope.columnTitle = "ID";
 	}));
 
@@ -34,7 +32,7 @@ describe("Header view", function () {
 		it("should be rendered the same as with the title attribute on the lg-column", function() {
 			var element = $compile(grid)($rootScope);
 			$rootScope.$digest();
-			
+
 			expect(element.find("th:eq(1)").text()).toBe(element.find("th:eq(0)").text());
 		});
 	});
