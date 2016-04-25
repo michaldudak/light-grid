@@ -49,8 +49,7 @@ angular.module("lightGridControls").directive("lgPager", function () {
 					pageNumber = $scope.pageCount - 1;
 				}
 
-				var firstIndex = pageSize * pageNumber;
-				$scope.provider.limitTo(pageSize, firstIndex);
+				$scope.provider.page(pageNumber);
 			}
 
 			$scope.$watch("provider.getCurrentViewSettings().limitTo", function (limitToSettings) {

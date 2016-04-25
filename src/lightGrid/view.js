@@ -52,7 +52,7 @@ angular.module("lightGrid").directive("lgView", function ($compile) {
 				var first = $elem.first();
 				var last = $elem.last();
 
-				first.attr("ng-if-start", "displayCondition");
+				first.attr("ng-if-start", displayCondition);
 				first.attr("lg-view-initialized", "");
 				last.attr("ng-if-end", "");
 			} else {

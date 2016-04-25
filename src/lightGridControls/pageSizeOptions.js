@@ -12,12 +12,12 @@ angular.module("lightGridControls").directive("lgPageSizeOptions", function ($wi
 		link: function pageSizeOptionsLink($scope) {
 			var DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50];
 			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;
-			$scope.pageSize = $scope.provider.getCurrentViewSettings().limitTo.limit;
+			$scope.pageSize = $scope.provider.getCurrentViewSettings().limitTo && $scope.provider.getCurrentViewSettings().limitTo.limit;
 			appendPotentiallyMissingPageSizeToOptions($scope.pageSize);
 
 			$scope.pageSizeChanged = function () {
 				appendPotentiallyMissingPageSizeToOptions($scope.pageSize);
-				$scope.provider.limitTo($scope.pageSize, 0);
+				$scope.provider.setPageSize($scope.pageSize);
 			};
 
 			$scope.$watchCollection("pageSizeOptions", function validatePageSizeOptions() {

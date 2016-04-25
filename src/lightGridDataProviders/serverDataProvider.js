@@ -1,24 +1,24 @@
 function defaultSettingsSerializer(requestSettings) {
 	var queryString = [];
-	
+
 	if (requestSettings.limitTo) {
 		if (requestSettings.limitTo.limit) {
 			queryString.push("limit=" + requestSettings.limitTo.limit);
 		}
-		
+
 		if (requestSettings.limitTo.begin) {
 			queryString.push("begin=" + requestSettings.limitTo.begin);
 		}
 	}
-	
+
 	if (requestSettings.orderBy && requestSettings.orderBy.expression) {
 		queryString.push("orderBy=" + encodeURIComponent(requestSettings.orderBy.expression));
-		
+
 		if (requestSettings.orderBy.reverse) {
 			queryString.push("reverse=true");
 		}
 	}
-	
+
 	if (requestSettings.filter && requestSettings.filter.expression) {
 		var expression = requestSettings.filter.expression;
 		if (angular.isString(expression)) {
@@ -29,15 +29,15 @@ function defaultSettingsSerializer(requestSettings) {
 				if (!expression.hasOwnProperty(field)) {
 					continue;
 				}
-				
+
 				var value = expression[field];
 				searchQueryParts.push(encodeURIComponent(field) + ":" + encodeURIComponent(value));
 			}
-			
+
 			queryString.push("search=" + searchQueryParts.join(","));
 		}
 	}
-	
+
 	return queryString.join("&");
 }
 
@@ -49,37 +49,39 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 	var viewSettings = angular.copy(defaultViewSettings);
 	var viewModel = [];
 	var filteredItemCount = 0;
-	
+
+	var DEFAULT_PAGE_SIZE = 10;
+
 	// debounce data
 	var pendingRequest = null;
 	var pendingRequestSettings = null;
 	this.debounceTime = debounceTime;
 	this.settingsSerializer = defaultSettingsSerializer;
-	
+
 	var self = this;
 
 	function updateFilters(requestSettings) {
 		if (!resourceUrl) {
 			return;
 		}
-		
+
 		if (!requestSettings) {
 			requestSettings = viewSettings;
 		} else {
 			pendingRequestSettings = angular.extend({}, pendingRequestSettings, requestSettings);
 			requestSettings = angular.extend({}, viewSettings, pendingRequestSettings);
 		}
-		
+
 		var url = resourceUrl;
-		
+
 		if (!angular.isFunction(self.settingsSerializer)) {
 			self.settingsSerializer = defaultSettingsSerializer;
 		}
-		
+
 		if (!angular.isFunction(self.responseParser)) {
 			self.responseParser = defaultResponseParser;
 		}
-		
+
 		var queryString = self.settingsSerializer(requestSettings);
 		if (queryString.length > 0) {
 			if (url.indexOf("?") === -1) {
@@ -87,15 +89,15 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 			} else {
 				url += "&";
 			}
-			
+
 			url += queryString;
 		}
-		
+
 		if (pendingRequest !== null) {
 			$timeout.cancel(pendingRequest);
 			pendingRequest = null;
 		}
-		
+
 		function sendRequest() {
 			$http.get(url).success(function(response) {
 				var parsedResponse = self.responseParser(response);
@@ -104,7 +106,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 				viewSettings = requestSettings;
 			});
 		}
-		
+
 		if (self.debounceTime) {
 			pendingRequest = $timeout(function() {
 				pendingRequest = null;
@@ -145,7 +147,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 
 	this.limitTo = function (limit, begin) {
 		var requestSettings = {};
-		
+
 		if (limit === undefined || limit === null) {
 			requestSettings.limitTo = null;
 		} else {
@@ -158,12 +160,27 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		updateFilters(requestSettings);
 	};
 
+	this.page = function (pageIndex) {
+		if (!viewSettings.limitTo || !viewSettings.limitTo.limit) {
+			viewSettings.limitTo = {
+				limit: DEFAULT_PAGE_SIZE
+			};
+		}
+
+		viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
+		updateFilters();
+	};
+
+	this.setPageSize = function (pageSize) {
+		this.limitTo(pageSize, 0);
+	};
+
 	this.filter = function (expression) {
 		var newLimitToSettings = angular.copy(viewSettings.limitTo);
 		if (!!newLimitToSettings) {
 			newLimitToSettings.begin = 0;
 		}
-		
+
 		var requestSettings = {
 			filter: {
 				expression: expression
@@ -173,7 +190,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 
 		updateFilters(requestSettings);
 	};
-	
+
 	this.setViewSettings = function(requestSettings) {
 		updateFilters(requestSettings);
 	};
@@ -197,7 +214,7 @@ angular.module("lightGridDataProviders").provider("lgServerDataProviderFactory",
 		limitTo: null,
 		filter: null
 	};
-	
+
 	this.debounceTime = 150;
 
 	this.$get = function($http, $timeout) {

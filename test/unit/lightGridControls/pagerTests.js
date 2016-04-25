@@ -24,6 +24,7 @@ describe("lgPager directive tests", function () {
 
 		$rootScope.providerMock = {
 			limitTo: jasmine.createSpy("limitTo"),
+			page: jasmine.createSpy("page"),
 			getCurrentViewSettings: function() {
 				return {
 					limitTo: {
@@ -130,30 +131,30 @@ describe("lgPager directive tests", function () {
 		});
 
 		describe("First", function() {
-			it("should call the limitTo method of the provider", function() {
+			it("should call the page method of the provider", function() {
 				element.find(".first").click();
-				expect($rootScope.providerMock.limitTo).toHaveBeenCalledWith(25, 0);
+				expect($rootScope.providerMock.page).toHaveBeenCalledWith(0);
 			});
 		});
 
 		describe("Previous", function() {
-			it("should call the limitTo method of the provider", function() {
+			it("should call the page method of the provider", function() {
 				element.find(".previous").click();
-				expect($rootScope.providerMock.limitTo).toHaveBeenCalledWith(25, 25);
+				expect($rootScope.providerMock.page).toHaveBeenCalledWith(1);
 			});
 		});
 
 		describe("Next", function() {
-			it("should call the limitTo method of the provider", function() {
+			it("should call the page method of the provider", function() {
 				element.find(".next").click();
-				expect($rootScope.providerMock.limitTo).toHaveBeenCalledWith(25, 75);
+				expect($rootScope.providerMock.page).toHaveBeenCalledWith(3);
 			});
 		});
 
 		describe("Last", function() {
-			it("should call the limitTo method of the provider", function() {
+			it("should call the page method of the provider", function() {
 				element.find(".last").click();
-				expect($rootScope.providerMock.limitTo).toHaveBeenCalledWith(25, 100);
+				expect($rootScope.providerMock.page).toHaveBeenCalledWith(4);
 			});
 		});
 	});
