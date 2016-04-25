@@ -1,6 +1,4 @@
-﻿/* global beforeEach, describe, it, expect, inject, module */
-
-describe("Local data provider", function () {
+﻿describe("Local data provider", function () {
 	"use strict";
 
 	var dataProvider;

@@ -1,5 +1,3 @@
-/* global beforeEach, describe, it, expect, inject, module */
-
 describe("Sorting", function () {
 	"use strict";
 
@@ -69,7 +67,7 @@ describe("Sorting", function () {
 				$timeout.flush();
 
 				var rows = grid.find("td.first");
-				
+
 				expect(rows.eq(0).text()).toBe("Samwise");
 				expect(rows.eq(1).text()).toBe("Peregrin");
 				expect(rows.eq(2).text()).toBe("Meriadok");

@@ -1,6 +1,4 @@
-﻿/* global beforeEach, describe, it, expect, inject, module */
-
-describe("Light Grid: View modes tests", function () {
+﻿describe("Light Grid: View modes tests", function () {
 	"use strict";
 
 	var $compile;

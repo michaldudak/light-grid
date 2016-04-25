@@ -1,6 +1,4 @@
-﻿/* global beforeEach, jasmine, describe, it, expect, inject, module */
-
-describe("Light Grid: Sorter directive tests", function () {
+﻿describe("Light Grid: Sorter directive tests", function () {
 	"use strict";
 
 	var $compile;

@@ -1,1 +1,1 @@
-﻿angular.module("lightGrid", []).constant("DEFAULT_VIEW", "read");
+﻿angular.module("lightGrid", []).constant("DEFAULT_VIEW", "default");

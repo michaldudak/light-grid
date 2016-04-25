@@ -8,7 +8,6 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 	var NG_REMOVED = "$$NG_REMOVED";
 
 	var updateScope = function(scope, index, valueIdentifier, value, arrayLength, rowController, gridController) {
-		// TODO(perf): generate setters to shave off ~40ms or 1-1.5%
 		scope[valueIdentifier] = value;
 
 		scope.$index = index;
@@ -135,7 +134,7 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 						key = (collection === collectionKeys) ? index : collectionKeys[index];
 						value = collection[key];
 						trackById = trackByIdFn(key, value, index);
-						
+
 						if (lastBlockMap[trackById]) {
 							// found previously seen block
 							block = lastBlockMap[trackById];
@@ -159,7 +158,7 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 						block = lastBlockMap[blockKey];
 						elementsToRemove = getBlockNodes(block.clone);
 						$animate.leave(elementsToRemove);
-						
+
 						if (elementsToRemove[0].parentNode) {
 							// if the element was not removed yet because of pending animation, mark it as deleted
 							// so that we can ignore it later
@@ -169,7 +168,7 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 								elementsToRemove[index][NG_REMOVED] = true;
 							}
 						}
-						
+
 						block.scope.$destroy();
 					}
 					/* jshint forin:true */

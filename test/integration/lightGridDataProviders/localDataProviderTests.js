@@ -1,5 +1,3 @@
-/* global beforeEach, describe, it, expect, inject, module */
-
 describe("Local data provider integration tests", function () {
 	"use strict";
 

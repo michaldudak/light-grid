@@ -16,7 +16,9 @@ module.exports = function (config) {
 			"libs/jquery.js",
 			"libs/angular.js",
 			"libs/angular-mocks.js",
-			"dist/light-grid.js",
+			"src/**/moduleDefinition.js",
+			"src/common.js",
+			"src/**/*.js",
 			"test/unit/**/*.js",
 			"test/integration/**/*.js"
 		]

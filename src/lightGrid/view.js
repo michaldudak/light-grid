@@ -4,21 +4,10 @@
 angular.module("lightGrid").directive("lgView", function ($compile) {
 	"use strict";
 
-	function isInitialized(element) {
-		if (element.length > 1) {
-			return angular.isDefined(element.first().attr("lg-view-initialized"));
-		} else {
-			return angular.isDefined(element.attr("lg-view-initialized"));
-		}
-	}
-
 	return {
-		multiElement: true,
-		link: function lgViewLink($scope, $elem, $attrs) {
-			if (isInitialized($elem)) {
-				return;
-			}
-
+		transclude: "element",
+		priority: 600, // as ngIf
+		link: function lgViewLink($scope, $elem, $attrs, ctrl, $transclude) {
 			var viewNameExpression = $attrs.lgView || $attrs.view;
 			var viewNames;
 
@@ -48,19 +37,25 @@ angular.module("lightGrid").directive("lgView", function ($compile) {
 				}).join(" || ");
 			}
 
-			if ($elem.length > 1) {
-				var first = $elem.first();
-				var last = $elem.last();
+			var placeholder = $compile.$$createComment("lgView");
+			$elem.after(placeholder);
 
-				first.attr("ng-if-start", "displayCondition");
-				first.attr("lg-view-initialized", "");
-				last.attr("ng-if-end", "");
-			} else {
-				$elem.attr("lg-view-initialized", "");
-				$elem.attr("ng-if", displayCondition);
-			}
+			var showing = false;
+			var content = null;
 
-			$compile($elem)($scope);
+			$scope.$watch(displayCondition, function lgViewWatchAction(shouldShow) {
+				if (shouldShow && !showing) {
+					$transclude(function (clone) {
+						angular.element(placeholder).before(clone);
+						content = clone;
+					});
+					showing = true;
+				} else if (!shouldShow && showing) {
+					content.remove();
+					content = null;
+					showing = false;
+				}
+			});
 		}
 	};
 });

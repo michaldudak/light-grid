@@ -1,10 +1,9 @@
-﻿angular.module("lightGridControls").directive("lgPager", function () {
+angular.module("lightGridControls").directive("lgPager", function () {
 	"use strict";
 
 	return {
 		scope: {
-			provider: "=",
-			pageSizeOptions: "@"
+			provider: "="
 		},
 		template: "<div class='pager'>" +
 			"<button ng-disabled='isFirst' class='first' ng-click='goToFirst()'>Last</button>" +
@@ -12,31 +11,10 @@
 			"<span class='pager-summary'>Page {{currentPage + 1}} of {{pageCount}}</span>" +
 			"<button ng-disabled='isLast' class='next' ng-click='goToNext()'>Next</button>" +
 			"<button ng-disabled='isLast' class='last' ng-click='goToLast()'>Last</button>" +
-			"</div>" +
-			"<div class='page-size'><select class='form-control' ng-options='size for size in pageSizes' ng-model='pageSize'></select></div>",
+			"</div>",
 		link: function pagerLink($scope) {
-			var DEFAULT_PAGE_SIZE_OPTIONS = "10,25,50";
-
-			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;
-			parsePageSizeOptions();
-
-			if ($scope.pageSizes.length === 0) {
-				$scope.pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS;
-				parsePageSizeOptions();
-			}
-
-			function parsePageSizeOptions() {
-				$scope.pageSizes = $scope.pageSizeOptions
-					.split(",")
-					.map(function(pso) {
-						return parseInt(pso, 10);
-					})
-					.filter(function(pso) {
-						return !isNaN(pso);
-					});
-			}
-
-			$scope.pageSize = $scope.pageSizes[0];
+			var pageSize;
+			update($scope.provider.getCurrentViewSettings().limitTo);
 			goToPage(0);
 
 			function calculateCurrentPage(currentIndex, pageSize) {
@@ -53,17 +31,11 @@
 				if (!limitToSettings) {
 					$scope.currentPage = 0;
 					$scope.pageCount = 1;
+					pageSize = 1;
 				} else {
 					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
 					$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
-					$scope.pageSize = limitToSettings.limit;
-
-					if ($scope.pageSizes.indexOf($scope.pageSize) === -1) {
-						$scope.pageSizes.push($scope.pageSize);
-						$scope.pageSizes.sort(function(a, b) {
-							return a - b;
-						});
-					}
+					pageSize = limitToSettings.limit;
 				}
 
 				$scope.isFirst = $scope.currentPage <= 0;
@@ -77,8 +49,7 @@
 					pageNumber = $scope.pageCount - 1;
 				}
 
-				var firstIndex = $scope.pageSize * pageNumber;
-				$scope.provider.limitTo($scope.pageSize, firstIndex);
+				$scope.provider.page(pageNumber);
 			}
 
 			$scope.$watch("provider.getCurrentViewSettings().limitTo", function (limitToSettings) {
@@ -87,10 +58,6 @@
 
 			$scope.$watch("provider.getModelItemCount()", function () {
 				update($scope.provider.getCurrentViewSettings().limitTo);
-			});
-
-			$scope.$watch("pageSize", function(value) {
-				$scope.provider.limitTo(value, 0);
 			});
 
 			$scope.goToFirst = function () {

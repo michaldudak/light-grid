@@ -1,6 +1,4 @@
-﻿/* global beforeEach, describe, it, expect, inject, module */
-
-describe("Expandable row", function () {
+﻿describe("Expandable row", function () {
 	"use strict";
 
 	var $compile;
@@ -106,7 +104,7 @@ describe("Expandable row", function () {
 			var button = element.find("button").eq(0);
 			button.click();
 			$timeout.flush();
-			
+
 			button.click();
 			$timeout.flush();
 

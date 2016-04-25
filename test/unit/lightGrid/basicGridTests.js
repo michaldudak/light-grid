@@ -1,5 +1,3 @@
-/* global beforeEach, describe, it, expect, inject, module */
-
 describe("Grid directive tests:", function () {
 	"use strict";
 

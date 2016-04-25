@@ -5,6 +5,8 @@
 	var filteredItemCount;
 	var originalModel = model;
 
+	var DEFAULT_PAGE_SIZE = 10;
+
 	function updateFilters() {
 		viewModel = originalModel;
 
@@ -23,11 +25,9 @@
 				if (viewSettings.limitTo.begin >= filteredItemCount) {
 					viewSettings.limitTo.begin = 0;
 				}
-
-				viewModel = viewModel.slice(viewSettings.limitTo.begin, viewModel.length);
 			}
 
-			viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit);
+			viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit, viewSettings.limitTo.begin);
 		}
 	}
 
@@ -74,11 +74,18 @@
 	};
 
 	this.page = function (pageIndex) {
-		if (viewSettings.limitTo && viewSettings.limitTo.limit) {
-			viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
+		if (!viewSettings.limitTo || !viewSettings.limitTo.limit) {
+			viewSettings.limitTo = {
+				limit: DEFAULT_PAGE_SIZE
+			};
 		}
 
+		viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
 		updateFilters();
+	};
+
+	this.setPageSize = function (pageSize) {
+		this.limitTo(pageSize, 0);
 	};
 
 	this.filter = function (expression, comparator) {

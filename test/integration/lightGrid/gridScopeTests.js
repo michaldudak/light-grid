@@ -1,5 +1,3 @@
-/* global beforeEach, describe, it, expect, inject, module */
-
 describe("Grid scope tests", function () {
 	"use strict";
 
@@ -37,9 +35,9 @@ describe("Grid scope tests", function () {
 			{ id: "two" }
 		];
 	}));
-	
+
 	var element;
-		
+
 	beforeEach(function () {
 		element = $compile(grid)($rootScope);
 		$rootScope.$digest();
@@ -50,22 +48,22 @@ describe("Grid scope tests", function () {
 			expect(element.find("tr:eq(1) .simpleColumn").text().trim()).toEqual($rootScope.rowValue);
 			expect(element.find("tr:eq(2) .simpleColumn").text().trim()).toEqual($rootScope.rowValue);
 		});
-		
+
 		it("should resolve the reference from a header of a column", function() {
 			expect(element.find("tr:eq(0) th:first").text().trim()).toEqual($rootScope.titleValue);
 		});
-		
+
 		it("should resolve the reference from a column with a view", function() {
 			expect(element.find("tr:eq(1) .columnWithView").text().trim()).toEqual($rootScope.rowValue);
 			expect(element.find("tr:eq(2) .columnWithView").text().trim()).toEqual($rootScope.rowValue);
 		});
 	});
-	
+
 	describe("when the grid templates contain references to the grid scope", function() {
 		it("should resolve the reference from a header of a column", function() {
 			expect(element.find("tr:eq(0) th:last").text().trim()).toEqual("2");
 		});
-		
+
 		it("should resolve the reference from a column", function() {
 			expect(element.find("tr:eq(1) .gridScopeRef").text().trim()).toEqual("2");
 			expect(element.find("tr:eq(2) .gridScopeRef").text().trim()).toEqual("2");
