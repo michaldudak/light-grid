@@ -3,6 +3,7 @@ describe("View modes with paging", function () {
 
 	var $compile;
 	var $rootScope;
+	var $timeout;
 	var dataProvider;
 	var grid;
 	var pager;
@@ -13,7 +14,7 @@ describe("View modes with paging", function () {
 		<table lg-grid model='dataProvider.getGridModel()'> \
 			<tr lg-row> \
 				<td> \
-					<lg-view>Default view: {{ row.data.value }}</lg-view> \
+					<lg-view view='default'>Default view: {{ row.data.value }}</lg-view> \
 					<lg-view view='alternate'>Alternate view: {{ row.data.value }}</lg-view> \
 					<lg-view view='editable'><input ng-model='row.viewData.value' /></lg-view> \
 				</td> \
@@ -33,9 +34,10 @@ describe("View modes with paging", function () {
 		module("lightGridControls");
 	});
 
-	beforeEach(inject(function (_$compile_, _$rootScope_, _lgLocalDataProviderFactory_) {
+	beforeEach(inject(function (_$compile_, _$rootScope_, _$timeout_, _lgLocalDataProviderFactory_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
+		$timeout = _$timeout_;
 
 		$rootScope.model = [];
 
@@ -53,14 +55,35 @@ describe("View modes with paging", function () {
 	}));
 
 	describe("when page is changed to the second one", function () {
-		describe("and view is left at default", function () {
-			xit("should show the second page of data", function () {
-				// issue related to https://github.com/angular/angular.js/issues/14506
-				pager.find(".next").click();
-				$rootScope.$digest();
+		beforeEach(function () {
+			pager.find(".next").click();
+			$rootScope.$digest();
+		});
 
+		describe("and view is left at default", function () {
+			it("should show the second page of data", function () {
 				expect(grid.find("tr").length).toEqual(PAGE_SIZE);
 				expect(grid.find("tr:eq(0) td:eq(0)").text().trim()).toEqual("Default view: Value 10");
+			});
+		});
+
+		describe("and view is changed to alternate", function () {
+			beforeEach(function () {
+				grid.find("tr:eq(0) .vw-alternate").click();
+				$rootScope.$digest();
+				$timeout.flush();
+			});
+
+			it("should show the alternate view content", function () {
+				expect(grid.find("tr:eq(0) td:eq(0)").text().trim()).toEqual("Alternate view: Value 10");
+			});
+
+			describe("and page is changed to the next one", function () {
+				it("the first row should switch back to default view", function () {
+					pager.find(".next").click();
+					$rootScope.$digest();
+					expect(grid.find("tr:eq(0) td:eq(0)").text().trim()).toEqual("Default view: Value 20");
+				});
 			});
 		});
 	});
