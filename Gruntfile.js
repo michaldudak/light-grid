@@ -13,8 +13,8 @@ module.exports = function (grunt) {
 					"license: <%= pkg.license %>\n\n " +
 					"build date: <%= new Date().toISOString() %>\n" +
 					"*/\n\n" +
-					"(function (window, angular, $, undefined) {\n\n",
-				footer: "\n\n}(window, window.angular, window.jQuery));",
+					"(function (window, angular) {\n\n",
+				footer: "\n\n}(window, window.angular));",
 				stripBanners: true
 			},
 			dist: {
