@@ -6,12 +6,14 @@ This release has been tested with Angular 1.5.5.
 ###Breaking changes
 * Extracted `lgPageSizeOptions` directive from `lgPager`
 * `lgView` cannot span across multiple elements anymore
+* Changed the default view name from "read" to "default"
 
 ###New features
 * Removed jQuery dependency
 
 ###Bug fixes
 * Rewritten lgView to work with Angular 1.5
+* View model is regenerated every time a view is changed
 
 ##v0.3.1
 

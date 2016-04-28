@@ -1,7 +1,7 @@
 ﻿/**
  * Defines a view in the column template
  */
-angular.module("lightGrid").directive("lgView", function ($compile) {
+angular.module("lightGrid").directive("lgView", function () {
 	"use strict";
 
 	return {
@@ -37,7 +37,7 @@ angular.module("lightGrid").directive("lgView", function ($compile) {
 				}).join(" || ");
 			}
 
-			var placeholder = $compile.$$createComment("lgView");
+			var placeholder = document.createComment("lgView");
 			$elem.after(placeholder);
 
 			var showing = false;

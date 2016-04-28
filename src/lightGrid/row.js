@@ -47,6 +47,7 @@ angular.module("lightGrid").directive("lgRow", function rowDirective($parse, $an
 
 		this.switchView = function (view) {
 			$scope.row.view = view;
+			$scope.row.viewModel = angular.copy($scope.row.data);
 		};
 
 		this.acceptViewModel = function () {
