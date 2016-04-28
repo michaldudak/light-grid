@@ -1,7 +1,7 @@
 /**
  * Directive persisting data from the viewModel of the row.
  */
-angular.module("lightGridControls").directive("lgPersistData", function ($q) {
+angular.module("lightGridControls").directive("lgPersistData", function ($q, DEFAULT_VIEW) {
 	"use strict";
 
 	return {
@@ -10,12 +10,12 @@ angular.module("lightGridControls").directive("lgPersistData", function ($q) {
 			$elem.on("click", function () {
 				var dataProvider = $scope.$eval($params.provider);
 				var rowController = $scope.row.controller;
-				
+
 				$q.when(dataProvider.saveModel($scope.viewData))
 					.then(function () {
 						if (rowController) {
 							rowController.acceptViewModel();
-							rowController.switchView("read");
+							rowController.switchView(DEFAULT_VIEW);
 						}
 					});
 			});

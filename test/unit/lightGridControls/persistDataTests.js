@@ -40,7 +40,7 @@ describe("lgPersistData directive tests", function () {
 			expect($rootScope.providerMock.saveModel).toHaveBeenCalledWith($rootScope.viewData);
 		});
 
-		it("should accept the view model and switch view to 'read'", function() {
+		it("should accept the view model and switch view to the default one ('default')", function() {
 			var element = $compile(markup)($rootScope);
 			$rootScope.$digest();
 
@@ -49,7 +49,7 @@ describe("lgPersistData directive tests", function () {
 			$timeout.flush();
 
 			expect($rootScope.row.controller.acceptViewModel).toHaveBeenCalled();
-			expect($rootScope.row.controller.switchView).toHaveBeenCalledWith("read");
+			expect($rootScope.row.controller.switchView).toHaveBeenCalledWith("default");
 		});
 	});
 });
