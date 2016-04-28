@@ -1,5 +1,18 @@
 #Changelog
 
+##v0.4.0
+This release has been tested with Angular 1.5.5.
+
+###Breaking changes
+* Extracted `lgPageSizeOptions` directive from `lgPager`
+* `lgView` cannot span across multiple elements anymore
+
+###New features
+* Removed jQuery dependency
+
+###Bug fixes
+* Rewritten lgView to work with Angular 1.5
+
 ##v0.3.1
 
 * Added bower.json and build artifacts
