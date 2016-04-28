@@ -8,5 +8,11 @@
 		"dist": true,
 		"libs": true,
 		"typings": true
+	},
+	"files.exclude": {
+		"**/.git": true,
+		"**/.DS_Store": true,
+		"node_modules": true,
+		"typings": true
 	}
 }
