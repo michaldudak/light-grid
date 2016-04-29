@@ -14,8 +14,15 @@ angular.module("lightGridControls").directive("lgPager", function () {
 			"</div>",
 		link: function pagerLink($scope) {
 			var pageSize;
-			update($scope.provider.getCurrentViewSettings().limitTo);
-			goToPage(0);
+
+			$scope.$watch("provider", function (newProvider) {
+				if (!newProvider) {
+					return;
+				}
+
+				update(newProvider.getCurrentViewSettings().limitTo);
+				goToPage(0);
+			});
 
 			function calculateCurrentPage(currentIndex, pageSize) {
 				return Math.floor(currentIndex / pageSize);
