@@ -20,14 +20,20 @@
 
 		filteredItemCount = viewModel.length;
 
-		if (viewSettings.limitTo && viewSettings.limitTo.limit !== 0) {
-			if (viewSettings.limitTo.begin) {
-				if (viewSettings.limitTo.begin >= filteredItemCount) {
-					viewSettings.limitTo.begin = 0;
-				}
+		if (viewSettings.limitTo) {
+			if (viewSettings.limitTo.begin < 0) {
+				viewSettings.limitTo.begin = 0;
 			}
 
-			viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit, viewSettings.limitTo.begin);
+			if (viewSettings.limitTo.limit !== 0) {
+				if (viewSettings.limitTo.begin) {
+					if (viewSettings.limitTo.begin >= filteredItemCount) {
+						viewSettings.limitTo.begin = 0;
+					}
+				}
+
+				viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit, viewSettings.limitTo.begin);
+			}
 		}
 	}
 
@@ -49,6 +55,7 @@
 	};
 
 	this.saveModel = function () {
+		updateFilters();
 	};
 
 	this.orderBy = function (expression, reverse) {
@@ -99,6 +106,10 @@
 
 	this.reset = function () {
 		viewSettings = angular.copy(defaultViewSettings);
+		updateFilters();
+	};
+
+	this.refresh = function () {
 		updateFilters();
 	};
 

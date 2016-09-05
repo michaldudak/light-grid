@@ -24,7 +24,11 @@ angular.module("lightGridControls").directive("lgPager", function () {
 				goToPage(0);
 			});
 
-			function calculateCurrentPage(currentIndex, pageSize) {
+			function calculateCurrentPage(currentIndex, pageSize, totalItemCount) {
+				if (totalItemCount === 0) {
+					return -1;
+				}
+
 				return Math.floor(currentIndex / pageSize);
 			}
 
@@ -40,7 +44,7 @@ angular.module("lightGridControls").directive("lgPager", function () {
 					$scope.pageCount = 1;
 					pageSize = 1;
 				} else {
-					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
+					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit, totalItemCount);
 					$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
 					pageSize = limitToSettings.limit;
 				}

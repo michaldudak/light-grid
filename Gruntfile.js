@@ -51,6 +51,9 @@ module.exports = function (grunt) {
 			},
 			singleRun: {
 			},
+			debug: {
+				singleRun: false
+			},
 			continuous: {
 				singleRun: false,
 				background: true
