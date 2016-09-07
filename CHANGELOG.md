@@ -1,27 +1,28 @@
-#Changelog
+# Changelog
 
-##v0.4.0
+## v0.4.0 RC1
 This release has been tested with Angular 1.5.5.
 
-###Breaking changes
+### Breaking changes
 * Extracted `lgPageSizeOptions` directive from `lgPager`
 * `lgView` cannot span across multiple elements anymore
 * Changed the default view name from "read" to "default"
 
-###New features
+### New features
 * Removed jQuery dependency
+* ServerDataProvider methods return promises
 
-###Bug fixes
+### Bug fixes
 * Rewritten lgView to work with Angular 1.5
 * View model is regenerated every time a view is changed
 
-##v0.3.1
+## v0.3.1
 
 * Added bower.json and build artifacts
 
-##v0.3.0
+## v0.3.0
 
-###Breaking changes
+### Breaking changes
 * Removed the `lgColumn`, `lgColumnTemplates` and `lgHeaderView` directives
 * Added the `lgRow` directive instead
 * Restricted the `lgGrid` directive to an attribute
@@ -29,7 +30,7 @@ This release has been tested with Angular 1.5.5.
   `data`, `controller`, `view` and `viewModel` fields
 * Removed the `lgSortableColumn`, `lgEditableColumn` and `lgBoundColumn` template directives
 
-###New features
+### New features
 * ng-repeat - like properties ($index, $odd, $even, etc.) now available in row scope
 * `lgView` now can span across multiple elements (with `ng-view-start` and `ng-view-end`)
 * Added a `grid` object to grid and row scopes containing `data` and `controller` fields
@@ -37,15 +38,15 @@ This release has been tested with Angular 1.5.5.
 
 Thanks to these changes, it was possible to reduce the size of the script significantly (from 15 kB to 12 kB minified).
 
-##v0.2.0
+## v0.2.0
 
-###Breaking changes
+### Breaking changes
 * Renamed the `lightGrid` directive to `lgGrid`
 * Renamed the `persistData` directive to `lgPersistData`
 * Renamed the `switchView` directive to `lgSwitchView`
 * Restricted `lgPersistData`, `lgToggleExpandedRow` and `lgSwitchView` directives to attributes
 
-###New features
+### New features
 * Added the `ServerDataProvider`
 * Added the page size chooser to `lgPager`
 * Updated Angular JS version to 1.4.1 in tests
@@ -53,10 +54,10 @@ Thanks to these changes, it was possible to reduce the size of the script signif
 
 Also added several unit tests and refactored the internals of the grid.
 
-##v0.1.0
+## v0.1.0
 The first public release of Light Grid.
 
-###Features
+### Features
 * custom cell templates
 * paging
 * sorting
