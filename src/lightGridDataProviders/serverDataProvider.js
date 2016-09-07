@@ -45,7 +45,7 @@ function defaultResponseParser(serverResponse) {
 	return serverResponse;
 }
 
-function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, debounceTime) {
+function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSettings, debounceTime) {
 	var viewSettings = angular.copy(defaultViewSettings);
 	var viewModel = [];
 	var filteredItemCount = 0;
@@ -57,6 +57,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 	var pendingRequestSettings = null;
 	var isRequestPending = false;
 	var isFirstRequestComplete = false;
+	var pendingRequestDeferred = null;
 
 	this.debounceTime = debounceTime;
 	this.settingsSerializer = defaultSettingsSerializer;
@@ -65,7 +66,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 
 	function updateFilters(requestSettings) {
 		if (!resourceUrl) {
-			return;
+			throw new Error("resourceUrl was not set");
 		}
 
 		if (!requestSettings) {
@@ -99,7 +100,21 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		if (pendingRequest !== null) {
 			$timeout.cancel(pendingRequest);
 			pendingRequest = null;
+		} else {
+			pendingRequestDeferred = $q.defer();
 		}
+
+		if (self.debounceTime) {
+			pendingRequest = $timeout(function() {
+				pendingRequest = null;
+				pendingRequestSettings = null;
+				sendRequest();
+			}, self.debounceTime);
+		} else {
+			sendRequest();
+		}
+
+		return pendingRequestDeferred.promise;
 
 		function sendRequest() {
 			isRequestPending = true;
@@ -112,21 +127,13 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 				viewSettings = requestSettings;
 				isRequestPending = false;
 				isFirstRequestComplete = true;
+				pendingRequestDeferred.resolve(response);
 			}
 
-			function errorCallback() {
+			function errorCallback(response) {
 				isRequestPending = false;
+				pendingRequestDeferred.reject(response);
 			}
-		}
-
-		if (self.debounceTime) {
-			pendingRequest = $timeout(function() {
-				pendingRequest = null;
-				pendingRequestSettings = null;
-				sendRequest();
-			}, self.debounceTime);
-		} else {
-			sendRequest();
 		}
 	}
 
@@ -166,7 +173,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 			}
 		};
 
-		updateFilters(requestSettings);
+		return updateFilters(requestSettings);
 	};
 
 	this.limitTo = function (limit, begin) {
@@ -181,7 +188,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 			};
 		}
 
-		updateFilters(requestSettings);
+		return updateFilters(requestSettings);
 	};
 
 	this.page = function (pageIndex) {
@@ -192,11 +199,11 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		}
 
 		viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
-		updateFilters();
+		return updateFilters();
 	};
 
 	this.setPageSize = function (pageSize) {
-		this.limitTo(pageSize, 0);
+		return this.limitTo(pageSize, 0);
 	};
 
 	this.filter = function (expression) {
@@ -212,20 +219,20 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 			requestSettings.limitTo = newLimitToSettings;
 		}
 
-		updateFilters(requestSettings);
+		return updateFilters(requestSettings);
 	};
 
 	this.setViewSettings = function(requestSettings) {
-		updateFilters(requestSettings);
+		return updateFilters(requestSettings);
 	};
 
 	this.refresh = function () {
-		updateFilters();
+		return updateFilters();
 	};
 
 	this.reset = function () {
 		viewSettings = angular.copy(defaultViewSettings);
-		updateFilters();
+		return updateFilters();
 	};
 }
 
@@ -241,10 +248,10 @@ angular.module("lightGridDataProviders").provider("lgServerDataProviderFactory",
 
 	this.debounceTime = 150;
 
-	this.$get = function($http, $timeout) {
+	this.$get = function($http, $timeout, $q) {
 		return {
 			create: function(resourceUrl) {
-				return new ServerDataProvider(resourceUrl, $http, $timeout, self.defaultViewSettings, self.debounceTime);
+				return new ServerDataProvider(resourceUrl, $http, $timeout, $q, self.defaultViewSettings, self.debounceTime);
 			}
 		};
 	};

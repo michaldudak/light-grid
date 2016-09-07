@@ -71,6 +71,22 @@ describe("Server data provider", function() {
 				$httpBackend.flush();
 			});
 
+			it("should return a promise and resolve it when the response is received", function() {
+				$httpBackend.whenGET(testResourceUrl + "?limit=15").respond(responseStub);
+				var promiseWasResolved = false;
+				var promise = dataProvider.limitTo(15);
+				promise.then(function () {
+					promiseWasResolved = true;
+				});
+
+				expect(promiseWasResolved).toBe(false);
+
+				$timeout.flush();
+				$httpBackend.flush();
+
+				expect(promiseWasResolved).toBe(true);
+			});
+
 			it("should persist the settings after the response is received", function() {
 				$httpBackend.whenGET(testResourceUrl + "?limit=15").respond(responseStub);
 				dataProvider.limitTo(15);
@@ -291,11 +307,25 @@ describe("Server data provider", function() {
 				expect(viewSettings.filter.expression).toBe("foo");
 				expect(viewSettings.orderBy.expression).toBe("id");
 			});
+
+			it("should return different promises for both calls", function () {
+				$httpBackend.whenGET(testResourceUrl + "?search=foo").respond(responseStub);
+				$httpBackend.whenGET(testResourceUrl + "?orderBy=id&search=foo").respond(responseStub);
+
+				var request1promise = dataProvider.filter("foo");
+				$timeout.flush();
+				$httpBackend.flush();
+
+				var request2promise = dataProvider.orderBy("id");
+				$timeout.flush();
+				$httpBackend.flush();
+
+				expect(request1promise).not.toBe(request2promise);
+			});
 		});
 
 		describe("if placed within the debounce threshold", function() {
 			it("should merge them and call the server just once", function() {
-
 				$httpBackend.expectGET(testResourceUrl + "?orderBy=id&search=foo").respond(responseStub);
 				dataProvider.debounceTime = 500;
 				dataProvider.filter("foo");
@@ -303,6 +333,18 @@ describe("Server data provider", function() {
 
 				$timeout.flush();
 				$httpBackend.flush();
+			});
+
+			it("should return the same promise for both calls", function() {
+				$httpBackend.whenGET(testResourceUrl + "?orderBy=id&search=foo").respond(responseStub);
+				dataProvider.debounceTime = 500;
+				var request1promise = dataProvider.filter("foo");
+				var request2promise = dataProvider.orderBy("id");
+
+				$timeout.flush();
+				$httpBackend.flush();
+
+				expect(request1promise).toBe(request2promise);
 			});
 		});
 	});
