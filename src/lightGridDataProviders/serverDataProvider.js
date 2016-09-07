@@ -55,6 +55,9 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 	// debounce data
 	var pendingRequest = null;
 	var pendingRequestSettings = null;
+	var isRequestPending = false;
+	var isFirstRequestComplete = false;
+
 	this.debounceTime = debounceTime;
 	this.settingsSerializer = defaultSettingsSerializer;
 
@@ -99,12 +102,21 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		}
 
 		function sendRequest() {
-			$http.get(url).success(function(response) {
-				var parsedResponse = self.responseParser(response);
+			isRequestPending = true;
+			$http.get(url).then(successCallback, errorCallback);
+
+			function successCallback(response) {
+				var parsedResponse = self.responseParser(response.data);
 				viewModel = parsedResponse.data;
 				filteredItemCount = parsedResponse.totalResults;
 				viewSettings = requestSettings;
-			});
+				isRequestPending = false;
+				isFirstRequestComplete = true;
+			}
+
+			function errorCallback() {
+				isRequestPending = false;
+			}
 		}
 
 		if (self.debounceTime) {
@@ -118,7 +130,19 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 		}
 	}
 
-	this.getGridModel = function() {
+	this.isRequestPending = function () {
+		return isRequestPending;
+	};
+
+	this.hasResults = function () {
+		return viewModel && viewModel.length > 0;
+	};
+
+	this.hasNoResults = function () {
+		return viewModel &&	viewModel.length === 0 && !this.isRequestPending() && isFirstRequestComplete;
+	};
+
+	this.getGridModel = function () {
 		return viewModel;
 	};
 
@@ -176,17 +200,17 @@ function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, d
 	};
 
 	this.filter = function (expression) {
-		var newLimitToSettings = angular.copy(viewSettings.limitTo);
-		if (!!newLimitToSettings) {
-			newLimitToSettings.begin = 0;
-		}
-
 		var requestSettings = {
 			filter: {
 				expression: expression
-			},
-			limitTo: newLimitToSettings
+			}
 		};
+
+		var newLimitToSettings = angular.copy(viewSettings.limitTo);
+		if (!!newLimitToSettings) {
+			newLimitToSettings.begin = 0;
+			requestSettings.limitTo = newLimitToSettings;
+		}
 
 		updateFilters(requestSettings);
 	};
