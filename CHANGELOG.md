@@ -11,6 +11,7 @@ This release has been tested with Angular 1.5.5.
 ### New features
 * Removed jQuery dependency
 * ServerDataProvider methods return promises
+* Added success and error handlers to ServerDataProvider
 
 ### Bug fixes
 * Rewritten lgView to work with Angular 1.5

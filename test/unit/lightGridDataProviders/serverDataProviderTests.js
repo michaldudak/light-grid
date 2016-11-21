@@ -407,4 +407,52 @@ describe("Server data provider", function() {
 			});
 		});
 	});
+
+	describe("custom success handler", function () {
+		describe("when provided", function () {
+			it("should execute the handler with the server's response", function () {
+				$httpBackend.whenGET(testResourceUrl).respond(200, "Response text");
+
+				var customSuccessHandler = function (response) {
+					expect(response.status).toEqual(200);
+					expect(response.data).toEqual("Response text");
+
+					response.data = {
+						data: [response.data],
+						totalResults: 1
+					};
+
+					return response;
+				};
+
+				dataProvider.successHandler = customSuccessHandler;
+				dataProvider.refresh();
+
+				$timeout.flush();
+				$httpBackend.flush();
+
+				expect(dataProvider.getGridModel()).toEqual(["Response text"]);
+				expect(dataProvider.getModelItemCount()).toEqual(1);
+			});
+		});
+	});
+
+	describe("custom error handler", function () {
+		describe("when provided", function () {
+			it("should execute the handler with the server's response", function () {
+				$httpBackend.whenGET(testResourceUrl).respond(500, "Error text");
+
+				var customErrorHandler = function (response) {
+					expect(response.status).toEqual(500);
+					expect(response.data).toEqual("Error text");
+				};
+
+				dataProvider.errorHandler = customErrorHandler;
+				dataProvider.refresh();
+
+				$timeout.flush();
+				$httpBackend.flush();
+			});
+		});
+	});
 });

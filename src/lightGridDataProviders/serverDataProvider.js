@@ -45,6 +45,14 @@ function defaultResponseParser(serverResponse) {
 	return serverResponse;
 }
 
+function defaultSuccessHandler(serverResponse) {
+	return serverResponse;
+}
+
+function defaultErrorHandler() {
+	return;
+}
+
 function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSettings, debounceTime) {
 	var viewSettings = angular.copy(defaultViewSettings);
 	var viewModel = [];
@@ -64,6 +72,24 @@ function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSetting
 
 	var self = this;
 
+	function ensureHandlerFunctionsDefined() {
+		if (!angular.isFunction(self.settingsSerializer)) {
+			self.settingsSerializer = defaultSettingsSerializer;
+		}
+
+		if (!angular.isFunction(self.responseParser)) {
+			self.responseParser = defaultResponseParser;
+		}
+
+		if (!angular.isFunction(self.errorHandler)) {
+			self.errorHandler = defaultErrorHandler;
+		}
+
+		if (!angular.isFunction(self.successHandler)) {
+			self.successHandler = defaultSuccessHandler;
+		}
+	}
+
 	function updateFilters(requestSettings) {
 		if (!resourceUrl) {
 			throw new Error("resourceUrl was not set");
@@ -78,13 +104,7 @@ function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSetting
 
 		var url = resourceUrl;
 
-		if (!angular.isFunction(self.settingsSerializer)) {
-			self.settingsSerializer = defaultSettingsSerializer;
-		}
-
-		if (!angular.isFunction(self.responseParser)) {
-			self.responseParser = defaultResponseParser;
-		}
+		ensureHandlerFunctionsDefined();
 
 		var queryString = self.settingsSerializer(requestSettings);
 		if (queryString.length > 0) {
@@ -121,17 +141,23 @@ function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSetting
 			$http.get(url).then(successCallback, errorCallback);
 
 			function successCallback(response) {
-				var parsedResponse = self.responseParser(response.data);
+				var transformedResponse = self.successHandler(response);
+				if (!transformedResponse) {
+					throw new Error("successCallback did not return any value. Did you forget to return the modified value?");
+				}
+
+				var parsedResponse = self.responseParser(transformedResponse.data);
 				viewModel = parsedResponse.data;
 				filteredItemCount = parsedResponse.totalResults;
 				viewSettings = requestSettings;
 				isRequestPending = false;
 				isFirstRequestComplete = true;
-				pendingRequestDeferred.resolve(response);
+				pendingRequestDeferred.resolve(transformedResponse);
 			}
 
 			function errorCallback(response) {
 				isRequestPending = false;
+				self.errorHandler(response);
 				pendingRequestDeferred.reject(response);
 			}
 		}
