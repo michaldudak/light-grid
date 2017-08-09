@@ -1,19 +1,30 @@
 /*!
- Light Grid 0.4.0-wip 
+ Light Grid 0.3.2 
 
  by Michał Dudak (http://dudak.me)
  https://github.com/michaldudak/light-grid.git
  license: MIT
 
- build date: 2017-08-09T18:46:54.800Z
+<<<<<<< HEAD
+ build date: 2016-04-21T14:27:21.589Z
+||||||| merged common ancestors
+ build date: 2015-11-28T17:22:20.828Z
+=======
+ build date: 2017-08-09T18:35:58.780Z
+>>>>>>> master
 */
 
-(function (window, angular) {
+(function (window, angular, $, undefined) {
 
-angular.module("lightGrid", []).constant("DEFAULT_VIEW", "default");
+angular.module("lightGrid", []).constant("DEFAULT_VIEW", "read");
 
+
+/* exported getBlockNodes */
 
 function getBlockNodes(nodes) {
+	// TODO(perf): just check if all items in `nodes` are siblings and if they are return the original
+	// collection, otherwise update the original collection.
+
 	var node = nodes[0];
 	var endNode = nodes[nodes.length - 1];
 	var blockNodes = [node];
@@ -29,6 +40,12 @@ function getBlockNodes(nodes) {
 	return angular.element(blockNodes);
 }
 
+/**
+ * The root grid directive.
+ * Parameters:
+ *  - model - {Array} (interpolated) data model displayed on the grid (optional).
+ *  - initial-view - {String} Name of the initial view mode of all rows in the grid.
+ */
 angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 	"use strict";
 
@@ -74,6 +91,8 @@ angular.module("lightGrid").directive("lgGrid", function gridDirective() {
 });
 
 
+/* global getBlockNodes */
+
 angular.module("lightGrid").directive("lgRow", ["$parse", "$animate", "DEFAULT_VIEW", function rowDirective($parse, $animate, DEFAULT_VIEW) {
 	"use strict";
 
@@ -82,6 +101,7 @@ angular.module("lightGrid").directive("lgRow", ["$parse", "$animate", "DEFAULT_V
 	var NG_REMOVED = "$$NG_REMOVED";
 
 	var updateScope = function(scope, index, valueIdentifier, value, arrayLength, rowController, gridController) {
+		// TODO(perf): generate setters to shave off ~40ms or 1-1.5%
 		scope[valueIdentifier] = value;
 
 		scope.$index = index;
@@ -121,7 +141,6 @@ angular.module("lightGrid").directive("lgRow", ["$parse", "$animate", "DEFAULT_V
 
 		this.switchView = function (view) {
 			$scope.row.view = view;
-			$scope.row.viewModel = angular.copy($scope.row.data);
 		};
 
 		this.acceptViewModel = function () {
@@ -209,7 +228,7 @@ angular.module("lightGrid").directive("lgRow", ["$parse", "$animate", "DEFAULT_V
 						key = (collection === collectionKeys) ? index : collectionKeys[index];
 						value = collection[key];
 						trackById = trackByIdFn(key, value, index);
-
+						
 						if (lastBlockMap[trackById]) {
 							// found previously seen block
 							block = lastBlockMap[trackById];
@@ -233,7 +252,7 @@ angular.module("lightGrid").directive("lgRow", ["$parse", "$animate", "DEFAULT_V
 						block = lastBlockMap[blockKey];
 						elementsToRemove = getBlockNodes(block.clone);
 						$animate.leave(elementsToRemove);
-
+						
 						if (elementsToRemove[0].parentNode) {
 							// if the element was not removed yet because of pending animation, mark it as deleted
 							// so that we can ignore it later
@@ -243,7 +262,7 @@ angular.module("lightGrid").directive("lgRow", ["$parse", "$animate", "DEFAULT_V
 								elementsToRemove[index][NG_REMOVED] = true;
 							}
 						}
-
+						
 						block.scope.$destroy();
 					}
 					/* jshint forin:true */
@@ -301,13 +320,27 @@ angular.module("lightGrid").directive("lgRow", ["$parse", "$animate", "DEFAULT_V
 }]);
 
 
-angular.module("lightGrid").directive("lgView", function () {
+/**
+ * Defines a view in the column template
+ */
+angular.module("lightGrid").directive("lgView", ["$compile", function ($compile) {
 	"use strict";
 
+	function isInitialized(element) {
+		if (element.length > 1) {
+			return angular.isDefined(element.first().attr("lg-view-initialized"));
+		} else {
+			return angular.isDefined(element.attr("lg-view-initialized"));
+		}
+	}
+
 	return {
-		transclude: "element",
-		priority: 600, // as ngIf
-		link: function lgViewLink($scope, $elem, $attrs, ctrl, $transclude) {
+		multiElement: true,
+		link: function lgViewLink($scope, $elem, $attrs) {
+			if (isInitialized($elem)) {
+				return;
+			}
+
 			var viewNameExpression = $attrs.lgView || $attrs.view;
 			var viewNames;
 
@@ -337,28 +370,22 @@ angular.module("lightGrid").directive("lgView", function () {
 				}).join(" || ");
 			}
 
-			var placeholder = document.createComment("lgView");
-			$elem.after(placeholder);
+			if ($elem.length > 1) {
+				var first = $elem.first();
+				var last = $elem.last();
 
-			var showing = false;
-			var content = null;
+				first.attr("ng-if-start", "displayCondition");
+				first.attr("lg-view-initialized", "");
+				last.attr("ng-if-end", "");
+			} else {
+				$elem.attr("lg-view-initialized", "");
+				$elem.attr("ng-if", displayCondition);
+			}
 
-			$scope.$watch(displayCondition, function lgViewWatchAction(shouldShow) {
-				if (shouldShow && !showing) {
-					$transclude(function (clone) {
-						angular.element(placeholder).before(clone);
-						content = clone;
-					});
-					showing = true;
-				} else if (!shouldShow && showing) {
-					content.remove();
-					content = null;
-					showing = false;
-				}
-			});
+			$compile($elem)($scope);
 		}
 	};
-});
+}]);
 
 
 angular.module("lightGridDataProviders", ["lightGrid"]);
@@ -370,8 +397,6 @@ function LocalDataProvider(model, filterFilter, orderByFilter, limitToFilter, de
 	var viewModel;
 	var filteredItemCount;
 	var originalModel = model;
-
-	var DEFAULT_PAGE_SIZE = 10;
 
 	function updateFilters() {
 		viewModel = originalModel;
@@ -386,20 +411,16 @@ function LocalDataProvider(model, filterFilter, orderByFilter, limitToFilter, de
 
 		filteredItemCount = viewModel.length;
 
-		if (viewSettings.limitTo) {
-			if (viewSettings.limitTo.begin < 0) {
-				viewSettings.limitTo.begin = 0;
-			}
-
-			if (viewSettings.limitTo.limit !== 0) {
-				if (viewSettings.limitTo.begin) {
-					if (viewSettings.limitTo.begin >= filteredItemCount) {
-						viewSettings.limitTo.begin = 0;
-					}
+		if (viewSettings.limitTo && viewSettings.limitTo.limit !== 0) {
+			if (viewSettings.limitTo.begin) {
+				if (viewSettings.limitTo.begin >= filteredItemCount) {
+					viewSettings.limitTo.begin = 0;
 				}
 
-				viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit, viewSettings.limitTo.begin);
+				viewModel = viewModel.slice(viewSettings.limitTo.begin, viewModel.length);
 			}
+
+			viewModel = limitToFilter(viewModel, viewSettings.limitTo.limit);
 		}
 	}
 
@@ -421,7 +442,6 @@ function LocalDataProvider(model, filterFilter, orderByFilter, limitToFilter, de
 	};
 
 	this.saveModel = function () {
-		updateFilters();
 	};
 
 	this.orderBy = function (expression, reverse) {
@@ -447,18 +467,11 @@ function LocalDataProvider(model, filterFilter, orderByFilter, limitToFilter, de
 	};
 
 	this.page = function (pageIndex) {
-		if (!viewSettings.limitTo || !viewSettings.limitTo.limit) {
-			viewSettings.limitTo = {
-				limit: DEFAULT_PAGE_SIZE
-			};
+		if (viewSettings.limitTo && viewSettings.limitTo.limit) {
+			viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
 		}
 
-		viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
 		updateFilters();
-	};
-
-	this.setPageSize = function (pageSize) {
-		this.limitTo(pageSize, 0);
 	};
 
 	this.filter = function (expression, comparator) {
@@ -472,10 +485,6 @@ function LocalDataProvider(model, filterFilter, orderByFilter, limitToFilter, de
 
 	this.reset = function () {
 		viewSettings = angular.copy(defaultViewSettings);
-		updateFilters();
-	};
-
-	this.refresh = function () {
 		updateFilters();
 	};
 
@@ -501,27 +510,28 @@ angular.module("lightGridDataProviders").provider("lgLocalDataProviderFactory", 
 	}];
 });
 
+
 function defaultSettingsSerializer(requestSettings) {
 	var queryString = [];
-
+	
 	if (requestSettings.limitTo) {
 		if (requestSettings.limitTo.limit) {
 			queryString.push("limit=" + requestSettings.limitTo.limit);
 		}
-
+		
 		if (requestSettings.limitTo.begin) {
 			queryString.push("begin=" + requestSettings.limitTo.begin);
 		}
 	}
-
+	
 	if (requestSettings.orderBy && requestSettings.orderBy.expression) {
 		queryString.push("orderBy=" + encodeURIComponent(requestSettings.orderBy.expression));
-
+		
 		if (requestSettings.orderBy.reverse) {
 			queryString.push("reverse=true");
 		}
 	}
-
+	
 	if (requestSettings.filter && requestSettings.filter.expression) {
 		var expression = requestSettings.filter.expression;
 		if (angular.isString(expression)) {
@@ -532,15 +542,15 @@ function defaultSettingsSerializer(requestSettings) {
 				if (!expression.hasOwnProperty(field)) {
 					continue;
 				}
-
+				
 				var value = expression[field];
 				searchQueryParts.push(encodeURIComponent(field) + ":" + encodeURIComponent(value));
 			}
-
+			
 			queryString.push("search=" + searchQueryParts.join(","));
 		}
 	}
-
+	
 	return queryString.join("&");
 }
 
@@ -548,67 +558,41 @@ function defaultResponseParser(serverResponse) {
 	return serverResponse;
 }
 
-function defaultSuccessHandler(serverResponse) {
-	return serverResponse;
-}
-
-function defaultErrorHandler() {
-	return;
-}
-
-function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSettings, debounceTime) {
+function ServerDataProvider(resourceUrl, $http, $timeout, defaultViewSettings, debounceTime) {
 	var viewSettings = angular.copy(defaultViewSettings);
 	var viewModel = [];
 	var filteredItemCount = 0;
-
-	var DEFAULT_PAGE_SIZE = 10;
-
+	
 	// debounce data
 	var pendingRequest = null;
 	var pendingRequestSettings = null;
-	var isRequestPending = false;
-	var isFirstRequestComplete = false;
-	var pendingRequestDeferred = null;
-
 	this.debounceTime = debounceTime;
 	this.settingsSerializer = defaultSettingsSerializer;
-
+	
 	var self = this;
-
-	function ensureHandlerFunctionsDefined() {
-		if (!angular.isFunction(self.settingsSerializer)) {
-			self.settingsSerializer = defaultSettingsSerializer;
-		}
-
-		if (!angular.isFunction(self.responseParser)) {
-			self.responseParser = defaultResponseParser;
-		}
-
-		if (!angular.isFunction(self.errorHandler)) {
-			self.errorHandler = defaultErrorHandler;
-		}
-
-		if (!angular.isFunction(self.successHandler)) {
-			self.successHandler = defaultSuccessHandler;
-		}
-	}
 
 	function updateFilters(requestSettings) {
 		if (!resourceUrl) {
-			throw new Error("resourceUrl was not set");
+			return;
 		}
-
+		
 		if (!requestSettings) {
 			requestSettings = viewSettings;
 		} else {
 			pendingRequestSettings = angular.extend({}, pendingRequestSettings, requestSettings);
 			requestSettings = angular.extend({}, viewSettings, pendingRequestSettings);
 		}
-
+		
 		var url = resourceUrl;
-
-		ensureHandlerFunctionsDefined();
-
+		
+		if (!angular.isFunction(self.settingsSerializer)) {
+			self.settingsSerializer = defaultSettingsSerializer;
+		}
+		
+		if (!angular.isFunction(self.responseParser)) {
+			self.responseParser = defaultResponseParser;
+		}
+		
 		var queryString = self.settingsSerializer(requestSettings);
 		if (queryString.length > 0) {
 			if (url.indexOf("?") === -1) {
@@ -616,17 +600,24 @@ function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSetting
 			} else {
 				url += "&";
 			}
-
+			
 			url += queryString;
 		}
-
+		
 		if (pendingRequest !== null) {
 			$timeout.cancel(pendingRequest);
 			pendingRequest = null;
-		} else {
-			pendingRequestDeferred = $q.defer();
 		}
-
+		
+		function sendRequest() {
+			$http.get(url).success(function(response) {
+				var parsedResponse = self.responseParser(response);
+				viewModel = parsedResponse.data;
+				filteredItemCount = parsedResponse.totalResults;
+				viewSettings = requestSettings;
+			});
+		}
+		
 		if (self.debounceTime) {
 			pendingRequest = $timeout(function() {
 				pendingRequest = null;
@@ -636,49 +627,9 @@ function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSetting
 		} else {
 			sendRequest();
 		}
-
-		return pendingRequestDeferred.promise;
-
-		function sendRequest() {
-			isRequestPending = true;
-			$http.get(url).then(successCallback, errorCallback);
-
-			function successCallback(response) {
-				var transformedResponse = self.successHandler(response);
-				if (!transformedResponse) {
-					throw new Error("successCallback did not return any value. Did you forget to return the modified value?");
-				}
-
-				var parsedResponse = self.responseParser(transformedResponse.data);
-				viewModel = parsedResponse.data;
-				filteredItemCount = parsedResponse.totalResults;
-				viewSettings = requestSettings;
-				isRequestPending = false;
-				isFirstRequestComplete = true;
-				pendingRequestDeferred.resolve(transformedResponse);
-			}
-
-			function errorCallback(response) {
-				isRequestPending = false;
-				self.errorHandler(response);
-				pendingRequestDeferred.reject(response);
-			}
-		}
 	}
 
-	this.isRequestPending = function () {
-		return isRequestPending;
-	};
-
-	this.hasResults = function () {
-		return viewModel && viewModel.length > 0;
-	};
-
-	this.hasNoResults = function () {
-		return viewModel &&	viewModel.length === 0 && !this.isRequestPending() && isFirstRequestComplete;
-	};
-
-	this.getGridModel = function () {
+	this.getGridModel = function() {
 		return viewModel;
 	};
 
@@ -702,12 +653,12 @@ function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSetting
 			}
 		};
 
-		return updateFilters(requestSettings);
+		updateFilters(requestSettings);
 	};
 
 	this.limitTo = function (limit, begin) {
 		var requestSettings = {};
-
+		
 		if (limit === undefined || limit === null) {
 			requestSettings.limitTo = null;
 		} else {
@@ -717,51 +668,36 @@ function ServerDataProvider(resourceUrl, $http, $timeout, $q, defaultViewSetting
 			};
 		}
 
-		return updateFilters(requestSettings);
-	};
-
-	this.page = function (pageIndex) {
-		if (!viewSettings.limitTo || !viewSettings.limitTo.limit) {
-			viewSettings.limitTo = {
-				limit: DEFAULT_PAGE_SIZE
-			};
-		}
-
-		viewSettings.limitTo.begin = viewSettings.limitTo.limit * pageIndex;
-		return updateFilters();
-	};
-
-	this.setPageSize = function (pageSize) {
-		return this.limitTo(pageSize, 0);
+		updateFilters(requestSettings);
 	};
 
 	this.filter = function (expression) {
-		var requestSettings = {
-			filter: {
-				expression: expression
-			}
-		};
-
 		var newLimitToSettings = angular.copy(viewSettings.limitTo);
 		if (!!newLimitToSettings) {
 			newLimitToSettings.begin = 0;
-			requestSettings.limitTo = newLimitToSettings;
 		}
+		
+		var requestSettings = {
+			filter: {
+				expression: expression
+			},
+			limitTo: newLimitToSettings
+		};
 
-		return updateFilters(requestSettings);
+		updateFilters(requestSettings);
 	};
-
+	
 	this.setViewSettings = function(requestSettings) {
-		return updateFilters(requestSettings);
+		updateFilters(requestSettings);
 	};
 
 	this.refresh = function () {
-		return updateFilters();
+		updateFilters();
 	};
 
 	this.reset = function () {
 		viewSettings = angular.copy(defaultViewSettings);
-		return updateFilters();
+		updateFilters();
 	};
 }
 
@@ -774,13 +710,13 @@ angular.module("lightGridDataProviders").provider("lgServerDataProviderFactory",
 		limitTo: null,
 		filter: null
 	};
-
+	
 	this.debounceTime = 150;
 
-	this.$get = ["$http", "$timeout", "$q", function($http, $timeout, $q) {
+	this.$get = ["$http", "$timeout", function($http, $timeout) {
 		return {
 			create: function(resourceUrl) {
-				return new ServerDataProvider(resourceUrl, $http, $timeout, $q, self.defaultViewSettings, self.debounceTime);
+				return new ServerDataProvider(resourceUrl, $http, $timeout, self.defaultViewSettings, self.debounceTime);
 			}
 		};
 	}];
@@ -789,6 +725,8 @@ angular.module("lightGridDataProviders").provider("lgServerDataProviderFactory",
 
 angular.module("lightGridControls", ["lightGrid"]);
 
+
+/* global getBlockNodes */
 
 angular.module("lightGridControls").directive("lgExpandedRow", ["$animate", function ($animate) {
 	"use strict";
@@ -853,7 +791,8 @@ angular.module("lightGridControls").directive("lgPager", function () {
 
 	return {
 		scope: {
-			provider: "="
+			provider: "=",
+			pageSizeOptions: "@"
 		},
 		template: "<div class='pager'>" +
 			"<button ng-disabled='isFirst' class='first' ng-click='goToFirst()'>First</button>" +
@@ -861,24 +800,34 @@ angular.module("lightGridControls").directive("lgPager", function () {
 			"<span class='pager-summary'>Page {{currentPage + 1}} of {{pageCount}}</span>" +
 			"<button ng-disabled='isLast' class='next' ng-click='goToNext()'>Next</button>" +
 			"<button ng-disabled='isLast' class='last' ng-click='goToLast()'>Last</button>" +
-			"</div>",
+			"</div>" +
+			"<div class='page-size'><select class='form-control' ng-options='size for size in pageSizes' ng-model='pageSize'></select></div>",
 		link: function pagerLink($scope) {
-			var pageSize;
+			var DEFAULT_PAGE_SIZE_OPTIONS = "10,25,50";
 
-			$scope.$watch("provider", function (newProvider) {
-				if (!newProvider) {
-					return;
-				}
+			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;
+			parsePageSizeOptions();
 
-				update(newProvider.getCurrentViewSettings().limitTo);
-				goToPage(0);
-			});
+			if ($scope.pageSizes.length === 0) {
+				$scope.pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS;
+				parsePageSizeOptions();
+			}
 
-			function calculateCurrentPage(currentIndex, pageSize, totalItemCount) {
-				if (totalItemCount === 0) {
-					return -1;
-				}
+			function parsePageSizeOptions() {
+				$scope.pageSizes = $scope.pageSizeOptions
+					.split(",")
+					.map(function(pso) {
+						return parseInt(pso, 10);
+					})
+					.filter(function(pso) {
+						return !isNaN(pso);
+					});
+			}
 
+			$scope.pageSize = $scope.pageSizes[0];
+			goToPage(0);
+
+			function calculateCurrentPage(currentIndex, pageSize) {
 				return Math.floor(currentIndex / pageSize);
 			}
 
@@ -892,11 +841,17 @@ angular.module("lightGridControls").directive("lgPager", function () {
 				if (!limitToSettings) {
 					$scope.currentPage = 0;
 					$scope.pageCount = 1;
-					pageSize = 1;
 				} else {
-					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit, totalItemCount);
+					$scope.currentPage = calculateCurrentPage(limitToSettings.begin, limitToSettings.limit);
 					$scope.pageCount = calculatePageCount(limitToSettings.limit, totalItemCount);
-					pageSize = limitToSettings.limit;
+					$scope.pageSize = limitToSettings.limit;
+
+					if ($scope.pageSizes.indexOf($scope.pageSize) === -1) {
+						$scope.pageSizes.push($scope.pageSize);
+						$scope.pageSizes.sort(function(a, b) {
+							return a - b;
+						});
+					}
 				}
 
 				$scope.isFirst = $scope.currentPage <= 0;
@@ -910,7 +865,8 @@ angular.module("lightGridControls").directive("lgPager", function () {
 					pageNumber = $scope.pageCount - 1;
 				}
 
-				$scope.provider.page(pageNumber);
+				var firstIndex = $scope.pageSize * pageNumber;
+				$scope.provider.limitTo($scope.pageSize, firstIndex);
 			}
 
 			$scope.$watch("provider.getCurrentViewSettings().limitTo", function (limitToSettings) {
@@ -919,6 +875,10 @@ angular.module("lightGridControls").directive("lgPager", function () {
 
 			$scope.$watch("provider.getModelItemCount()", function () {
 				update($scope.provider.getCurrentViewSettings().limitTo);
+			});
+
+			$scope.$watch("pageSize", function(value) {
+				$scope.provider.limitTo(value, 0);
 			});
 
 			$scope.goToFirst = function () {
@@ -941,82 +901,10 @@ angular.module("lightGridControls").directive("lgPager", function () {
 });
 
 
-angular.module("lightGridControls").directive("lgPageSizeOptions", ["$window", function ($window) {
-	"use strict";
-
-	return {
-		scope: {
-			provider: "=",
-			pageSizeOptions: "=?options"
-		},
-		template: "<div class='page-size'>" +
-			"<select class='form-control' ng-options='size for size in pageSizeOptions' ng-model='pageSize' ng-change='pageSizeChanged()'></select>" +
-			"</div>",
-		link: function pageSizeOptionsLink($scope) {
-			var DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50];
-			$scope.pageSizeOptions = $scope.pageSizeOptions || DEFAULT_PAGE_SIZE_OPTIONS;
-
-			$scope.$watch("provider", function (newProvider) {
-				if (!newProvider) {
-					return;
-				}
-
-				$scope.pageSize = newProvider.getCurrentViewSettings().limitTo && newProvider.getCurrentViewSettings().limitTo.limit;
-				appendPotentiallyMissingPageSizeToOptions($scope.pageSize);
-			});
-
-			$scope.pageSizeChanged = function () {
-				appendPotentiallyMissingPageSizeToOptions($scope.pageSize);
-				$scope.provider.setPageSize($scope.pageSize);
-			};
-
-			$scope.$watchCollection("pageSizeOptions", function validatePageSizeOptions() {
-				var valid = true;
-
-				if (!angular.isArray($scope.pageSizeOptions)) {
-					valid = false;
-				}
-
-				if (valid && $scope.pageSizeOptions.length <= 0) {
-					valid = false;
-				}
-
-				if (valid && !$scope.pageSizeOptions.every(function (item) {
-					return angular.isNumber(item);
-				})) {
-					valid = false;
-				}
-
-				if (!valid) {
-					$window.console.warn("Page size options are incorrect, using default values", $scope.pageSizeOptions);
-					$scope.pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS;
-				}
-
-				appendPotentiallyMissingPageSizeToOptions($scope.pageSize);
-			});
-
-			$scope.$watch("provider.getCurrentViewSettings().limitTo.limit", function (newLimit) {
-				appendPotentiallyMissingPageSizeToOptions(newLimit);
-				$scope.pageSize = newLimit;
-			});
-
-			function appendPotentiallyMissingPageSizeToOptions(value) {
-				if (!angular.isNumber(value) || value === null || !angular.isDefined(value)) {
-					return;
-				}
-
-				if ($scope.pageSizeOptions.indexOf(value) === -1) {
-					$scope.pageSizeOptions.push(value);
-					$scope.pageSizeOptions = $scope.pageSizeOptions.sort(function (a, b) {
-						return a - b;
-					});
-				}
-			}
-		}
-	};
-}]);
-
-angular.module("lightGridControls").directive("lgPersistData", ["$q", "DEFAULT_VIEW", function ($q, DEFAULT_VIEW) {
+/**
+ * Directive persisting data from the viewModel of the row.
+ */
+angular.module("lightGridControls").directive("lgPersistData", ["$q", function ($q) {
 	"use strict";
 
 	return {
@@ -1025,12 +913,12 @@ angular.module("lightGridControls").directive("lgPersistData", ["$q", "DEFAULT_V
 			$elem.on("click", function () {
 				var dataProvider = $scope.$eval($params.provider);
 				var rowController = $scope.row.controller;
-
+				
 				$q.when(dataProvider.saveModel($scope.viewData))
 					.then(function () {
 						if (rowController) {
 							rowController.acceptViewModel();
-							rowController.switchView(DEFAULT_VIEW);
+							rowController.switchView("read");
 						}
 					});
 			});
@@ -1039,6 +927,10 @@ angular.module("lightGridControls").directive("lgPersistData", ["$q", "DEFAULT_V
 }]);
 
 
+/**
+ * Enables sorting data by a column specified by the sort-property attribute
+ * This directive is meant to be used in header template.
+ */
 angular.module("lightGridControls").directive("lgSorter", ["$timeout", function ($timeout) {
 	"use strict";
 
@@ -1046,36 +938,37 @@ angular.module("lightGridControls").directive("lgSorter", ["$timeout", function 
 		template: "<span class='sorter {{ cssClass }}'><span ng-transclude class='columnTitle'></span></span>",
 		transclude: true,
 		replace: true,
-		scope: {
-			dataProvider: "=provider"
-		},
-		link: function sorterLink($scope, $elem, $attrs) {
-			var sortProperty = $attrs.sortProperty || $attrs.lgSorter;
+		scope: true,
+		link: function sorterLink(scope, elem, attrs) {
+			var sortProperty = attrs.sortProperty || attrs.lgSorter;
+			var dataProvider = scope.$eval(attrs.provider);
+
+			scope.dataProvider = dataProvider;
 
 			function updateCssClass() {
-				if (!$scope.isSorted) {
-					$scope.cssClass = "";
+				if (!scope.isSorted) {
+					scope.cssClass = "";
 				} else {
-					$scope.cssClass = $scope.sortDirectionDescending ? "sorter-desc" : "sorter-asc";
+					scope.cssClass = scope.sortDirectionDescending ? "sorter-desc" : "sorter-asc";
 				}
 			}
 
-			$scope.isSorted = false;
-			$scope.sortDirectionDescending = true;
+			scope.isSorted = false;
+			scope.sortDirectionDescending = true;
 
-			$elem.on("click", function () {
+			elem.on("click", function () {
 				$timeout(function () {
-					$scope.dataProvider.orderBy(sortProperty, !$scope.sortDirectionDescending);
+					dataProvider.orderBy(sortProperty, !scope.sortDirectionDescending);
 				});
 			});
 
-			$scope.$watch("dataProvider.getCurrentViewSettings().orderBy", function (sortSettings) {
+			scope.$watch("dataProvider.getCurrentViewSettings().orderBy", function (sortSettings) {
 				if (!sortSettings) {
-					$scope.isSorted = false;
-					$scope.sortDirectionDescending = true;
+					scope.isSorted = false;
+					scope.sortDirectionDescending = true;
 				} else {
-					$scope.isSorted = sortProperty === sortSettings.expression;
-					$scope.sortDirectionDescending = $scope.isSorted ? sortSettings.reverse : true;
+					scope.isSorted = sortProperty === sortSettings.expression;
+					scope.sortDirectionDescending = scope.isSorted ? sortSettings.reverse : true;
 				}
 
 				updateCssClass();
@@ -1085,6 +978,10 @@ angular.module("lightGridControls").directive("lgSorter", ["$timeout", function 
 }]);
 
 
+/**
+ * Allows to change a view mode of the row.
+ * Can only be used as an attribute. Its value specifies name of the target view mode.
+ */
 angular.module("lightGridControls").directive("lgSwitchView", ["$timeout", function ($timeout) {
 	"use strict";
 
@@ -1103,6 +1000,11 @@ angular.module("lightGridControls").directive("lgSwitchView", ["$timeout", funct
 }]);
 
 
+/**
+ * Opens or closes the expanded view of the row.
+ * This can be only used as an attribute. Its value specifies the name of the template
+ * used as an expanded row content.
+ */
 angular.module("lightGridControls").directive("lgToggleExpandedRow", ["$timeout", function ($timeout) {
 	"use strict";
 
@@ -1120,4 +1022,4 @@ angular.module("lightGridControls").directive("lgToggleExpandedRow", ["$timeout"
 	};
 }]);
 
-}(window, window.angular));
+}(window, window.angular, window.jQuery));

@@ -17,6 +17,10 @@ This release has been tested with Angular 1.5.5.
 * Rewritten lgView to work with Angular 1.5
 * View model is regenerated every time a view is changed
 
+## v0.3.2
+
+* Fixed improper label in pager
+
 ## v0.3.1
 
 * Added bower.json and build artifacts
