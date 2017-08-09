@@ -1,11 +1,11 @@
 /*!
- Light Grid 0.4.0-wip 
+ Light Grid 1.0.0-rc1 
 
  by Michał Dudak (http://dudak.me)
  https://github.com/michaldudak/light-grid.git
  license: MIT
 
- build date: 2017-08-09T18:46:54.800Z
+ build date: 2017-08-09T20:06:53.781Z
 */
 
 (function (window, angular) {
@@ -346,7 +346,8 @@ angular.module("lightGrid").directive("lgView", function () {
 			$scope.$watch(displayCondition, function lgViewWatchAction(shouldShow) {
 				if (shouldShow && !showing) {
 					$transclude(function (clone) {
-						angular.element(placeholder).before(clone);
+						var $placeholder = angular.element(placeholder);
+						$placeholder.parent()[0].insertBefore(clone[0], $placeholder[0]);
 						content = clone;
 					});
 					showing = true;

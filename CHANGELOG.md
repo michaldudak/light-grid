@@ -1,7 +1,7 @@
 # Changelog
 
-## v0.4.0 RC1
-This release has been tested with Angular 1.5.5.
+## v1.0.0 RC1
+This release has been tested with Angular 1.6.5.
 
 ### Breaking changes
 * Extracted `lgPageSizeOptions` directive from `lgPager`
@@ -14,7 +14,7 @@ This release has been tested with Angular 1.5.5.
 * Added success and error handlers to ServerDataProvider
 
 ### Bug fixes
-* Rewritten lgView to work with Angular 1.5
+* Rewritten lgView to work with Angular 1.5 and 1.6
 * View model is regenerated every time a view is changed
 
 ## v0.3.2

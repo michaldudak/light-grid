@@ -46,7 +46,8 @@ angular.module("lightGrid").directive("lgView", function () {
 			$scope.$watch(displayCondition, function lgViewWatchAction(shouldShow) {
 				if (shouldShow && !showing) {
 					$transclude(function (clone) {
-						angular.element(placeholder).before(clone);
+						var $placeholder = angular.element(placeholder);
+						$placeholder.parent()[0].insertBefore(clone[0], $placeholder[0]);
 						content = clone;
 					});
 					showing = true;
