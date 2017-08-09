@@ -1,5 +1,9 @@
 #Changelog
 
+##v0.3.2
+
+* Fixed improper label in pager
+
 ##v0.3.1
 
 * Added bower.json and build artifacts

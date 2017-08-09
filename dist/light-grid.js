@@ -1,11 +1,11 @@
 /*!
- Light Grid 0.3.1 
+ Light Grid 0.3.2 
 
  by Michał Dudak (http://dudak.me)
  https://github.com/michaldudak/light-grid.git
  license: MIT
 
- build date: 2015-11-28T17:22:20.828Z
+ build date: 2017-08-09T18:35:58.780Z
 */
 
 (function (window, angular, $, undefined) {
@@ -797,7 +797,7 @@ angular.module("lightGridControls").directive("lgPager", function () {
 			pageSizeOptions: "@"
 		},
 		template: "<div class='pager'>" +
-			"<button ng-disabled='isFirst' class='first' ng-click='goToFirst()'>Last</button>" +
+			"<button ng-disabled='isFirst' class='first' ng-click='goToFirst()'>First</button>" +
 			"<button ng-disabled='isFirst' class='previous' ng-click='goToPrevious()'>Previous</button>" +
 			"<span class='pager-summary'>Page {{currentPage + 1}} of {{pageCount}}</span>" +
 			"<button ng-disabled='isLast' class='next' ng-click='goToNext()'>Next</button>" +
