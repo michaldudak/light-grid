@@ -22,12 +22,9 @@ describe("Server data provider", function() {
 		dataProvider = providerFactory.create(testResourceUrl);
 	}));
 
-	afterEach(function(done) {
-		setTimeout(function () {
-			$httpBackend.verifyNoOutstandingExpectation();
-			$httpBackend.verifyNoOutstandingRequest();
-			done();
-		}, 0);
+	afterEach(function() {
+		$httpBackend.verifyNoOutstandingExpectation();
+		$httpBackend.verifyNoOutstandingRequest();
 	});
 
 	describe("when viewSettings are set to their defaults", function() {

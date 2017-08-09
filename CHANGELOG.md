@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.0 RC2
+
+This release fixes a problem in ServerDataProvider unit tests.
+
 ## v1.0.0 RC1
 This release has been tested with Angular 1.6.5.
 

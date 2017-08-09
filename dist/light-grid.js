@@ -5,7 +5,7 @@
  https://github.com/michaldudak/light-grid.git
  license: MIT
 
- build date: 2017-08-09T20:06:53.781Z
+ build date: 2017-08-09T20:41:26.821Z
 */
 
 (function (window, angular) {
@@ -362,7 +362,10 @@ angular.module("lightGrid").directive("lgView", function () {
 });
 
 
-angular.module("lightGridDataProviders", ["lightGrid"]);
+angular.module("lightGridDataProviders", ["lightGrid"])
+	.config(["$qProvider", function ($qProvider) {
+		$qProvider.errorOnUnhandledRejections(false);
+	}]);
 
 
 function LocalDataProvider(model, filterFilter, orderByFilter, limitToFilter, defaultViewSettings) {
